@@ -1,0 +1,45 @@
+/* ============================================
+   UTILITIES - Classes auxiliares
+   ============================================ */
+
+/* Classes para substituir estilos inline */
+.inline-block {
+  display: inline-block;
+}
+
+.content-indent {
+  margin-left: 1rem;
+}
+
+.list-indent {
+  margin-left: 1rem;
+}
+
+.skills-list {
+  margin-left: 2rem;
+}
+
+.close-menu {
+  padding: 0 !important;
+  cursor: pointer;
+}
+
+.theme-label {
+  padding-left: 0 !important;
+  padding-top: 0 !important;
+  padding-right: 14px !important;
+  cursor: pointer;
+}
+
+.footer-row {
+  margin-top: -4px;
+}
+
+.iframe-preview {
+  width: 100%;
+  height: 400px;
+}
+
+.menu-account {
+  margin-bottom: 0.3rem;
+}

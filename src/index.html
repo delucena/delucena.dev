@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Jose Paulo de delucena.dev - Software Engineer">
+    <title>delucena.dev - Portfolio</title>
+    <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
+    <link rel="alternate icon" href="./assets/favicon.ico">
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'>
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+
+<body>
+<main>
+    <section id="navigation">
+        <div class="menu">
+            <div>
+                <input type="checkbox" name="" id="menu" checked>
+                <label for="menu" aria-label="Toggle menu">
+                    <i class="fa-solid fa-bars hamburger-icon" aria-hidden="true"></i>
+                    <i class="fa-solid fa-xmark close-icon" aria-hidden="true"></i>
+                </label>
+
+                <label for="explorerView" aria-label="Explorer view"><i class="fa-regular fa-folder" aria-hidden="true"></i></label>
+                <label for="extensionsView" class="extensions-icon" aria-label="Extensions view">
+                    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M23 7.21878C23 6.63842 22.7741 6.09232 22.3644 5.68323L18.3008 1.61583C17.4814 0.794722 16.0519 0.794722 15.2325 1.61583L12 4.85135V4.64974C12 3.4352 11.0134 2.44771 9.8 2.44771H3.2C1.98658 2.44771 1 3.4352 1 4.64974V20.798C1 22.0125 1.98658 23 3.2 23H19.3333C20.5468 23 21.5333 22.0125 21.5333 20.798V14.1919C21.5333 12.9773 20.5468 11.9898 19.3333 11.9898H19.1319L22.3644 8.75531C22.7741 8.34524 23 7.80012 23 7.21878ZM3.2 3.91573H9.8C10.2038 3.91573 10.5333 4.24457 10.5333 4.64974V11.9898H2.46667V4.64974C2.46667 4.24457 2.79618 3.91573 3.2 3.91573ZM2.46667 20.798V13.4579H10.5333V21.532H3.2C2.79618 21.532 2.46667 21.2022 2.46667 20.798ZM20.0667 14.1919V20.798C20.0667 21.2022 19.7372 21.532 19.3333 21.532H12V13.4579H19.3333C19.7372 13.4579 20.0667 13.7867 20.0667 14.1919ZM12 11.9898V9.58523L14.4024 11.9898H12ZM21.327 7.71595L17.2634 11.7833C16.9974 12.0495 16.5359 12.0495 16.269 11.7833L12.2053 7.71595C12.0724 7.58383 11.999 7.40669 11.999 7.21878C11.999 7.03087 12.0724 6.85471 12.2053 6.72161L16.269 2.65421C16.402 2.52111 16.578 2.44771 16.7657 2.44771C16.9534 2.44771 17.1294 2.52111 17.2624 2.65421L21.326 6.72161C21.459 6.85373 21.5324 7.03087 21.5324 7.21878C21.5324 7.40669 21.46 7.58285 21.327 7.71595Z"/></svg>
+                </label>
+                <a href="https://github.com/delucena" target="_blank" class="git-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                        <path d="M21.007 8.222A3.738 3.738 0 0 0 15.045 5.2a3.737 3.737 0 0 0 1.156 6.583 2.988 2.988 0 0 1-2.668 1.67h-2.99a4.456 4.456 0 0 0-2.989 1.165V7.4a3.737 3.737 0 1 0-1.494 0v9.117a3.776 3.776 0 1 0 1.816.099 2.99 2.99 0 0 1 2.668-1.667h2.99a4.484 4.484 0 0 0 4.223-3.039 3.736 3.736 0 0 0 3.25-3.687zM4.565 3.738a2.242 2.242 0 1 1 4.484 0 2.242 2.242 0 0 1-4.484 0zm4.484 16.441a2.242 2.242 0 1 1-4.484 0 2.242 2.242 0 0 1 4.484 0zm8.221-9.715a2.242 2.242 0 1 1 0-4.485 2.242 2.242 0 0 1 0 4.485z"/>
+                    </svg>
+                </a>
+                <i class="fa-solid fa-magnifying-glass disabled"></i>
+            </div>
+            <input type="radio" name="socialAccounts" id="close">
+            <div>
+                <div class="menu-account">
+                    <label class="folder settings" for="folderToggleAccounts">
+                        <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M8 2C4.686 2 2 4.686 2 8C2 11.314 4.686 14 8 14C11.314 14 14 11.314 14 8C14 4.686 11.314 2 8 2ZM1 8C1 4.134 4.134 1 8 1C11.866 1 15 4.134 15 8C15 11.866 11.866 15 8 15C4.134 15 1 11.866 1 8ZM8 12.25C9.933 12.25 11.5 11.036 11.5 9.214C11.5 8.543 10.956 8 10.286 8H5.715C5.044 8 4.501 8.544 4.501 9.214C4.501 11.035 6.068 12.25 8.001 12.25H8ZM8 7.25C9.036 7.25 9.875 6.411 9.875 5.375C9.875 4.339 9.036 3.5 8 3.5C6.964 3.5 6.125 4.339 6.125 5.375C6.125 6.411 6.964 7.25 8 7.25Z"/></svg>
+                    </label>
+                    <input type="radio" name="socialAccounts" id="folderToggleAccounts">
+                    <ul>
+                        <li><a target="_blank" href="https://www.linkedin.com/in/delucena">LinkedIn</a></li>
+                        <hr>
+                        <li><a target="_blank" href="mailto:josepaulo@delucena.dev">Enviar Email</a></li>
+                        <hr>
+                        <li><a target="_blank" href="https://github.com/delucena">GitHub</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <label class="folder settings" for="folderToggleSettings">
+                        <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M7.99997 6C6.89497 6 5.99997 6.895 5.99997 8C5.99997 9.105 6.89497 10 7.99997 10C9.10497 10 9.99997 9.105 9.99997 8C9.99997 6.895 9.10497 6 7.99997 6ZM7.99997 9C7.44797 9 6.99997 8.552 6.99997 8C6.99997 7.448 7.44797 7 7.99997 7C8.55197 7 8.99997 7.448 8.99997 8C8.99997 8.552 8.55197 9 7.99997 9ZM14.565 9.715L13.279 8.628C13.245 8.599 13.213 8.567 13.184 8.533C12.888 8.186 12.931 7.667 13.279 7.372L14.565 6.285C14.693 6.177 14.742 6.003 14.691 5.844C14.386 4.903 13.882 4.04 13.219 3.308C13.139 3.22 13.027 3.172 12.912 3.172C12.865 3.172 12.818 3.18 12.773 3.196L11.186 3.761C11.144 3.776 11.1 3.788 11.056 3.796C11.006 3.805 10.956 3.81 10.907 3.81C10.515 3.81 10.167 3.532 10.094 3.134L9.79097 1.482C9.76097 1.318 9.63397 1.188 9.46997 1.153C8.98997 1.051 8.49897 1 8.00097 1C7.50297 1 7.01097 1.052 6.53097 1.153C6.36697 1.188 6.23997 1.318 6.20997 1.482L5.90797 3.134C5.89997 3.178 5.88797 3.221 5.87297 3.263C5.75197 3.6 5.43397 3.81 5.09397 3.81C5.00197 3.81 4.90797 3.794 4.81597 3.762L3.22897 3.197C3.18397 3.181 3.13597 3.173 3.08997 3.173C2.97497 3.173 2.86297 3.221 2.78297 3.309C2.11897 4.041 1.61597 4.904 1.30997 5.845C1.25797 6.004 1.30797 6.178 1.43597 6.286L2.72197 7.373C2.75597 7.402 2.78797 7.434 2.81697 7.468C3.11297 7.815 3.06997 8.334 2.72197 8.629L1.43597 9.716C1.30797 9.824 1.25897 9.998 1.30997 10.157C1.61497 11.098 2.11897 11.961 2.78297 12.693C2.86297 12.781 2.97497 12.829 3.08997 12.829C3.13697 12.829 3.18397 12.821 3.22897 12.805L4.81597 12.24C4.85797 12.225 4.90197 12.213 4.94597 12.205C4.99597 12.196 5.04597 12.192 5.09497 12.192C5.48697 12.192 5.83497 12.47 5.90797 12.868L6.20997 14.52C6.23997 14.684 6.36697 14.814 6.53097 14.849C7.01097 14.951 7.50297 15.002 8.00097 15.002C8.49897 15.002 8.99097 14.95 9.46997 14.849C9.63397 14.814 9.76097 14.684 9.79097 14.52L10.094 12.868C10.102 12.824 10.114 12.781 10.129 12.739C10.25 12.402 10.568 12.192 10.908 12.192C11 12.192 11.094 12.208 11.186 12.24L12.772 12.805C12.818 12.821 12.865 12.829 12.911 12.829C13.026 12.829 13.138 12.781 13.218 12.693C13.882 11.961 14.385 11.098 14.69 10.157C14.742 9.998 14.692 9.824 14.564 9.716L14.565 9.715ZM12.728 11.726L11.521 11.296C11.323 11.226 11.117 11.19 10.908 11.19C10.139 11.19 9.44697 11.676 9.18797 12.399C9.15397 12.492 9.12897 12.588 9.11097 12.686L8.88097 13.937C8.59097 13.979 8.29597 14 8.00097 14C7.70597 14 7.41097 13.979 7.11997 13.936L6.89097 12.685C6.73197 11.818 5.97697 11.189 5.09497 11.189C4.98697 11.189 4.87697 11.199 4.76597 11.219C4.66897 11.237 4.57397 11.262 4.47997 11.295L3.27297 11.725C2.90497 11.264 2.61097 10.759 2.39397 10.214L3.36797 9.391C3.74097 9.076 3.96797 8.634 4.00797 8.148C4.04797 7.662 3.89497 7.19 3.57797 6.818C3.51397 6.743 3.44297 6.672 3.36797 6.608L2.39397 5.785C2.61097 5.24 2.90497 4.734 3.27297 4.274L4.47997 4.704C4.67797 4.774 4.88397 4.81 5.09397 4.81C5.86297 4.81 6.55497 4.324 6.81397 3.601C6.84797 3.507 6.87297 3.411 6.89097 3.314L7.11997 2.063C7.41097 2.021 7.70597 1.999 8.00097 1.999C8.29597 1.999 8.59097 2.02 8.88097 2.062L9.10997 3.313C9.26897 4.18 10.024 4.809 10.906 4.809C11.014 4.809 11.124 4.799 11.234 4.779C11.331 4.761 11.427 4.736 11.521 4.703L12.728 4.273C13.096 4.733 13.39 5.239 13.607 5.784L12.634 6.607C12.261 6.922 12.033 7.364 11.994 7.85C11.954 8.336 12.107 8.809 12.424 9.18C12.489 9.256 12.559 9.326 12.635 9.39L13.609 10.213C13.392 10.758 13.098 11.264 12.73 11.724L12.728 11.726Z"/></svg>
+                    </label>
+                    <input type="radio" name="socialAccounts" id="folderToggleSettings">
+                    <ul>
+                        <li>
+                            <label for="theme" class="theme-label">Tema: <span id="themeLabel">Dark</span></label>
+                            <input type="checkbox" name="theme" id="theme">
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+            <input type="radio" name="viewToggle" id="explorerView" checked>
+            <input type="radio" name="viewToggle" id="extensionsView">
+        <div class="explorer">
+            <div>
+                <div class="title">EXPLORER</div>
+                <label class="folder subTitle" for="folderToggleDelucenaDev">delucena.dev</label>
+                <input type="checkbox" id="folderToggleDelucenaDev" checked>
+                <ul>
+                    <li>
+                        <label class="folder" for="folderToggleSrc">src</label>
+                        <input type="checkbox" id="folderToggleSrc" checked>
+                        <ul>
+                        <li>
+                            <label class="folder" for="folderToggleMain">main</label>
+                            <input type="checkbox" id="folderToggleMain" checked>
+                            <ul>
+                                <li>
+                                    <label class="folder" for="folderToggleJava">java</label>
+                                    <input type="checkbox" id="folderToggleJava">
+                                    <ul>
+                                        <li>
+                                            <label class="folder" for="folderToggleCom">com</label>
+                                            <input type="checkbox" id="folderToggleCom">
+                                            <ul>
+                                                <li>
+                                                    <label class="folder" for="folderToggleDelucena">delucena</label>
+                                                    <input type="checkbox" id="folderToggleDelucena">
+                                                    <ul>
+                                                        <li>
+                                                            <label class="folder" for="folderToggleDev">dev</label>
+                                                            <input type="checkbox" id="folderToggleDev">
+                                                            <ul>
+                                                                <li>
+                                                                    <label class="file disabled java">Application.java</label>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <label class="folder" for="folderToggleResources">resources</label>
+                                    <input type="checkbox" id="folderToggleResources" checked>
+                                    <ul>
+                                        <li>
+                                            <label class="file disabled properties">application.properties</label>
+                                        </li>
+                                        <li>
+                                            <label class="file disabled yml">application.yml</label>
+                                        </li>
+                                        <li>
+                                            <label class="folder" for="folderToggleStatic">static</label>
+                                            <input type="checkbox" id="folderToggleStatic" checked>
+                                            <ul>
+                                                <li>
+                                                    <label class="folder" for="folderToggleImages">images</label>
+                                                    <input type="checkbox" id="folderToggleImages" checked>
+<!--                                                    <ul>-->
+<!--                                                        <li>-->
+<!--                                                            <label class="img" for="image">image.png</label>-->
+<!--                                                        </li>-->
+<!--                                                    </ul>-->
+                                                </li>
+                                                <li>
+                                                    <label for="index" class="file html index">index.html</label>
+                                                </li>
+                                                <li>
+                                                    <label for="experience"
+                                                           class="file html experience">experience.html</label>
+                                                </li>
+                                                <li>
+                                                    <label for="skills" class="file html skills">skills.html</label>
+                                                </li>
+                                                <li>
+                                                    <label for="contact" class="file html contact">contact.html</label>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <label class="folder" for="folderToggleTest">test</label>
+                            <input type="checkbox" id="folderToggleTest">
+                            <ul>
+                                <li>
+                                    <label class="folder disabled">java</label>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    </li>
+                    <li>
+                        <label class="file disabled xml">pom.xml</label>
+                    </li>
+                    <li>
+                        <label class="file disabled gitignore">.gitignore</label>
+                    </li>
+                    <li>
+                        <label for="readme" class="readme markdown">README.md</label>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <div class="subTitle">OUTLINE</div>
+                <div class="subTitle">TIMELINE</div>
+            </div>
+        </div>
+        <div class="extensions">
+            <div>
+                <div class="title">EXTENSIONS</div>
+                <label class="folder subTitle" for="folderToggleInstalled">
+                    <span class="section-title">INSTALLED</span>
+                    <span class="section-count">8</span>
+                </label>
+                <input type="checkbox" id="folderToggleInstalled" checked>
+                <ul>
+                    <li>
+                        <div class="extension-item">
+                            <svg class="extension-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                            </svg>
+                            <span>PUC Minas - Pós-graduação Lato Sensu, Devops & Continuous Software Engineering</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="extension-item">
+                            <svg class="extension-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                            </svg>
+                            <span>PUC Minas - Pós-graduação Lato Sensu, Arquitetura de Software Distribuído</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="extension-item">
+                            <i class="fa-solid fa-laptop-code extension-icon"></i>
+                            <span>Unipê - Tecnologia em Sistemas para Internet</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="extension-item">
+                            <i class="fa-solid fa-calculator extension-icon"></i>
+                            <span>UFPB - Bacharelado em Matemática</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="extension-item">
+                            <svg class="extension-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                            </svg>
+                            <span>Java EE 6 Java Persistence API Developer</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="extension-item">
+                            <svg class="extension-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                            </svg>
+                            <span>Java EE 6 Enterprise JavaBeans Developer</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="extension-item">
+                            <svg class="extension-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                            </svg>
+                            <span>Java EE 6 Web Component Developer (nov 2015)</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="extension-item">
+                            <svg class="extension-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                            </svg>
+                            <span>Java SE 6 Programmer</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="extension-item">
+                            <svg class="extension-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                            </svg>
+                            <span>Architect Enterprise Applications with Java EE</span>
+                        </div>
+                    </li>
+
+                </ul>
+                <hr class="section-divider">
+                <label class="folder subTitle" for="folderToggleRecommended">
+                    <span class="section-title">RECOMMENDED</span>
+                    <span class="section-count">6</span>
+                </label>
+                <input type="checkbox" id="folderToggleRecommended" checked>
+                <ul>
+                    <li>
+                        <div class="extension-item">
+                            <i class="fa-solid fa-cloud extension-icon"></i>
+                            <span>Cloud Development Environments for Platform Engineers</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="extension-item">
+                            <i class="fa-solid fa-book-open extension-icon"></i>
+                            <span>Introduction to Platform Engineering</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="extension-item">
+                            <i class="fa-solid fa-robot extension-icon"></i>
+                            <span>Intro to AI in Platform Engineering</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="extension-item">
+                            <svg class="extension-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21 16V8C20.9996 7.64928 20.9071 7.30481 20.7315 7.00116C20.556 6.69751 20.3037 6.44536 20 6.27L13 2.27C12.696 2.09446 12.3511 2.00205 12 2.00205C11.6489 2.00205 11.304 2.09446 11 2.27L4 6.27C3.69626 6.44536 3.44398 6.69751 3.26846 7.00116C3.09294 7.30481 3.00036 7.64928 3 8V16C3.00036 16.3507 3.09294 16.6952 3.26846 16.9988C3.44398 17.3025 3.69626 17.5546 4 17.73L11 21.73C11.304 21.9055 11.6489 21.9979 12 21.9979C12.3511 21.9979 12.696 21.9055 13 21.73L20 17.73C20.3037 17.5546 20.556 17.3025 20.7315 16.9988C20.9071 16.6952 20.9996 16.3507 21 16Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                <path d="M3.27 6.96L12 12.01L20.73 6.96" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                <path d="M12 22.08V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                            </svg>
+                            <span>Kubernetes Cluster Lifecycle Management in Platform Engineering</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="extension-item">
+                            <i class="fa-solid fa-chart-line extension-icon"></i>
+                            <span>Observability for Platform Engineering</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="extension-item">
+                            <i class="fa-solid fa-shield-halved extension-icon"></i>
+                            <span>Vulnerability Management for Platform Engineers</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <div class="subTitle">OUTLINE</div>
+                <div class="subTitle">TIMELINE</div>
+            </div>
+        </div>
+    </section>
+    <section id="editor">
+        <div class="editorContainer">
+            <div id="header">
+                <!-- ADD FILE -->
+              <div>
+                <input type="radio" name="openedFile" id="readme" checked>
+                <label for="readme">README.md(preview)</label>
+              </div>
+                <div>
+                    <input type="radio" name="openedFile" id="index">
+                    <label for="index">index.html(preview)</label>
+                </div>
+                <div>
+                    <input type="radio" name="openedFile" id="experience">
+                    <label for="experience">experience.html(preview)</label>
+                </div>
+                <div>
+                    <input type="radio" name="openedFile" id="skills">
+                    <label for="skills">skills.html(preview)</label>
+                </div>
+                <div>
+                    <input type="radio" name="openedFile" id="contact">
+                    <label for="contact">contact.html(preview)</label>
+                </div>
+            </div>
+            <div contenteditable class="editor">
+                <!-- Toggle Preview/Code Button - Flutuante -->
+                <div class="floating-toggle">
+                    <input type="checkbox" id="togglePreviewCode" aria-label="Alternar entre preview e código">
+                    <label for="togglePreviewCode" class="preview-toggle-btn" title="Alternar entre preview e código">
+                        <i class="fa-solid fa-code" aria-hidden="true"></i>
+                    </label>
+                </div>
+                <!-- Code View Container -->
+                <div class="code-view-container" id="codeViewContainer" style="display: none;">
+                    <pre class="code-view"><code id="codeViewContent" class="language-html"></code></pre>
+                </div>
+                <!-- ADD FILE -->
+                <section class="index" id="_index_">
+                    <h1>José Paulo de Lucena</h1> <br>
+                    <h2>🚀 Engenheiro de Software Sênior</h2><br>
+                    <br>
+                    Engenheiro de Software Sênior com sólida experiência em desenvolvimento backend, arquitetura de microsserviços e sistemas distribuídos de alta escalabilidade e performance.<br>
+                    <br>
+                    Atuei em projetos estratégicos de transformação digital em instituições financeiras e ambientes corporativos complexos, liderando iniciativas de modernização, integração de sistemas críticos e otimização de performance.<br>
+                    <br>
+                    Especialista em Java, Go (Golang), arquitetura de microsserviços, sistemas distribuídos e práticas de DevOps. Experiência com Kubernetes, AWS, observabilidade (Datadog, New Relic, Grafana) e cultura de qualidade com testes automatizados e code review.<br>
+                    <br>
+                    Sempre aberto a colaborações, aprendizado contínuo e novos desafios!<br>
+                    <br>
+                </section>
+                <section class="experience" id="_experience_">
+                    <h1>💼 Experiência Profissional</h1>
+                    <br>
+                    <br>
+
+                    <h2>🏢 Mercado Livre</h2>
+                    <h3>Sr Software Engineer</h3>
+                    <p><b>mar de 2023 - o momento · 2 anos 10 meses · Remota</b></p>
+                    <br>
+                    <p>Engenheiro de Software Sênior em time core responsável por acumular, consolidar e gerenciar valores e volumes transacionais utilizados por várias áreas do negócio. Atuação em microsserviços e sistemas distribuídos com foco em escala, alta performance e confiabilidade. Participei da migração progressiva de serviços Java 8+/Spring para Go, com rollout seguro e observabilidade ponta a ponta.</p>
+                    <br>
+                    <div style="margin-left:1rem">
+                        <b>Principais responsabilidades:</b>
+                        <ul style="margin-left:1rem">
+                            <li><b>Arquitetura & Operação:</b> microsserviços com filas, cache, MySQL e jobs assíncronos; práticas de idempotência, backpressure e resiliência em produção.</li>
+                            <li><b>Observabilidade:</b> Datadog e New Relic (APM, métricas, logs, dashboards e alertas) para diagnóstico proativo e redução de incidentes.</li>
+                            <li><b>Qualidade:</b> cultura forte de testes unitários, code review e quality gates; versionamento em Git/GitHub.</li>
+                            <li><b>Performance:</b> tuning de conexões/queries, uso eficiente de cache e análise contínua de gargalos em pipelines assíncronos.</li>
+                            <li><b>Testes & Automação (E2E):</b> scripts Python orquestrando cenários do começo ao fim (smoke/contrato/negócio), validando efeitos em filas, cache e MySQL, conferindo consistência de dados e checando telemetria; execução integrada ao CI para prevenção de regressões.</li>
+                        </ul>
+                        <br>
+                        <b>Projetos:</b>
+                        <ul style="margin-left:1rem">
+                            <li><b>accumulators-event-expander:</b> Consome eventos limpos (payment, payouts, etc.), normaliza/expande e publica em tópico dedicado para desacoplar upstreams.</li>
+                            <li><b>accumulators-event-listener:</b> Aplica regras/filters e transforma eventos em comandos de domínio (create/update/revert), roteando por tipo(payments, payouts, etc.).</li>
+                            <li><b>accumulators-core-api:</b> Coração do domínio: processa comandos, persiste em MySQL particionado/shard e mantém KVS para leitura rápida; executa jobs (materialização, reprocesso, reconciliação) e emite eventos operacionais.</li>
+                            <li><b>accumulators-search-api:</b> Camada de consulta (read-model) com latência baixa sobre o KVS de acumuladores; expõe APIs de busca e paginação.</li>
+                            <li><b>accumulators-cap-api:</b> Serviço de CAP/limites, recebendo stream de atualizações e expondo verificação/aplicação de limites.</li>
+                        </ul>
+                    </div>
+                    <br>
+                    <br>
+
+                    <h2>🏦 Sicoob</h2>
+                    <h3>Engenheiro de software sênior</h3>
+                    <p><b>nov de 2021 - mar de 2023 · 1 ano 5 meses · Remota</b></p>
+                    <br>
+                    <p>Engenheiro de Software Sênior atuando no desenvolvimento e integração de soluções empresariais em ambiente bancário, com foco em modernização de middleware e confiabilidade de sistemas críticos. Participei diretamente das migrações de plataforma, incluindo JBoss EAP > IBM WebSphere Application Server 9.0 (WAS 9) e Java 6 > Java 8, garantindo estabilidade, performance e continuidade operacional.</p>
+                    <br>
+                    <div style="margin-left:1rem">
+                        <b>Principais responsabilidades:</b>
+                        <ul style="margin-left:1rem">
+                            <li><b>Modernização & Middleware:</b> automação de configuração e deploy no JBoss (incl. ajustes via JBoss CLI) e sustentação pós-migração no WAS 9 (clusters, datasources, segurança).</li>
+                            <li><b>Integrações:</b> desenho e implementação de APIs REST/SOAP com OpenAPI e IBM API Connect, assegurando governança, versionamento e segurança ponta a ponta.</li>
+                            <li><b>Dados & Persistência:</b> EJB/JPA/JDBC com DB2, tuning de conexões/queries e políticas de transação para alta confiabilidade.</li>
+                            <li><b>Observabilidade & Operação:</b> Graylog para centralização de logs, dashboards e alertas; diagnóstico proativo e redução de MTTR.</li>
+                            <li><b>Entrega Contínua & Qualidade:</b> pipelines Jenkins/GitLab CI, revisão de código e testes automatizados (JUnit/Mockito/PowerMock) para releases previsíveis e seguras.</li>
+                            <li><b>Alta disponibilidade:</b> suporte à propagação de dados em clusters WAS, balanceamento e resiliência de serviços críticos.</li>
+                        </ul>
+                    </div>
+                    <br>
+                    <br>
+
+                    <h2>🏦 Will Bank</h2>
+                    <h3>Desenvolvedor Sênior Backend</h3>
+                    <p><b>jan de 2021 - nov de 2021 · 11 meses · Remota</b></p>
+                    <br>
+                    <p>Desenvolvedor Sênior Backend no time de Fraude & Segurança, atuando na migração do ecossistema PAG! (monólito/microsserviços) para microsserviços no Will, com atualização de Java 8 > Java 11 e fortalecimento de controles de segurança (acesso, reconhecimento facial e antifraude). Foco em escalabilidade, confiabilidade e segurança em ambiente AWS, com observabilidade contínua (New Relic/Datadog).</p>
+                    <br>
+                    <div style="margin-left:1rem">
+                        <b>Principais responsabilidades:</b>
+                        <ul style="margin-left:1rem">
+                            <li><b>Arquitetura & Migração:</b> estratégia Strangler para decomposição do monólito, canary releases e validação paralela; serviços Spring (Java 11) orientados a domínios de segurança.</li>
+                            <li><b>Integração & Dados:</b> Kafka e AWS SQS para mensageria; MongoDB, MySQL e Redis para persistência e cache; Liquibase nas migrações.</li>
+                            <li><b>Plataforma & Serverless:</b> Docker e Kubernetes (EKS) para orquestração; AWS Lambda para automações e integrações serverless (rotinas operacionais e glue entre serviços); implantação em AWS com práticas de resiliência e autosserviço.</li>
+                            <li><b>Qualidade & Entrega:</b> princípios SOLID, testes automatizados, Maven + Jenkins (CI/CD), code review e políticas de release previsíveis.</li>
+                            <li><b>Observabilidade & Operação:</b> New Relic/Datadog (APM, métricas, logs, dashboards e alertas) para reduzir MTTR e prevenir incidentes.</li>
+                        </ul>
+                    </div>
+                    <br>
+                    <br>
+
+                    <h2>🏢 ICTS</h2>
+                    <h3>Engenheiro de software sênior</h3>
+                    <p><b>jan de 2019 - jan de 2021 · 2 anos 1 mês · Brasília e Região, Brasil</b></p>
+                    <br>
+                    <p>Responsável pelo SGE – Sistema de Gestão Empresarial (mais de 13 módulos: contas a pagar/receber, compras, orçamento, tributário etc.) para o Bancoob, entregando uma plataforma robusta, escalável e confiável em ambiente bancário. Atuei de ponta a ponta no back-end Java sob JBoss com foco em performance, consistência de dados e automação de fluxos operacionais.</p>
+                    <br>
+                    <div style="margin-left:1rem">
+                        <b>Principais responsabilidades:</b>
+                        <ul style="margin-left:1rem">
+                            <li><b>Middleware & Plataforma:</b> JBoss (EAP) como servidor de aplicação; evolução do stack Java 6 → Java 8, ajustes de compatibilidade e boas práticas de implantação.</li>
+                            <li><b>Camada de Negócio:</b> EJB (session beans) e JPA/Hibernate com uso combinado de Criteria API e native queries quando necessário para performance e reporting.</li>
+                            <li><b>Performance & Dados:</b> tuning de SQL/queries, otimização de índices e planos de execução, revisão de transações/lock-contention, paginação eficiente e redução de round-trips ao banco.</li>
+                            <li><b>Integração & Processos:</b> serviços REST internos, jobs de processamento e automações para conciliações e fechamentos (rotinas críticas do domínio financeiro).</li>
+                            <li><b>Frontend legado:</b> manutenção/evolução de telas em ActionScript (Adobe Flex) integradas ao back-end Java.</li>
+                            <li><b>Qualidade & Operação:</b> padronização de camadas (DAO/Service), tratamento de erros, logs estruturados e práticas de revisão de código.</li>
+                        </ul>
+                    </div>
+                    <br>
+                    <br>
+
+                    <h2>🏢 Spassu Tecnologia e Serviços</h2>
+                    <h3>Consultor de Sistemas Sênior</h3>
+                    <p><b>set de 2018 - jan de 2021 · 2 anos 5 meses</b></p>
+                    <br>
+                    <p>Consultor Sênior atuando para o Banestes, alinhando demandas de negócio a arquiteturas robustas e práticas modernas de engenharia. Responsável por desenho de soluções, desenvolvimento e melhorias de performance/segurança, garantindo escalabilidade e manutenibilidade dos sistemas.</p>
+                    <br>
+                    <div style="margin-left:1rem">
+                        <b>Principais responsabilidades:</b>
+                        <ul style="margin-left:1rem">
+                            <li><b>Arquitetura & Plataforma:</b> Java 8 em WildFly/WildFly Swarm (microservices), padronização de módulos e camadas (API, domínio, persistência) e definição de contratos.</li>
+                            <li><b>Back-end & Dados:</b> EJB e JPA/Hibernate com MySQL; otimização de queries/índices, paginação eficiente e revisão de transações para performance consistente.</li>
+                            <li><b>APIs & Integração:</b> serviços REST e GraphQL para exposição de capacidades do banco; versionamento de contratos e políticas de segurança/autorização.</li>
+                            <li><b>Entrega Contínua:</b> pipelines com Jenkins e Git (build/test/release), qualidade via code review e automações de verificação.</li>
+                            <li><b>Boas práticas:</b> logs estruturados, tratamento de erros, observabilidade básica e guidelines de código para equipes do cliente.</li>
+                        </ul>
+                    </div>
+                    <br>
+                    <br>
+
+                    <h2>🏢 Abacomm Brasil</h2>
+                    <h3>Full-stack Developer Angular/Java</h3>
+                    <p><b>jun de 2017 - jan de 2020 · 2 anos 8 meses · Remoto</b></p>
+                    <br>
+                    <p>Desenvolvedor Full-stack Java atendendo múltiplos clientes em projetos web e APIs, com foco em JavaEE/JSF/CDI/JPA e Spring Boot, integrações REST, e entrega contínua (Jenkins/Git). Atuei em soluções com Angular, MySQL, e serviços em AWS, sempre priorizando qualidade, performance e manutenção simples.</p>
+                    <br>
+                    <div style="margin-left:1rem">
+                        <b>Principais projetos:</b>
+                        <ul style="margin-left:1rem">
+                            <li><b>ABP (Associação Brasileira de Psicologia):</b> desenvolvimento e evolução de sistema JSF com REST, CDI e JPA/Hibernate; padronização de camadas (DAO/Service), paginação eficiente e melhoria de consultas no MySQL.</li>
+                            <li><b>PwC:</b> APIs em Spring Boot orientadas a eventos (publicação/consumo), integração com serviços em AWS (armazenamento e automações), hardening de endpoints e documentação de contratos.</li>
+                            <li><b>Oi (Promotor):</b> portal JSF com uso de Futures para processamento assíncrono, relatórios com JasperReports (PDF/Excel) e otimizações de performance; refino de código usando lambdas (Java 8) e boas práticas de concorrência.</li>
+                        </ul>
+                    </div>
+                    <br>
+                    <br>
+
+                    <h2>🏢 Mirante Tecnologia</h2>
+                    <h3>Analista de sistemas Java</h3>
+                    <p><b>ago de 2015 - jun de 2017 · 1 ano 11 meses · Brasília e Região, Brasil</b></p>
+                    <br>
+                    <p>Responsável pelo desenvolvimento do SGE – Sistemas de gestão empresarial, aplicação que será utilizada pelo Bancoob, para gerenciar todas as funcionalidades que um banco precisa, como por exemplo: Contas a pagar, Contas a receber, Compras, Orçamento, Tributário dentre outros 13 módulos que está em desenvolvimento.</p>
+                    <br>
+                    <br>
+
+                    <h2>🏢 CTIS Tecnologia S.A</h2>
+                    <h3>Desenvolvedor Web/Java</h3>
+                    <p><b>jun de 2014 - ago de 2015 · 1 ano 3 meses · Brasília e Região, Brasil</b></p>
+                    <br>
+                    <p>Desenvolvedor Pleno Java na CTIS (Fábrica de Software), atendendo o CNPq no eGAD – Gestão Arquivística de Documentos, com foco em protocolo, classificação, tramitação e guarda de documentos, garantindo rastreabilidade, performance e conformidade com práticas de gestão documental.</p>
+                    <br>
+                    <div style="margin-left:1rem">
+                        <b>Principais responsabilidades:</b>
+                        <ul style="margin-left:1rem">
+                            <li><b>Back-end & Persistência:</b> EJB 3 e JPA/Hibernate para serviços de negócio e repositório; modelagem de entidades, queries otimizadas e controle transacional.</li>
+                            <li><b>Front-end:</b> JSF 2 + PrimeFaces para telas ricas, formulários e validações; componentes customizados e UX voltada a alta produtividade.</li>
+                            <li><b>Busca & Relatórios:</b> Apache Solr para full-text search (indexação de metadados/documentos) e iReport para relatórios operacionais/gerenciais (protocolos, movimentações, estatísticas).</li>
+                            <li><b>Workflow & Processos:</b> JBPM para modelar fluxos de tramitação e regra de negócio (análises, aprovações, prazos), com monitoramento de tarefas.</li>
+                            <li><b>Qualidade & Entrega:</b> build com Maven, versionamento em SVN, revisão de código e logs estruturados; ajustes de desempenho em consultas e paginação.</li>
+                        </ul>
+                    </div>
+                    <br>
+                    <br>
+
+                    <h2>🏢 INDRA</h2>
+                    <h3>Desenvolvedor Web/Java</h3>
+                    <p><b>nov de 2013 - jun de 2014 · 8 meses · João Pessoa e Região, Brasil</b></p>
+                    <br>
+                    <p>Desenvolvedor Pleno Java prestando serviços para a Secretaria de Estado da Receita da Paraíba no Sistema ATF – Administração Tributária e Financeira, com foco em cálculo, emissão e processamento de recolhimentos, estabilidade das rotinas fiscais e consistência de dados em produção. Atuação em JSP/EJB/JDBC, padronização de camadas e otimização de SQL para alto desempenho.</p>
+                    <br>
+                    <div style="margin-left:1rem">
+                        <b>Principais responsabilidades:</b>
+                        <ul style="margin-left:1rem">
+                            <li><b>Domínio fiscal (ATF):</b> implementação de regras para emissão de guias, apuração de tributos, isenções/penalidades/atualizações monetárias e validações cadastrais.</li>
+                            <li><b>Integrações & Processamento:</b> rotinas de remessa/retorno bancário, conciliações de pagamentos e reconciliação de divergências.</li>
+                            <li><b>Back-end:</b> EJB (session beans) com JDBC e SQL otimizado; controle transacional, concorrência e tratamento de erros.</li>
+                            <li><b>Front-end:</b> JSP com formulários e validações server-side, seguindo padrões de segurança e usabilidade do órgão.</li>
+                            <li><b>Qualidade & Entrega:</b> Maven (build/empacote), versionamento em CVS, logs estruturados e correções orientadas por incidentes/monitoramento.</li>
+                        </ul>
+                    </div>
+                    <br>
+                    <br>
+
+                    <h2>🏢 Synctech Soluções em Informática</h2>
+                    <h3>Desenvolvedor Delphi</h3>
+                    <p><b>out de 2012 - nov de 2013 · 1 ano 2 meses · João Pessoa e Região, Brasil</b></p>
+                    <br>
+                    <p>Desenvolvedor Pleno atuando no desenvolvimento de ERP de automação comercial (múltiplos módulos: vendas, estoque, fiscal, precificação, relatórios gerenciais), com foco em performance, consistência de dados e rotinas fiscais. Entregas em Delphi 6 + Firebird 2.5 (desktop), C#/.NET para documentos fiscais eletrônicos e Android para operações de campo.</p>
+                    <br>
+                    <div style="margin-left:1rem">
+                        <b>Principais responsabilidades:</b>
+                        <ul style="margin-left:1rem">
+                            <li><b>ERP (Delphi 6 + Firebird 2.5):</b> implementação/evolução de módulos de estoque, fiscal, precificação (incl. curva ABC) e relatórios; otimização de consultas, índices e rotinas críticas.</li>
+                            <li><b>Componentes proprietários (Delphi):</b> criação e manutenção do SyncPDV (sincronização PDV ↔ retaguarda), SyncRetaguarda (replicação e consolidação) e SyncSped (exportações/rotinas fiscais).</li>
+                            <li><b>Fiscais eletrônicos (C#/.NET):</b> SyncNFe para emissão/validação de NFe, tratamento de retornos e armazenamento; integrações com SQL Server e Firebird.</li>
+                            <li><b>Frente de caixa/Backoffice:</b> ajustes de usabilidade, rotinas de fechamento e conciliações operacionais, melhoria de estabilidade e redução de erros operacionais.</li>
+                            <li><b>Mobile (Android – Handroid):</b> app para inventário/conferência e apoio a operações de loja, com sincronização offline/online e comunicação com o ERP.</li>
+                            <li><b>UI & Relatórios:</b> componentes DevExpress e relatórios operacionais/gerenciais.</li>
+                        </ul>
+                    </div>
+
+                </section>
+                <section class="skills" id="_skills_">
+                    <h1>🛠️ Skills & Competências</h1>
+                    <br>
+                    <br>
+
+                    <h2>💻 Linguagens e Frameworks</h2>
+                    <ul style="margin-left:2rem">
+                        <li>Java 8+ (Spring Boot, Spring Framework, Spring Security, Spring Cloud)</li>
+                        <li>Go (Golang)</li>
+                        <li>JavaEE (JSF, EJB, JPA/Hibernate)</li>
+                        <li>Python (automação e testes E2E)</li>
+                    </ul>
+                    <br>
+                    <br>
+
+                    <h2>🏗️ Arquitetura e Design</h2>
+                    <ul style="margin-left:2rem">
+                        <li>Microsserviços e Sistemas Distribuídos</li>
+                        <li>SOLID, DDD (Domain-Driven Design)</li>
+                        <li>CQRS (Command Query Responsibility Segregation)</li>
+                        <li>Event Sourcing e SAGA Pattern</li>
+                        <li>Clean Code e Design Patterns</li>
+                    </ul>
+                    <br>
+                    <br>
+
+                    <h2>🔌 Integração e Comunicação</h2>
+                    <ul style="margin-left:2rem">
+                        <li>API REST e SOAP</li>
+                        <li>OpenAPI/Swagger</li>
+                        <li>Apache Kafka</li>
+                        <li>AWS SQS</li>
+                        <li>GraphQL</li>
+                    </ul>
+                    <br>
+                    <br>
+
+                    <h2>💾 Banco de Dados e Cache</h2>
+                    <ul style="margin-left:2rem">
+                        <li>MySQL, PostgreSQL, DB2</li>
+                        <li>Redis (Key-Value Store)</li>
+                        <li>MongoDB</li>
+                        <li>Apache Solr (busca full-text)</li>
+                    </ul>
+                    <br>
+                    <br>
+
+                    <h2>☁️ DevOps e Infraestrutura</h2>
+                    <ul style="margin-left:2rem">
+                        <li>Docker e Containerização</li>
+                        <li>Kubernetes (EKS) - probes, services, deploys, kubectl</li>
+                        <li>GitHub Actions (tags/releases)</li>
+                        <li>AWS (VPC, RDS, IAM, Route53, Lambda, SQS)</li>
+                        <li>WildFly/JBoss EAP (JBoss CLI, configurações de middleware)</li>
+                        <li>IBM WebSphere Application Server 9.0 (WAS 9)</li>
+                        <li>Jenkins e GitLab CI (pipelines CI/CD)</li>
+                    </ul>
+                    <br>
+                    <br>
+
+                    <h2>📊 Monitoramento e Observabilidade</h2>
+                    <ul style="margin-left:2rem">
+                        <li>Grafana e Prometheus</li>
+                        <li>Datadog (APM, métricas, logs, dashboards, alertas)</li>
+                        <li>New Relic (APM, métricas, logs, dashboards, alertas)</li>
+                        <li>Graylog (centralização de logs)</li>
+                        <li>OpenTelemetry</li>
+                        <li>Kibana</li>
+                    </ul>
+                    <br>
+                    <br>
+
+                    <h2>🔒 Segurança & Plataforma</h2>
+                    <ul style="margin-left:2rem">
+                        <li>External Secrets</li>
+                        <li>cert-manager</li>
+                        <li>Ingress Controllers</li>
+                        <li>Spring Security</li>
+                        <li>IBM API Connect (governança de APIs)</li>
+                    </ul>
+                    <br>
+                    <br>
+
+                    <h2>✅ Qualidade e Testes Automatizados</h2>
+                    <ul style="margin-left:2rem">
+                        <li>JUnit 5</li>
+                        <li>Mockito e PowerMock</li>
+                        <li>Testcontainers</li>
+                        <li>Testes E2E (Python scripts)</li>
+                        <li>Code Review e Quality Gates</li>
+                    </ul>
+                    <br>
+                    <br>
+
+                    <h2>👥 Cultura e Práticas</h2>
+                    <ul style="margin-left:2rem">
+                        <li>Squads ágeis</li>
+                        <li>DevSecOps</li>
+                        <li>Code Review</li>
+                        <li>Quality Gates</li>
+                        <li>Git/GitHub/GitLab (versionamento)</li>
+                        <li>Maven e build automation</li>
+                    </ul>
+                    <br>
+                    <br>
+
+                    <h2>🌐 Idiomas</h2>
+                    <ul style="margin-left:2rem">
+                        <li>Português (Nativo)</li>
+                        <li>Inglês (Técnico/Profissional)</li>
+                    </ul>
+                    <br>
+                    <br>
+
+                    <h2>💡 Soft Skills</h2>
+                    <ul style="margin-left:2rem">
+                        <li>Excelente comunicação</li>
+                        <li>Alta disciplina e organização</li>
+                        <li>Mente criativa e solucionadora de problemas</li>
+                        <li>Trabalho em equipe e colaboração</li>
+                        <li>Liderança técnica e mentoria</li>
+                    </ul>
+                </section>
+                <section contenteditable="false" class="contact" id="_contact_">
+                    <h1>📬 Entre em Contato</h1>
+                    <br>
+                    <p style="color: var(--color-text-secondary); margin-bottom: 2rem;">
+                        Estou sempre aberto a conversas, colaborações e novos desafios!
+                        Sinta-se à vontade para entrar em contato através de qualquer um dos canais abaixo.
+                    </p>
+                    <br>
+
+                    <div class="contact-container">
+                        <!-- LinkedIn Card -->
+                        <a href="https://www.linkedin.com/in/delucena" target="_blank" class="contact-card">
+                            <div class="contact-icon linkedin">
+                                <i class="fa-brands fa-linkedin"></i>
+                            </div>
+                            <div class="contact-content">
+                                <h3>LinkedIn</h3>
+                                <p>Conecte-se comigo profissionalmente</p>
+                                <span class="contact-link">
+                                    linkedin.com/in/delucena
+                                    <i class="fa-solid fa-external-link-alt"></i>
+                                </span>
+                            </div>
+                        </a>
+
+                        <!-- GitHub Card -->
+                        <a href="https://github.com/delucena" target="_blank" class="contact-card">
+                            <div class="contact-icon github">
+                                <i class="fa-brands fa-github"></i>
+                            </div>
+                            <div class="contact-content">
+                                <h3>GitHub</h3>
+                                <p>Veja meus projetos e contribuições</p>
+                                <span class="contact-link">
+                                    github.com/delucena
+                                    <i class="fa-solid fa-external-link-alt"></i>
+                                </span>
+                            </div>
+                        </a>
+
+                        <!-- Email Card -->
+                        <a href="mailto:josepaulo@delucena.dev" target="_blank" class="contact-card">
+                            <div class="contact-icon email">
+                                <i class="fa-solid fa-envelope"></i>
+                            </div>
+                            <div class="contact-content">
+                                <h3>Email</h3>
+                                <p>Envie uma mensagem direta</p>
+                                <span class="contact-link">
+                                    josepaulo@delucena.dev
+                                    <i class="fa-solid fa-external-link-alt"></i>
+                                </span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <br><br>
+                </section>
+                <section contenteditable="false" class="readme" id="_readme_">
+                    <div class="readme-container">
+                        <div class="readme-photo-wrapper">
+                            <img src="./assets/images/profile.png" alt="José Paulo de Lucena" class="readme-photo">
+                        </div>
+                        <div class="readme-content">
+                            <h1>👋 Opa, meu nome é Zé, mas pode me chamar de Zé 😄</h1>
+                            <p>se penso, logo codifico.</p>
+                            <p>Backend, cloud, microsserviços e sistemas distribuídos.</p>
+                            <p>
+                                <a target="_blank" href="https://www.credly.com/users/jose-paulo-de-lucena-oliveira">
+                                    <img src="https://img.shields.io/badge/Oracle-Java%20Certified-red?style=for-the-badge&logo=oracle"
+                                         alt="Oracle Java Certified">
+                                </a>
+                            </p>
+                            <p>
+                                <img src="https://skillicons.dev/icons?i=java,go,spring,aws,docker,kubernetes,mysql,postgres,redis,kafka,grafana,prometheus&perline=12"
+                                     alt="My Skills">
+                            </p>
+                        </div>
+                    </div>
+                </section>
+                <section contenteditable="false" class="image" id="_image_">
+                    <!-- <img src="https://drive.google.com/file/d/1woEzN8O5JkuiP6NjpA1X4wgEQwmIBsxq/view?usp=drivesdk"
+                                    alt=""> -->
+                    <iframe class="iframe-preview"
+                            src="https://drive.google.com/file/d/1woEzN8O5JkuiP6NjpA1X4wgEQwmIBsxq/preview"
+                            allow="autoplay"></iframe>
+                    <!-- <img src="https://scontent.cdninstagram.com/v/t51.2885-15/384757290_1677291819415959_1613618115884424937_n.webp?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xNDQweDE4MDAuc2RyIn0&_nc_ht=scontent.cdninstagram.com&_nc_cat=103&_nc_ohc=QMRW2UaQyHMAX8qGyZM&edm=APs17CUBAAAA&ccb=7-5&ig_cache_key=MzIwMzE5NTg3NjY3MTk0MTY5Mw%3D%3D.2-ccb7-5&oh=00_AfCjgYIaaHxz7B3qiPyEZuBHqw1VTFQNpNNY_wxDCcnvlA&oe=65C7F6EC&_nc_sid=10d13b"
+                                    alt=" image"> -->
+                </section>
+            </div>
+            <!--  -->
+        </div>
+        <div class="terminal">
+            <div class="content">
+                <div>
+                    <input type="radio" name="terminal" id="problems">
+                    <div class="problems">
+                        <div class="problem-item">
+                            <span class="problem-icon error">●</span>
+                            <span class="problem-file">Application.java</span>
+                            <span class="problem-location">(5, 12)</span>
+                            <span class="problem-message">: Cannot resolve symbol 'delucena'</span>
+                        </div>
+                        <div class="problem-item">
+                            <span class="problem-icon warning">⚠</span>
+                            <span class="problem-file">Application.java</span>
+                            <span class="problem-location">(8, 15)</span>
+                            <span class="problem-message">: Unused import 'java.util.List'</span>
+                        </div>
+                        <div class="problem-item">
+                            <span class="problem-icon info">ℹ</span>
+                            <span class="problem-file">application.yml</span>
+                            <span class="problem-location">(12, 3)</span>
+                            <span class="problem-message">: Property 'server.port' is deprecated</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <input type="radio" name="terminal" id="output">
+                    <div class="output">
+                        <div class="output-selector">
+                            <select>
+                                <option>Tasks</option>
+                                <option selected>Maven</option>
+                                <option>Java</option>
+                                <option>Spring Boot</option>
+                            </select>
+                        </div>
+                        <div class="output-content" id="outputContent">
+                            <!-- O conteúdo será preenchido dinamicamente pelo JavaScript -->
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <input type="radio" name="terminal" id="terminals" checked>
+                    <div class="terminal-content">
+                        <div class="terminal-tab">
+                            <span class="terminal-icon">▶</span>
+                            <span>1: bash</span>
+                            <span class="terminal-close">×</span>
+                        </div>
+                        <div class="terminal-output" id="terminalOutput">
+                            <!-- Conteúdo será preenchido dinamicamente pelo JavaScript -->
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <input type="radio" name="terminal" id="debug">
+                    <div class="debug">
+                        <div class="debug-header">
+                            <span>No active debug sessions</span>
+                        </div>
+                        <div class="debug-content">
+                            <div class="debug-message">
+                                <i class="fa-solid fa-info-circle"></i>
+                                <span>To start debugging, set breakpoints in your code and press F5 or use the Run and Debug view.</span>
+                            </div>
+                            <div class="debug-info">
+                                <div class="debug-info-item">
+                                    <span class="debug-label">Breakpoints:</span>
+                                    <span class="debug-value">0</span>
+                                </div>
+                                <div class="debug-info-item">
+                                    <span class="debug-label">Watch:</span>
+                                    <span class="debug-value">0</span>
+                                </div>
+                                <div class="debug-info-item">
+                                    <span class="debug-label">Call Stack:</span>
+                                    <span class="debug-value">Empty</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <input type="radio" name="terminal" id="ports">
+                    <div class="ports">
+                        <div class="ports-header">
+                            <span>Forwarded Ports</span>
+                            <span class="ports-count">2 ports</span>
+                        </div>
+                        <div class="ports-content">
+                            <div class="port-item">
+                                <div class="port-info">
+                                    <span class="port-number">8080</span>
+                                    <span class="port-label">localhost:8080</span>
+                                </div>
+                                <div class="port-actions">
+                                    <span class="port-status running">Running</span>
+                                    <i class="fa-solid fa-external-link-alt port-action-icon"></i>
+                                </div>
+                            </div>
+                            <div class="port-item">
+                                <div class="port-info">
+                                    <span class="port-number">3306</span>
+                                    <span class="port-label">localhost:3306</span>
+                                </div>
+                                <div class="port-actions">
+                                    <span class="port-status running">Running</span>
+                                    <i class="fa-solid fa-external-link-alt port-action-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ports-footer">
+                            <span class="ports-hint">Right-click a port to configure forwarding</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="header">
+                <label for="problems" class="problems">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span>PROBLEMS</span>
+                    <span class="tab-count">3</span>
+                </label>
+                <label for="output" class="output">
+                    <i class="fa-solid fa-terminal"></i>
+                    <span>OUTPUT</span>
+                </label>
+                <label for="terminals" class="terminals">
+                    <i class="fa-solid fa-terminal"></i>
+                    <span>TERMINAL</span>
+                </label>
+                <label for="debug" class="debug">
+                    <i class="fa-solid fa-bug"></i>
+                    <span>DEBUG CONSOLE</span>
+                </label>
+                <label for="ports" class="ports">
+                    <i class="fa-solid fa-network-wired"></i>
+                    <span>PORTS</span>
+                </label>
+                <input type="checkbox" id="terminalToggle">
+                <label for="terminalToggle" class="terminalToggle"></label>
+            </div>
+        </div>
+    </section>
+</main>
+<section id="footer">
+    <div class="footer-row">
+        <i><a target="blank" href="https://github.com/delucena">main*</a></i>
+        <span class="hide">
+        <i class="fa-solid fa-circle-xmark"><span> 0</span></i>
+        <i class="fa-solid fa-triangle-exclamation"><span> 0</span></i>
+        <i class="fa-solid fa-circle-info"><span> 1</span></i>
+      </span>
+        <i><a target="blank" href="https://github.com/delucena">Git Graph</a></i>
+        <i><a target="blank" href="https://www.linkedin.com/in/delucena/">Linkedin</a></i>
+    </div>
+    <div class="footer-row">
+        <i class="hide">UTF-8</i>
+        <i class="hide">CRLF</i>
+        <i>HTML</i>
+        <i class="fa-solid fa-ban"> <span>Port:5500</span></i>
+        <i class="fa-regular fa-bell"></i>
+    </div>
+</section>
+    <!-- JavaScript Modular -->
+    <script src="./js/theme.js"></script>
+    <script src="./js/navigation.js"></script>
+    <script src="./js/terminal.js"></script>
+    <script src="./js/output.js"></script>
+    <script src="./js/preview-toggle.js"></script>
+    <script src="./js/main.js"></script>
+</body>
+
+</html>

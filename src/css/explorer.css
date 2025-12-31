@@ -1,0 +1,422 @@
+/* ============================================
+   EXPLORER - Árvore de Arquivos
+   ============================================ */
+
+.explorer {
+  background-color: var(--color-bg-secondary);
+  width: var(--width-navigation);
+  min-width: var(--width-navigation);
+  max-width: var(--width-navigation);
+  border: 1px solid var(--color-border-primary);
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(100dvh - var(--height-footer));
+  min-height: calc(100dvh - var(--height-footer));
+  max-height: calc(100dvh - var(--height-footer));
+  margin-left: calc(-1 * var(--width-navigation));
+  opacity: 0;
+  pointer-events: none;
+  position: relative;
+  z-index: 2;
+  transition: margin var(--transition-normal), opacity var(--transition-normal);
+}
+
+.explorer > div:first-child {
+  overflow-x: hidden;
+  overflow-y: auto;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  height: auto;
+}
+
+.explorer .title {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  padding: 0.48em;
+}
+
+.explorer .subTitle.folder {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  padding-block: 0.1em;
+  padding-left: var(--spacing-lg);
+  cursor: pointer;
+  position: relative;
+}
+
+.explorer .subTitle.folder::before {
+  content: none;
+}
+
+.explorer label {
+  color: var(--color-text-secondary);
+  display: block;
+  font-size: var(--font-size-base);
+  cursor: pointer;
+  padding-block: 0.1em;
+  padding-left: 2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.explorer label::before {
+  content: "\f13b";
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  color: var(--color-icon-file);
+  padding-left: 2px;
+  pointer-events: none;
+}
+
+.explorer label:hover {
+  background-color: var(--color-bg-primary);
+}
+
+.explorer .folder {
+  position: relative;
+  color: var(--color-text-secondary);
+  display: block;
+  font-size: var(--font-size-base);
+  cursor: pointer;
+  padding-block: 0.1em;
+  padding-left: var(--spacing-lg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.explorer .folder::before {
+  content: "\f07b";
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  color: var(--color-icon-folder);
+  margin-left: 1.2em;
+  pointer-events: none;
+}
+
+.explorer .folder:not(.disabled):has(+ input)::before {
+  content: "\f07b";
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  color: var(--color-icon-folder);
+  margin-left: 1.2em;
+  pointer-events: none;
+}
+
+.explorer .folder:hover {
+  background-color: var(--color-bg-primary);
+}
+
+.explorer .folder.disabled {
+  margin-left: 0;
+  opacity: 0.5;
+  cursor: default;
+}
+
+.folder ~ ul .folder.disabled {
+  padding-left: 0 !important;
+}
+
+.explorer .file.disabled {
+  margin-left: 0;
+  opacity: 0.5;
+  cursor: default;
+}
+
+.folder ~ ul .file.disabled {
+  padding-left: 0 !important;
+}
+
+.folder ~ ul .file {
+  padding-left: 0 !important;
+}
+
+.explorer .file.disabled::before {
+  content: "\f87d";
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-small);
+  pointer-events: none;
+}
+
+/* Ícones por tipo de arquivo */
+.explorer .file.disabled.java::before {
+  content: "\f4e4";
+  color: var(--color-icon-java);
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  padding-left: 2px;
+  font-size: var(--font-size-base);
+  pointer-events: none;
+}
+
+.explorer .file.disabled.xml::before {
+  content: "\f1c9";
+  color: var(--color-icon-xml);
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  padding-left: 2px;
+  font-size: var(--font-size-base);
+  pointer-events: none;
+}
+
+.explorer .file.disabled.gitignore::before {
+  content: "\f1fb";
+  color: var(--color-icon-gitignore);
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  padding-left: 2px;
+  font-size: var(--font-size-base);
+  pointer-events: none;
+}
+
+.explorer .file.disabled.properties::before {
+  content: "\f1c9";
+  color: var(--color-icon-properties);
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  padding-left: 2px;
+  font-size: var(--font-size-base);
+  pointer-events: none;
+}
+
+.explorer .file.disabled.yml::before {
+  content: "\f1c9";
+  color: var(--color-icon-yml);
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  padding-left: 2px;
+  font-size: var(--font-size-base);
+  pointer-events: none;
+}
+
+.explorer .file.disabled.html::before,
+.explorer .file.html::before {
+  content: "\f13b";
+  color: var(--color-icon-html);
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  padding-left: 2px;
+  font-size: var(--font-size-base);
+  pointer-events: none;
+}
+
+.explorer .file.html {
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+}
+
+.explorer .readme::before {
+  content: "\f87d";
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  color: var(--color-icon-file);
+  padding-left: 2px;
+  pointer-events: none;
+}
+
+.explorer .readme.markdown::before {
+  content: "\f0f6";
+  color: var(--color-icon-markdown);
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  padding-left: 2px;
+  font-size: var(--font-size-base);
+  pointer-events: none;
+}
+
+.explorer .readme {
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+}
+
+/* Sistema de setas para expansão */
+.explorer .folder:not(.disabled):has(+ input[type="checkbox"])::after {
+  content: "▶";
+  position: absolute;
+  left: 0.2em;
+  top: 0.3em;
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  font-weight: normal;
+  line-height: 1;
+  transition: all var(--transition-fast);
+  pointer-events: none;
+}
+
+.folder ~ ul .folder:not(.disabled):has(+ input[type="checkbox"])::after {
+  content: "▶";
+  position: absolute;
+  left: 0.2em;
+  top: 0.3em;
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  font-weight: normal;
+  line-height: 1;
+  transition: all var(--transition-fast);
+  pointer-events: none;
+}
+
+.explorer .folder:not(.disabled):has(+ input[type="checkbox"]:checked)::after,
+.folder ~ ul .folder:not(.disabled):has(+ input[type="checkbox"]:checked)::after {
+  content: "▼";
+  transform: none;
+}
+
+.folder ~ input[type="checkbox"] {
+  display: none;
+}
+
+.folder ~ ul {
+  position: relative;
+  display: none;
+  list-style: none;
+  margin-left: 0;
+  padding-left: var(--spacing-xl);
+  overflow-x: hidden;
+  min-width: 0;
+}
+
+.folder ~ ul li {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.folder ~ ul > li > label {
+  padding-left: 0 !important;
+}
+
+.folder ~ ul ul {
+  padding-left: var(--spacing-xl);
+}
+
+.folder ~ ul ul > li > label {
+  padding-left: 0 !important;
+}
+
+.folder ~ ul a {
+  text-decoration: none;
+}
+
+.folder ~ ul .img::before {
+  content: "\f1c5" !important;
+  color: var(--color-icon-file) !important;
+}
+
+.folder ~ ul .img {
+  padding-left: 0 !important;
+}
+
+.folder ~ input[type="checkbox"]:checked ~ ul {
+  display: block;
+}
+
+/* Destaque de arquivo ativo */
+main:has(#editor .editorContainer #header div #index:checked) #navigation .explorer .index,
+main:has(#editor .editorContainer #header div #experience:checked) #navigation .explorer .experience,
+main:has(#editor .editorContainer #header div #contact:checked) #navigation .explorer .contact,
+main:has(#editor .editorContainer #header div #skills:checked) #navigation .explorer .skills,
+main:has(#editor .editorContainer #header div #readme:checked) #navigation .explorer div .readme {
+  background-color: var(--color-bg-primary);
+}
+
+/* Alternância entre explorer e extensions */
+.menu:has(div #menu:checked) ~ #explorerView:checked ~ .explorer {
+  margin-left: 0;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.menu:has(div #menu:checked) ~ #explorerView:checked ~ .extensions {
+  margin-left: calc(-1 * var(--width-navigation));
+  opacity: 0;
+  pointer-events: none;
+}
+
+.menu:has(div #menu:checked) ~ #extensionsView:checked ~ .explorer {
+  margin-left: calc(-1 * var(--width-navigation));
+  opacity: 0;
+  pointer-events: none;
+}
+
+.menu:has(div #menu:checked) ~ #extensionsView:checked ~ .extensions {
+  margin-left: 0;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.menu:has(div #menu:not(:checked)) ~ .explorer,
+.menu:has(div #menu:not(:checked)) ~ .extensions {
+  margin-left: calc(-1 * var(--width-navigation));
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 992px) {
+  .explorer {
+    margin-left: 0px;
+    opacity: 1;
+  }
+
+  .menu:has(div #menu:checked) ~ .explorer {
+    margin-left: calc(-1 * var(--width-navigation));
+    opacity: 0;
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "name": "delucena.dev",
+  "version": "1.0.0",
+  "description": "Portfolio pessoal de delucena.dev - Desenvolvedor Back-end especializado em Java e Spring Boot. Interface interativa inspirada no Visual Studio Code criada apenas com CSS.",
+  "main": "src/index.html",
+  "scripts": {
+    "build": "node build.js",
+    "clean": "rm -rf dist",
+    "preview": "npm run build && open dist/index.html",
+    "favicon": "node src/assets/generate-favicon.js"
+  },
+  "keywords": [
+    "portfolio",
+    "delucena",
+    "java",
+    "spring-boot",
+    "backend",
+    "developer",
+    "css-only",
+    "vscode",
+    "interactive",
+    "frontend",
+    "html5",
+    "css3"
+  ],
+  "author": {
+    "name": "José Paulo de Lucena Oliveira",
+    "email": "josepaulo@delucena.dev",
+    "url": "https://delucena.dev"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/delucena/delucena.git"
+  },
+  "bugs": {
+    "url": "https://github.com/delucena/delucena/issues"
+  },
+  "homepage": "https://delucena.dev",
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
+  "devDependencies": {},
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

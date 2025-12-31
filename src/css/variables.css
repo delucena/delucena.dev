@@ -1,0 +1,74 @@
+/* ============================================
+   VARIÁVEIS CSS - Sistema de Design
+   ============================================ */
+
+:root {
+  /* Cores - Tema Dark (padrão) */
+  --color-bg-primary: rgb(30, 30, 30);
+  --color-bg-secondary: rgb(37, 37, 38);
+  --color-bg-accent: rgb(30, 30, 30);
+  --color-text-primary: rgb(212, 212, 212);
+  --color-text-secondary: rgb(133, 133, 133);
+  --color-border-primary: rgb(60, 60, 60);
+  --color-border-accent: rgb(0, 122, 204);
+  
+  /* Cores de status */
+  --color-error: #f48771;
+  --color-warning: #cca700;
+  --color-info: #75beff;
+  --color-success: #89d185;
+  
+  /* Cores de ícones */
+  --color-icon-folder: rgb(133, 133, 133);
+  --color-icon-file: rgb(78, 148, 206);
+  --color-icon-java: #f89820;
+  --color-icon-xml: #e37933;
+  --color-icon-gitignore: #f05032;
+  --color-icon-properties: #6db33f;
+  --color-icon-yml: #cb171e;
+  --color-icon-html: #e34c26;
+  --color-icon-markdown: #083fa1;
+  
+  /* Tipografia */
+  --font-family-mono: "Cascadia Code", "Droid Sans Mono", "monospace", monospace;
+  --font-size-base: 12px;
+  --font-size-small: 10px;
+  --font-size-large: 14px;
+  --font-size-title: 16px;
+  
+  /* Espaçamentos */
+  --spacing-xs: 0.2em;
+  --spacing-sm: 0.3em;
+  --spacing-md: 0.5em;
+  --spacing-lg: 0.8em;
+  --spacing-xl: 1rem;
+  --spacing-2xl: 1.5rem;
+  
+  /* Dimensões */
+  --width-navigation: 380px;
+  --width-menu: 60px;
+  --height-header: 30px;
+  --height-terminal: 250px;
+  --height-footer: 20px;
+  
+  /* Transições */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 250ms ease-in-out;
+  
+  /* Z-index */
+  --z-index-menu: 1;
+  --z-index-navigation: 10;
+  --z-index-editor: 1;
+  --z-index-dropdown: 1000;
+}
+
+/* Tema Light */
+body:has(#theme:checked) {
+  --color-bg-primary: rgb(250, 250, 250);
+  --color-bg-secondary: rgb(235, 235, 235);
+  --color-bg-accent: rgb(202, 204, 207);
+  --color-text-primary: rgb(44, 44, 44);
+  --color-text-secondary: rgb(111, 111, 111);
+  --color-border-primary: rgb(222, 222, 222);
+  --color-border-accent: rgb(140, 0, 255);
+}
