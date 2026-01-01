@@ -1,0 +1,122 @@
+/* ============================================
+   TERMINAL PORTS - Aba de Portas
+   ============================================ */
+
+.terminal .terminal-ports {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  padding: 0;
+}
+
+.terminal .terminal-ports-scrollable {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--spacing-md) var(--spacing-xl);
+}
+
+.terminal .terminal-ports-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md) 0;
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  border-bottom: 1px solid var(--color-border-primary);
+  margin-bottom: var(--spacing-md);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.terminal .terminal-ports-count {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-small);
+  font-weight: normal;
+}
+
+.terminal .terminal-ports-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  flex: 1;
+}
+
+.terminal .terminal-port-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6em;
+  background-color: var(--color-bg-secondary);
+  border-radius: 3px;
+  font-size: var(--font-size-base);
+  transition: background-color var(--transition-fast);
+}
+
+.terminal .terminal-port-item:hover {
+  background-color: var(--color-bg-primary);
+}
+
+.terminal .terminal-port-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xl);
+  flex: 1;
+}
+
+.terminal .terminal-port-number {
+  color: var(--color-border-accent);
+  font-weight: 600;
+  min-width: 50px;
+  font-family: var(--font-family-mono);
+}
+
+.terminal .terminal-port-label {
+  color: var(--color-text-primary);
+  font-family: var(--font-family-mono);
+}
+
+.terminal .terminal-port-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.terminal .terminal-port-status {
+  font-size: var(--font-size-small);
+  text-transform: uppercase;
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: 3px;
+}
+
+.terminal .terminal-port-status-running {
+  color: var(--color-success);
+  background-color: rgba(137, 209, 133, 0.1);
+}
+
+.terminal .terminal-port-action-icon {
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+.terminal .terminal-port-action-icon:hover {
+  opacity: 1;
+  color: var(--color-border-accent);
+}
+
+.terminal .terminal-ports-footer {
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border-primary);
+  margin-top: var(--spacing-md);
+  flex-shrink: 0;
+}
+
+.terminal .terminal-ports-hint {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-small);
+  font-style: italic;
+}

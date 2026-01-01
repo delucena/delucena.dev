@@ -37,7 +37,7 @@ delucena/
 ├── build.sh                    # Script de build Shell
 ├── package.json                # Configuração do projeto Node.js
 ├── package-lock.json           # Lock file do npm
-├── LICENSE.txt                 # Licença MIT
+├── LICENSE                     # Licença MIT
 ├── README.md                   # Documentação original do projeto
 ├── DOCUMENTACAO.md            # Esta documentação completa
 │
@@ -454,7 +454,7 @@ O CSS define ícones específicos usando Font Awesome:
 ### Certificações (Extensions - INSTALLED)
 1. Java EE 6 Java Persistence API Developer
 2. Java EE 6 Enterprise JavaBeans Developer
-3. Java EE 6 Web Component Developer (nov 2015)
+3. Java EE 6 Web Component Developer
 4. Java SE 6 Programmer
 5. Architect Enterprise Applications with Java EE
 
@@ -543,7 +543,7 @@ Edite as seções dentro de `<div contenteditable class="editor">` em `src/index
 
 ## 📄 Licença
 
-Este projeto está sob a licença **MIT**. Veja o arquivo `LICENSE.txt` para mais detalhes.
+Este projeto está sob a licença **MIT**. Veja o arquivo `LICENSE` para mais detalhes.
 
 ---
 

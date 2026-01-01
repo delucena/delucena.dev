@@ -116,6 +116,15 @@
   }
 
   /**
+   * Verifica se o módulo CodeHighlighter está disponível
+   * @returns {boolean} - true se disponível
+   */
+  function isHighlighterAvailable() {
+    return typeof window.CodeHighlighter !== 'undefined' && 
+           typeof window.CodeHighlighter.highlightHTML === 'function';
+  }
+
+  /**
    * Obtém o HTML da seção atual de forma limpa
    * @returns {string} - HTML da seção atual formatado
    */
@@ -232,88 +241,21 @@
   }
 
   /**
-   * Aplica syntax highlighting ao HTML
+   * Aplica syntax highlighting ao HTML usando o módulo CodeHighlighter
    * @param {string} html - HTML a ser destacado
-   * @returns {string} - HTML com spans coloridos
+   * @returns {string} - HTML com spans coloridos usando classes token.*
    */
   function highlightHTML(html) {
     if (!html) return '';
     
-    // Escapa o HTML primeiro
-    let highlighted = escapeHtml(html);
+    // Usa o módulo CodeHighlighter se disponível
+    if (isHighlighterAvailable()) {
+      return window.CodeHighlighter.highlightHTML(html);
+    }
     
-    // Processa o HTML inteiro de uma vez para melhor controle
-    // Destaca comentários HTML primeiro (precisa ser antes das tags)
-    highlighted = highlighted.replace(
-      /(&lt;!--[\s\S]*?--&gt;)/g,
-      '<span class="html-comment">$1</span>'
-    );
-    
-    // Destaca tags HTML com coloração completa
-    highlighted = highlighted.replace(
-      /(&lt;)(\/?)([\w-]+)([^&]*?)(&gt;)/g,
-      function(match, open, slash, tagName, tagContent, close) {
-        let processedContent = tagContent;
-        
-        // Primeiro, destaca atributos com valores entre aspas (simples ou duplas)
-        processedContent = processedContent.replace(
-          /(\s+)([\w-]+)(\s*=\s*)(["'])([^"']*?)(\4)/g,
-          function(attrMatch, space, attrName, equals, quote, attrValue, endQuote) {
-            return space + 
-                   '<span class="html-attribute">' + attrName + '</span>' +
-                   '<span class="html-operator">' + equals + '</span>' +
-                   quote +
-                   '<span class="html-string">' + attrValue + '</span>' +
-                   endQuote;
-          }
-        );
-        
-        // Depois, destaca atributos booleanos (sem valor, como checked, disabled, etc.)
-        // Processa apenas partes que não contêm spans (não foram processadas)
-        processedContent = processedContent.replace(
-          /(\s+)([\w-]+)(?=\s|$|&gt;)/g,
-          function(attrMatch, space, attrName) {
-            // Verifica se já está dentro de um span (atributo com valor já processado)
-            if (attrMatch.includes('<span')) {
-              return attrMatch;
-            }
-            return space + '<span class="html-attribute">' + attrName + '</span>';
-          }
-        );
-        
-        // Retorna a tag completa com coloração individual
-        return '<span class="html-delimiter">' + open + '</span>' + 
-               (slash ? '<span class="html-tag-name">' + slash + '</span>' : '') +
-               '<span class="html-tag-name">' + tagName + '</span>' + 
-               processedContent + 
-               '<span class="html-delimiter">' + close + '</span>';
-      }
-    );
-    
-    // Destaca texto que não está dentro de spans (texto entre tags)
-    // Usa uma abordagem mais cuidadosa para não quebrar spans existentes
-    const parts = highlighted.split(/(<span[^>]*>[\s\S]*?<\/span>)/g);
-    const processedParts = parts.map(part => {
-      // Se já é um span, não processa
-      if (part.match(/^<span[^>]*>[\s\S]*?<\/span>$/)) {
-        return part;
-      }
-      
-      // Se contém texto, envolve em span de texto
-      const trimmed = part.trim();
-      if (trimmed) {
-        // Preserva espaços/indentação antes e depois
-        const beforeMatch = part.match(/^(\s*)/);
-        const afterMatch = part.match(/(\s*)$/);
-        const before = beforeMatch ? beforeMatch[1] : '';
-        const after = afterMatch ? afterMatch[1] : '';
-        return before + '<span class="html-text">' + trimmed + '</span>' + after;
-      }
-      
-      return part;
-    });
-    
-    return processedParts.join('');
+    // Fallback: retorna HTML escapado sem highlighting
+    console.warn('CodeHighlighter não disponível, retornando HTML sem highlighting');
+    return escapeHtml(html);
   }
 
   /**
@@ -331,10 +273,6 @@
       // Modo código
       const html = getCurrentSectionHTML();
       if (html) {
-        // Aplica syntax highlighting
-        const highlighted = highlightHTML(html);
-        codeViewContent.innerHTML = highlighted;
-        
         // Adiciona classe para modo código
         editor.classList.add('code-mode');
         
@@ -352,6 +290,23 @@
         codeViewContainer.style.display = 'block';
         codeViewContainer.style.visibility = 'visible';
         codeViewContainer.style.opacity = '1';
+        
+        // Aplica syntax highlighting
+        if (isHighlighterAvailable()) {
+          const highlighted = highlightHTML(html);
+          codeViewContent.innerHTML = highlighted;
+        } else {
+          // Aguarda o CodeHighlighter estar disponível (se ainda não estiver)
+          setTimeout(() => {
+            if (isHighlighterAvailable()) {
+              const highlighted = highlightHTML(html);
+              codeViewContent.innerHTML = highlighted;
+            } else {
+              // Fallback: HTML escapado sem highlighting
+              codeViewContent.textContent = html;
+            }
+          }, 100);
+        }
       }
     } else {
       // Modo preview

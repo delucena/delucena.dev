@@ -1,10 +1,18 @@
 /**
  * Simulação de Output Maven
  * Simula a saída do Maven no painel de output
+ * 
+ * @module output
+ * @description Simula logs de build Maven/Spring Boot no painel de output
  */
 
 (function() {
   'use strict';
+
+  const SELECTORS = {
+    outputContent: '#outputContent',
+    outputRadio: '#output'
+  };
 
   // Texto do output Maven
   const OUTPUT_TEXT = `[INFO] Scanning for projects...
@@ -123,23 +131,37 @@
   /**
    * Cria um observer para scroll automático
    * @param {HTMLElement} element - Elemento a observar
+   * @returns {MutationObserver} - Observer configurado
+   * @throws {Error} Se o elemento não for válido
    */
   function createScrollObserver(element) {
+    if (!element || !(element instanceof HTMLElement)) {
+      throw new Error('Elemento inválido para observer');
+    }
+    
     return new MutationObserver((mutations) => {
-      if (mutations.some(m => m.addedNodes.length > 0)) {
-        requestAnimationFrame(() => {
-          element.scrollTop = element.scrollHeight;
-        });
+      try {
+        if (mutations.some(m => m.addedNodes.length > 0)) {
+          requestAnimationFrame(() => {
+            element.scrollTop = element.scrollHeight;
+          });
+        }
+      } catch (error) {
+        console.error('Erro no scroll observer:', error);
       }
     });
   }
 
   /**
    * Imprime o texto gradualmente no output
+   * @throws {Error} Se o elemento outputContent não for encontrado
    */
   function printOutputGradually() {
-    const outputContent = document.getElementById('outputContent');
-    if (!outputContent) return;
+    const outputContent = document.querySelector(SELECTORS.outputContent);
+    if (!outputContent) {
+      console.warn('Elemento outputContent não encontrado');
+      return;
+    }
     
     // Limpar conteúdo anterior
     outputContent.innerHTML = '';
@@ -186,22 +208,44 @@
     printNextLine();
   }
 
-  // Detectar quando a aba output é selecionada
-  const outputRadio = document.getElementById('output');
-  if (outputRadio) {
-    let hasPrinted = false;
-    
-    outputRadio.addEventListener('change', function() {
-      if (this.checked && !hasPrinted) {
-        hasPrinted = true;
-        // Pequeno delay para garantir que a aba está visível
+  /**
+   * Inicializa o módulo de output
+   */
+  function init() {
+    try {
+      const outputRadio = document.querySelector(SELECTORS.outputRadio);
+      if (!outputRadio) {
+        console.warn('Elemento outputRadio não encontrado');
+        return;
+      }
+      
+      let hasPrinted = false;
+      
+      outputRadio.addEventListener('change', function() {
+        try {
+          if (this.checked && !hasPrinted) {
+            hasPrinted = true;
+            // Pequeno delay para garantir que a aba está visível
+            setTimeout(printOutputGradually, 100);
+          }
+        } catch (error) {
+          console.error('Erro ao processar mudança de aba:', error);
+        }
+      });
+      
+      // Se a aba já estiver selecionada ao carregar a página
+      if (outputRadio.checked) {
         setTimeout(printOutputGradually, 100);
       }
-    });
-    
-    // Se a aba já estiver selecionada ao carregar a página
-    if (outputRadio.checked) {
-      setTimeout(printOutputGradually, 100);
+    } catch (error) {
+      console.error('Erro ao inicializar módulo de output:', error);
     }
+  }
+
+  // Inicializa quando o DOM estiver pronto
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
   }
 })();

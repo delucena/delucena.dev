@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
@@ -10,7 +10,7 @@
 ![Java](https://img.shields.io/badge/Java-ED8B00?logo=java&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?logo=spring&logoColor=white)
 
-Portfolio pessoal de **delucena.dev** apresentado em formato de IDE interativa. Uma interface criada **apenas com CSS**, sem dependência de JavaScript para a funcionalidade principal, demonstrando o poder do CSS moderno usando seletores avançados, pseudo-classes e propriedades CSS para criar uma experiência interativa única.
+Portfolio pessoal de **delucena.dev** apresentado em formato de IDE interativa. Uma interface criada com **CSS modular** e **JavaScript modular**, demonstrando o poder do CSS moderno usando seletores avançados, pseudo-classes e propriedades CSS para criar uma experiência interativa única. O projeto utiliza um sistema de templates modulares e build automatizado.
 
 [🚀 Demo](#-como-usar) • [📖 Documentação](./DOCUMENTACAO.md) • [🤝 Contribuir](./CONTRIBUTING.md) • [🐛 Reportar Bug](https://github.com/delucena/delucena/issues) • [💡 Sugerir Feature](https://github.com/delucena/delucena/issues)
 
@@ -18,14 +18,17 @@ Portfolio pessoal de **delucena.dev** apresentado em formato de IDE interativa. 
 
 ## 🎯 Sobre o Projeto
 
-Este é o portfolio pessoal de **José Paulo de Lucena Oliveira (Zé/Delucena)**, um desenvolvedor Back-end especializado em Java e Spring Boot. O projeto demonstra como é possível criar interfaces interativas complexas usando apenas CSS, sem depender de JavaScript. A interface inclui:
+Este é o portfolio pessoal de **José Paulo de Lucena Oliveira (Zé/Delucena)**, um desenvolvedor Back-end especializado em Java e Spring Boot. O projeto demonstra como é possível criar interfaces interativas complexas usando CSS moderno e JavaScript modular. A interface inclui:
 
 - ✅ Barra lateral com explorador de arquivos
-- ✅ Editor de código com abas
-- ✅ Terminal integrado
+- ✅ Editor de código com abas e syntax highlighting
+- ✅ Terminal integrado com múltiplas abas (Problems, Output, Terminal, Debug, Ports)
 - ✅ Menu de configurações
 - ✅ Alternância entre tema claro e escuro
 - ✅ Navegação entre arquivos
+- ✅ Sistema de templates modulares
+- ✅ CSS e JavaScript organizados em módulos
+- ✅ Build automatizado com minificação
 - ✅ Efeitos de hover e transições suaves
 
 ## 📁 Estrutura do Projeto
@@ -33,14 +36,54 @@ Este é o portfolio pessoal de **José Paulo de Lucena Oliveira (Zé/Delucena)**
 ```
 delucena/
 ├── src/                        # Código-fonte
-│   ├── index.html              # HTML principal
+│   ├── index.html              # HTML base (montado a partir de templates)
+│   ├── 404.html                # Página de erro 404
+│   ├── templates/              # Componentes HTML modulares
+│   │   ├── navigation.html     # Barra lateral de navegação
+│   │   ├── editor-header.html  # Cabeçalho do editor
+│   │   └── terminal/           # Terminal modular
+│   │       ├── terminal.html
+│   │       ├── terminal-header.html
+│   │       └── terminal-tabs/
+│   │   ├── footer.html         # Rodapé
+│   │   └── sections/           # Seções de conteúdo
+│   │       ├── index-section.html
+│   │       ├── experience-section.html
+│   │       ├── skills-section.html
+│   │       ├── contact-section.html
+│   │       └── readme-section.html
 │   ├── css/                    # Arquivos CSS modulares
-│   ├── js/                     # Arquivos JavaScript
+│   │   ├── main.css            # Arquivo principal (importa todos)
+│   │   ├── variables.css       # Variáveis CSS (tema, cores)
+│   │   ├── reset.css           # Reset CSS
+│   │   ├── layout.css          # Layout principal
+│   │   ├── navigation.css     # Barra de navegação
+│   │   ├── explorer.css        # Explorer de arquivos
+│   │   ├── editor.css          # Editor de código
+│   │   ├── syntax-highlight.css # Syntax highlighting
+│   │   ├── terminal.css        # Terminal (wrapper)
+│   │   └── terminal/           # CSS modular do terminal
+│   ├── js/                     # Arquivos JavaScript modulares
+│   │   ├── main.js             # Inicialização
+│   │   ├── theme.js            # Gerenciamento de temas
+│   │   ├── navigation.js       # Navegação
+│   │   ├── code-highlighter.js # Syntax highlighting
+│   │   ├── code-copy.js        # Cópia de código
+│   │   ├── preview-toggle.js   # Alternância preview/código
+│   │   └── terminal/           # Módulos do terminal
 │   ├── assets/                 # Imagens e recursos
+│   ├── config/                 # Arquivos de configuração
+│   │   ├── _headers            # Headers Cloudflare Pages
+│   │   ├── robots.txt          # Configuração para crawlers
+│   │   └── sitemap.xml         # Mapa do site
+│   ├── scripts/                # Scripts auxiliares
+│   │   └── optimize-images.js  # Otimização de imagens
 │   └── main/                   # Estrutura Spring Boot
 │       ├── java/               # Código Java
 │       └── resources/          # Recursos e configurações
-├── dist/                       # Arquivos compilados (gerados)
+├── scripts/                    # Scripts auxiliares
+│   └── optimize-images.js      # Otimização de imagens
+├── dist/                       # Arquivos compilados (gerados pelo build)
 ├── build.js                    # Script de build (Node.js)
 ├── build.sh                    # Script de build (Shell)
 ├── package.json                # Configuração do projeto
@@ -53,7 +96,7 @@ delucena/
 ├── CONTRIBUTING.md            # Guia de contribuição
 ├── SECURITY.md                # Política de segurança
 ├── CHANGELOG.md               # Histórico de mudanças
-└── LICENSE.txt                # Licença MIT
+└── LICENSE                     # Licença MIT
 ```
 
 > 📚 Para mais detalhes sobre a estrutura, consulte [ESTRUTURA_PROJETO.md](./ESTRUTURA_PROJETO.md)
@@ -65,33 +108,48 @@ delucena/
 - Um navegador moderno (Chrome, Firefox, Safari, Edge)
 - Node.js (opcional, apenas para usar o script de build automatizado)
 
-### Opção 1: Usar os Arquivos Diretamente
+### Opção 1: Usar o Script de Build (Recomendado)
 
-1. Abra o arquivo `src/index.html` diretamente no navegador
-2. Ou copie manualmente os arquivos de `src/` para `dist/`:
+1. Clone o repositório:
    ```bash
-   cp src/index.html dist/index.html
-   cp src/style.css dist/style.css
+   git clone https://github.com/delucena/delucena.git
+   cd delucena
    ```
 
-### Opção 2: Usar o Script de Build (Node.js)
-
-1. Instale as dependências (se necessário):
+2. Instale as dependências (se necessário):
    ```bash
    npm install
    ```
 
-2. Execute o build:
+3. Execute o build:
    ```bash
    npm run build
    ```
 
-3. Abra `dist/index.html` no navegador
+4. Visualize o resultado:
+   ```bash
+   npm run serve
+   ```
+   Acesse `http://localhost:8000` no navegador
 
 **Scripts disponíveis:**
-- `npm run build` - Gera a pasta dist com os arquivos compilados
+- `npm run build` - Gera a pasta dist com os arquivos compilados (monta templates, minifica CSS/JS)
 - `npm run clean` - Remove a pasta dist
 - `npm run preview` - Gera o build e abre no navegador (macOS)
+- `npm run serve` - Gera o build e inicia servidor HTTP local na porta 8000
+- `npm run dev` - Alias para `serve`
+
+**O que o build faz:**
+- Monta `index.html` a partir de templates modulares
+- **Consolida CSS** - Resolve todos os `@import` em um único arquivo `main.css` (funciona mesmo abrindo diretamente)
+- Minifica CSS e JavaScript (cria arquivos .min.css e .min.js, mantém originais)
+- Copia assets (imagens, favicons)
+- Copia arquivos de configuração (robots.txt, sitemap.xml, _headers)
+- Otimiza imagens (se script disponível)
+
+**Nota:** O build consolida automaticamente todos os CSS (resolve `@import`) em um único arquivo `main.css`. 
+
+⚠️ **Importante sobre imagens:** Se você abrir `dist/index.html` diretamente no navegador (protocolo `file://`), algumas imagens podem não carregar devido a restrições de segurança do navegador. **Recomendado:** Use `npm run serve` para testar com um servidor HTTP local.
 
 ```bash
 npm run build
@@ -99,7 +157,7 @@ npm run clean
 npm run preview
 ```
 
-### Opção 3: Usar o Script Shell
+### Opção 2: Usar o Script Shell (Alternativo)
 
 1. Torne o script executável:
    ```bash
@@ -113,26 +171,7 @@ npm run preview
 
 3. Abra `dist/index.html` no navegador
 
-## 📦 Gerando a Pasta Dist
-
-A pasta `dist/` contém os arquivos prontos para produção. Para gerá-la:
-
-### Método 1: Script Node.js
-```bash
-npm run build
-```
-
-### Método 2: Script Shell
-```bash
-./build.sh
-```
-
-### Método 3: Manualmente
-```bash
-mkdir -p dist
-cp src/index.html dist/index.html
-cp src/style.css dist/style.css
-```
+> **Nota:** O script shell é uma versão simplificada. Recomendamos usar `npm run build` para obter todas as funcionalidades (templates, minificação, consolidação CSS).
 
 ## 🌐 Como Visualizar
 
@@ -180,20 +219,22 @@ Essas dependências são carregadas via CDN no HTML, então não é necessário 
 
 ### Alterar Conteúdo
 
-Edite os arquivos em `src/`:
-- `src/index.html` - Conteúdo e estrutura
-- `src/style.css` - Estilos e temas
+Edite os templates em `src/templates/`:
+- `src/templates/sections/*.html` - Seções do portfólio
+- `src/templates/navigation.html` - Barra lateral
+- `src/templates/terminal/` - Terminal e abas
 
-### Adicionar Novos Arquivos
+### Adicionar Novas Seções
 
-1. Adicione uma nova seção no HTML dentro de `<div class="editor">`
-2. Adicione um novo label no explorer
-3. Adicione uma nova aba no header
-4. Adicione as regras CSS correspondentes (veja os comentários no CSS)
+1. Crie um novo template em `src/templates/sections/nova-secao.html`
+2. Adicione o placeholder no `src/index.html`: `<!-- TEMPLATE: sections/nova-secao.html -->`
+3. Adicione um novo label no explorer (`src/templates/navigation.html`)
+4. Adicione uma nova aba no header (`src/templates/editor-header.html`)
+5. Adicione as regras CSS correspondentes em `src/css/editor.css`
 
 ### Modificar Tema
 
-As cores são definidas em variáveis CSS no início de `style.css`:
+As cores são definidas em variáveis CSS em `src/css/variables.css`:
 
 ```css
 :root {
@@ -201,14 +242,27 @@ As cores são definidas em variáveis CSS no início de `style.css`:
   --secondary-clr-500: rgb(37, 37, 38);
   /* ... */
 }
+
+body:has(#theme:checked) {
+  --bg-clr-500: rgb(255, 255, 255);
+  --secondary-clr-500: rgb(243, 243, 243);
+  /* ... */
+}
 ```
+
+### Adicionar Novas Funcionalidades JavaScript
+
+1. Crie um novo módulo em `src/js/novo-modulo.js`
+2. Adicione o script no `src/index.html`
+3. Inicialize o módulo em `src/js/main.js` se necessário
 
 ## 🛠️ Tecnologias Utilizadas
 
 - **Frontend:**
   - HTML5 semântico
-  - CSS3 (variáveis, seletores `:has()`, pseudo-classes)
-  - JavaScript (mínimo, apenas para simulação)
+  - CSS3 modular (variáveis, seletores `:has()`, pseudo-classes)
+  - JavaScript ES6+ modular
+  - Sistema de templates HTML
   - Bootstrap 5.3.2 (CDN)
   - Font Awesome 6.5.1 (CDN)
 
@@ -217,14 +271,16 @@ As cores são definidas em variáveis CSS no início de `style.css`:
   - Spring Boot
 
 - **Ferramentas:**
-  - Node.js (build)
+  - Node.js (build system)
   - Git
+  - Build automatizado com minificação
 
 ## 📊 Estatísticas
 
-- **Linhas de código HTML**: ~1000+
-- **Linhas de código CSS**: ~1900+
-- **Linhas de código JavaScript**: ~400+
+- **Total de arquivos**: ~50+ arquivos
+- **Linhas de código HTML**: ~1000+ (templates modulares)
+- **Linhas de código CSS**: ~2000+ (CSS modular)
+- **Linhas de código JavaScript**: ~2000+ (JS modular)
 - **Linhas de código Java**: ~12+
 
 ## 🤝 Contribuindo
@@ -239,7 +295,7 @@ Contribuições são sempre bem-vindas! Por favor, leia o [guia de contribuiçã
 
 ## 📄 Licença
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE.txt](./LICENSE.txt) para mais detalhes.
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](./LICENSE) para mais detalhes.
 
 ## 🔒 Segurança
 
@@ -269,13 +325,26 @@ Se você descobrir uma vulnerabilidade de segurança, por favor, não abra uma i
 
 - Alguns navegadores mais antigos podem não suportar o seletor `:has()`
 - A funcionalidade de edição de conteúdo é limitada (apenas visual)
+- Requer build para funcionar corretamente (HTML é montado a partir de templates)
 
 ## 📚 Recursos de Aprendizado
 
 - [CSS :has() Selector](https://developer.mozilla.org/en-US/docs/Web/CSS/:has)
 - [CSS Custom Properties](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)
 - [Font Awesome](https://fontawesome.com/)
+- [Spring Boot Documentation](https://spring.io/projects/spring-boot)
+
+## 🏗️ Arquitetura
+
+O projeto utiliza uma arquitetura modular:
+
+- **Templates HTML**: Componentes reutilizáveis montados durante o build
+- **CSS Modular**: Arquivos separados por funcionalidade, consolidados no build
+- **JavaScript Modular**: Módulos ES6 com IIFE para encapsulamento
+- **Build System**: Consolidação automática de CSS/JS e minificação
+
+Para mais detalhes sobre a arquitetura, consulte [ESTRUTURA_PROJETO.md](./ESTRUTURA_PROJETO.md).
 
 ---
 
-**Desenvolvido com ❤️ usando apenas CSS**
+**Desenvolvido com ❤️ usando CSS modular e JavaScript moderno**

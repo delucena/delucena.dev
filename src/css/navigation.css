@@ -187,6 +187,48 @@
   position: relative;
 }
 
+/* Badge de notificação para o menu de configurações */
+.menu label.folder.settings[for="folderToggleSettings"]::after {
+  content: "1";
+  position: absolute;
+  bottom: 0.2em;
+  right: 0.2em;
+  background-color: #007acc;
+  color: white;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  font-weight: bold;
+  line-height: 1;
+  z-index: 10;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Badge de notificação para o menu de account */
+.menu label.folder.settings[for="folderToggleAccounts"]::after {
+  content: "3";
+  position: absolute;
+  bottom: 0.2em;
+  right: 0.2em;
+  background-color: #007acc;
+  color: white;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  font-weight: bold;
+  line-height: 1;
+  z-index: 10;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
 .menu label.folder.settings svg {
   width: 22px;
   height: 22px;
@@ -307,4 +349,315 @@
 .menu > div:last-child > div:first-child .folder.settings ~ input[type="radio"]:checked ~ ul,
 .menu > div:last-child > div:last-child .folder.settings ~ input[type="radio"]:checked ~ ul {
   display: block !important;
+}
+
+/* Mobile: menu lateral sempre visível minimizado */
+@media (max-width: 768px) {
+  /* Navigation sempre visível no lado esquerdo */
+  #navigation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 60px; /* Largura minimizada */
+    min-width: 60px;
+    max-width: 60px;
+    height: 100%;
+    z-index: 1000;
+    display: block; /* Mudar para block para permitir posicionamento absoluto dos filhos */
+    background-color: transparent;
+    transition: width var(--transition-normal);
+    overflow: visible; /* Permitir que explorer/extensions sejam visíveis */
+    box-sizing: border-box;
+  }
+  
+  /* Menu minimizado - apenas ícones verticais */
+  .menu {
+    width: 60px;
+    min-width: 60px;
+    height: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: var(--spacing-md) 0;
+    background-color: var(--color-bg-accent);
+    position: relative;
+    z-index: 1001;
+  }
+  
+  .menu > div:first-child {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 0;
+  }
+  
+  .menu > div:last-child {
+    display: none;
+  }
+  
+  /* Esconder hamburger em mobile - não precisamos mais */
+  .menu label[for="menu"] {
+    display: none;
+  }
+  
+  /* Ícones do menu em mobile - sempre visíveis */
+  .menu label[for="explorerView"],
+  .menu label.extensions-icon,
+  .menu a.git-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid var(--color-border-primary);
+  }
+  
+  .menu label[for="explorerView"]:hover,
+  .menu label.extensions-icon:hover,
+  .menu a.git-icon:hover {
+    background-color: var(--color-bg-primary);
+  }
+  
+  .menu label[for="explorerView"] i,
+  .menu label.extensions-icon svg,
+  .menu a.git-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  /* Destaque quando ativo - será tratado via JavaScript se necessário */
+  /* Por enquanto, o hover já indica interatividade */
+  
+  /* Explorer e Extensions - expandem quando ativos */
+  .explorer,
+  .extensions {
+    position: fixed; /* Mudar para fixed para ficar acima de tudo */
+    top: 0;
+    left: 60px; /* Começa depois do menu minimizado */
+    width: 0 !important; /* Forçar fechado por padrão em mobile */
+    min-width: 0 !important;
+    max-width: 0 !important;
+    height: 100%;
+    margin-left: 0;
+    opacity: 0 !important;
+    background-color: var(--color-bg-secondary);
+    border: none;
+    overflow: hidden;
+    transition: width var(--transition-normal), opacity var(--transition-normal), z-index var(--transition-normal);
+    z-index: 1; /* Atrás quando minimizado */
+    pointer-events: none;
+    visibility: hidden !important;
+  }
+  
+  /* Quando Explorer está selecionado, expande e vai para frente */
+  #explorerView:checked ~ .explorer {
+    width: 220px !important;
+    min-width: 220px !important;
+    max-width: 220px !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    z-index: 9999 !important; /* Muito alto para ficar na frente de tudo */
+    visibility: visible !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    display: block !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Garantir que conteúdo interno do explorer seja visível quando expandido */
+  /* Esconder estrutura de pastas em mobile */
+  #explorerView:checked ~ .explorer .desktop-only {
+    display: none !important;
+  }
+  
+  /* Mostrar apenas lista mobile simplificada */
+  #explorerView:checked ~ .explorer .mobile-only {
+    display: block !important;
+  }
+  
+  #explorerView:checked ~ .explorer .mobile-explorer-list,
+  #explorerView:checked ~ .explorer .mobile-explorer-list li,
+  #explorerView:checked ~ .explorer .mobile-explorer-list li label {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  /* Garantir que título apareça */
+  #explorerView:checked ~ .explorer .title {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  /* Quando Extensions está selecionado, expande e vai para frente */
+  #extensionsView:checked ~ .extensions {
+    width: 220px !important;
+    min-width: 220px !important;
+    max-width: 220px !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    z-index: 9999 !important; /* Muito alto para ficar na frente de tudo */
+    visibility: visible !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    display: block !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Garantir que conteúdo interno do extensions seja visível quando expandido */
+  #extensionsView:checked ~ .extensions .title,
+  #extensionsView:checked ~ .extensions .folder.subTitle,
+  #extensionsView:checked ~ .extensions .extension-item,
+  #extensionsView:checked ~ .extensions li {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  /* MOBILE: IMPORTANTE - ul são controladas pelos checkboxes individuais */
+  /* Estado inicial: todas as listas começam escondidas */
+  #extensionsView:checked ~ .extensions .folder.subTitle ~ input[type="checkbox"] ~ ul,
+  #extensionsView:checked ~ .extensions .folder.subTitle ~ ul,
+  #extensionsView:checked ~ .extensions #folderToggleInstalled ~ ul,
+  #extensionsView:checked ~ .extensions #folderToggleRecommended ~ ul {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+  }
+  
+  /* MOBILE: INSTALLED - Quando checkbox está marcado */
+  #extensionsView:checked ~ .extensions #folderToggleInstalled:checked ~ ul {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  
+  /* MOBILE: INSTALLED - Quando checkbox NÃO está marcado */
+  #extensionsView:checked ~ .extensions #folderToggleInstalled:not(:checked) ~ ul {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+  }
+  
+  /* MOBILE: RECOMMENDED - Quando checkbox está marcado */
+  #extensionsView:checked ~ .extensions #folderToggleRecommended:checked ~ ul {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  
+  /* MOBILE: RECOMMENDED - Quando checkbox NÃO está marcado */
+  #extensionsView:checked ~ .extensions #folderToggleRecommended:not(:checked) ~ ul {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+  }
+  
+  /* MOBILE: Regras genéricas como fallback */
+  #extensionsView:checked ~ .extensions .folder.subTitle ~ input[type="checkbox"]:checked ~ ul {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  
+  #extensionsView:checked ~ .extensions .folder.subTitle ~ input[type="checkbox"]:not(:checked) ~ ul {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+  }
+  
+  /* Quando um está ativo, o outro fica escondido e atrás */
+  #explorerView:checked ~ .extensions {
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    z-index: 1 !important; /* Atrás quando minimizado */
+    visibility: hidden !important;
+  }
+  
+  #extensionsView:checked ~ .explorer {
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    z-index: 1 !important; /* Atrás quando minimizado */
+    visibility: hidden !important;
+  }
+  
+  /* Ajustar conteúdo do explorer/extensions */
+  .explorer > div:first-child,
+  .extensions > div:first-child {
+    padding: 0; /* Sem padding em mobile para lista ocupar toda largura */
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    z-index: 1;
+    background-color: var(--color-bg-secondary);
+  }
+  
+  .explorer .title,
+  .extensions .title {
+    padding: var(--spacing-md);
+    font-size: var(--font-size-base);
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Mobile explorer list - ajustes */
+  .mobile-explorer-list {
+    padding: 0;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .mobile-explorer-list li {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .mobile-explorer-list li label {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-size-base);
+    position: relative;
+    z-index: 1;
+    display: block;
+  }
+  
+  /* Garantir que extension items também sejam visíveis */
+  .extensions .extension-item {
+    position: relative;
+    z-index: 1;
+  }
 }

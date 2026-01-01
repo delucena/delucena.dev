@@ -1,0 +1,229 @@
+/* ============================================
+   TERMINAL TERMINAL - Aba de Terminal Interativo
+   ============================================ */
+
+/* Container da aba terminal - GARANTE estrutura flex correta */
+.terminal .terminal-content-terminal {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  width: 100% !important;
+  overflow: hidden !important;
+  min-height: 0 !important;
+  flex: 1 1 auto !important;
+  position: relative;
+}
+
+/* Wrapper interno - GARANTE estrutura flex correta */
+.terminal .terminal-terminal {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  min-height: 0 !important;
+  position: relative;
+  flex: 1 1 auto !important;
+}
+
+/* Header fixo no topo - NÃO scrolla, altura fixa */
+.terminal .terminal-terminal-header {
+  flex: 0 0 auto !important;
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  position: relative;
+  width: 100%;
+  height: auto;
+  min-height: auto;
+}
+
+.terminal .terminal-terminal-tab {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-xl);
+  background-color: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border-primary);
+  font-size: 11px;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.terminal .terminal-terminal-icon {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-small);
+}
+
+.terminal .terminal-terminal-close {
+  margin-left: auto;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  opacity: 0.7;
+}
+
+.terminal .terminal-terminal-close:hover {
+  opacity: 1;
+  color: var(--color-text-primary);
+}
+
+/* Área de output do terminal com scroll - GARANTE SCROLL FUNCIONANDO */
+.terminal .terminal-terminal-scrollable {
+  /* Flexbox - CRÍTICO para scroll funcionar em flexbox */
+  flex: 1 1 0% !important;
+  flex-grow: 1 !important;
+  flex-shrink: 1 !important;
+  flex-basis: 0% !important;
+  min-height: 0 !important;
+  
+  /* Overflow - CRÍTICO para scroll aparecer */
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  
+  /* Dimensões - GARANTE que ocupe espaço disponível */
+  width: 100% !important;
+  position: relative !important;
+  
+  /* Estilos visuais */
+  font-family: var(--font-family-mono);
+  line-height: 1.6;
+  white-space: normal;
+  padding: var(--spacing-md) var(--spacing-xl);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-base);
+  text-align: left;
+  background-color: var(--color-bg-accent);
+  box-sizing: border-box;
+  
+  /* Melhorias de scroll */
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: auto;
+  
+  /* Técnica para forçar scroll em flexbox - altura 0 com flex 1 */
+  height: 0;
+}
+
+.terminal .terminal-terminal-scrollable > div {
+  white-space: pre-wrap;
+  margin-bottom: 2px;
+}
+
+.terminal .terminal-terminal-line {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 2px;
+}
+
+.terminal .terminal-terminal-prompt {
+  color: #00ff00;
+  margin-right: var(--spacing-sm);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+/* Cor do prompt para tema light */
+body:has(#theme:checked) .terminal .terminal-terminal-prompt {
+  color: #008000;
+}
+
+.terminal .terminal-terminal-command {
+  color: var(--color-text-primary);
+}
+
+.terminal .terminal-terminal-info {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-small);
+}
+
+.terminal .terminal-terminal-banner {
+  color: var(--color-text-primary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-base);
+  font-weight: normal;
+  white-space: pre;
+  line-height: 1;
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+.terminal .terminal-terminal-success {
+  color: var(--color-success);
+}
+
+/* Container do input do terminal - DENTRO do scrollable */
+.terminal .terminal-terminal-input-container {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm) 0;
+  background-color: transparent;
+  gap: var(--spacing-sm);
+  position: relative;
+  margin-top: var(--spacing-sm);
+}
+
+.terminal .terminal-terminal-prompt-input {
+  color: #00ff00;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+/* Cor do prompt do input para tema light */
+body:has(#theme:checked) .terminal .terminal-terminal-prompt-input {
+  color: #008000;
+}
+
+.terminal .terminal-terminal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-text-primary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-base);
+  padding: 0;
+  margin: 0;
+}
+
+.terminal .terminal-terminal-input::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 0.5;
+}
+
+/* Cursor piscante no input */
+.terminal .terminal-terminal-input:focus {
+  caret-color: var(--color-text-primary);
+}
+
+/* Scrollbar do terminal-tab - mesmo estilo do explorer e code view */
+.terminal .terminal-terminal-scrollable::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.terminal .terminal-terminal-scrollable::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+
+.terminal .terminal-terminal-scrollable::-webkit-scrollbar-thumb {
+  background: var(--color-border-primary);
+  border-radius: 4px;
+}
+
+.terminal .terminal-terminal-scrollable::-webkit-scrollbar-thumb:hover {
+  background: #4a4a4a;
+}
+
+/* Scrollbar para tema light */
+body:has(#theme:checked) .terminal .terminal-terminal-scrollable::-webkit-scrollbar-thumb {
+  background: #b0b0b0;
+}
+
+body:has(#theme:checked) .terminal .terminal-terminal-scrollable::-webkit-scrollbar-thumb:hover {
+  background: #909090;
+}

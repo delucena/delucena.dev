@@ -1,0 +1,193 @@
+<section class="experience" id="_experience_">
+    <h1>💼 Experiência Profissional</h1>
+    <br>
+    <br>
+
+    <h2>🏢 Mercado Livre</h2>
+    <h3>Sr Software Engineer</h3>
+    <p><b>mar de 2023 - o momento · 2 anos 10 meses · Remota</b></p>
+    <br>
+    <p>Engenheiro de Software Sênior em time core responsável por acumular, consolidar e gerenciar valores e volumes transacionais utilizados por várias áreas do negócio. Atuação em microsserviços e sistemas distribuídos com foco em escala, alta performance e confiabilidade. Participei da migração progressiva de serviços Java 8+/Spring para Go, com rollout seguro e observabilidade ponta a ponta.</p>
+    <br>
+    <div style="margin-left:1rem">
+        <b>Principais responsabilidades:</b>
+        <ul style="margin-left:1rem">
+            <li><b>Arquitetura & Operação:</b> microsserviços com filas, cache, MySQL e jobs assíncronos; práticas de idempotência, backpressure e resiliência em produção.</li>
+            <li><b>Observabilidade:</b> Datadog e New Relic (APM, métricas, logs, dashboards e alertas) para diagnóstico proativo e redução de incidentes.</li>
+            <li><b>Qualidade:</b> cultura forte de testes unitários, code review e quality gates; versionamento em Git/GitHub.</li>
+            <li><b>Performance:</b> tuning de conexões/queries, uso eficiente de cache e análise contínua de gargalos em pipelines assíncronos.</li>
+            <li><b>Testes & Automação (E2E):</b> scripts Python orquestrando cenários do começo ao fim (smoke/contrato/negócio), validando efeitos em filas, cache e MySQL, conferindo consistência de dados e checando telemetria; execução integrada ao CI para prevenção de regressões.</li>
+        </ul>
+        <br>
+        <b>Projetos:</b>
+        <ul style="margin-left:1rem">
+            <li><b>accumulators-event-expander:</b> Consome eventos limpos (payment, payouts, etc.), normaliza/expande e publica em tópico dedicado para desacoplar upstreams.</li>
+            <li><b>accumulators-event-listener:</b> Aplica regras/filters e transforma eventos em comandos de domínio (create/update/revert), roteando por tipo(payments, payouts, etc.).</li>
+            <li><b>accumulators-core-api:</b> Coração do domínio: processa comandos, persiste em MySQL particionado/shard e mantém KVS para leitura rápida; executa jobs (materialização, reprocesso, reconciliação) e emite eventos operacionais.</li>
+            <li><b>accumulators-search-api:</b> Camada de consulta (read-model) com latência baixa sobre o KVS de acumuladores; expõe APIs de busca e paginação.</li>
+            <li><b>accumulators-cap-api:</b> Serviço de CAP/limites, recebendo stream de atualizações e expondo verificação/aplicação de limites.</li>
+        </ul>
+    </div>
+    <br>
+    <br>
+
+    <h2>🏦 Sicoob</h2>
+    <h3>Engenheiro de software sênior</h3>
+    <p><b>nov de 2021 - mar de 2023 · 1 ano 5 meses · Remota</b></p>
+    <br>
+    <p>Engenheiro de Software Sênior atuando no desenvolvimento e integração de soluções empresariais em ambiente bancário, com foco em modernização de middleware e confiabilidade de sistemas críticos. Participei diretamente das migrações de plataforma, incluindo JBoss EAP > IBM WebSphere Application Server 9.0 (WAS 9) e Java 6 > Java 8, garantindo estabilidade, performance e continuidade operacional.</p>
+    <br>
+    <div style="margin-left:1rem">
+        <b>Principais responsabilidades:</b>
+        <ul style="margin-left:1rem">
+            <li><b>Modernização & Middleware:</b> automação de configuração e deploy no JBoss (incl. ajustes via JBoss CLI) e sustentação pós-migração no WAS 9 (clusters, datasources, segurança).</li>
+            <li><b>Integrações:</b> desenho e implementação de APIs REST/SOAP com OpenAPI e IBM API Connect, assegurando governança, versionamento e segurança ponta a ponta.</li>
+            <li><b>Dados & Persistência:</b> EJB/JPA/JDBC com DB2, tuning de conexões/queries e políticas de transação para alta confiabilidade.</li>
+            <li><b>Observabilidade & Operação:</b> Graylog para centralização de logs, dashboards e alertas; diagnóstico proativo e redução de MTTR.</li>
+            <li><b>Entrega Contínua & Qualidade:</b> pipelines Jenkins/GitLab CI, revisão de código e testes automatizados (JUnit/Mockito/PowerMock) para releases previsíveis e seguras.</li>
+            <li><b>Alta disponibilidade:</b> suporte à propagação de dados em clusters WAS, balanceamento e resiliência de serviços críticos.</li>
+        </ul>
+    </div>
+    <br>
+    <br>
+
+    <h2>🏦 Will Bank</h2>
+    <h3>Desenvolvedor Sênior Backend</h3>
+    <p><b>jan de 2021 - nov de 2021 · 11 meses · Remota</b></p>
+    <br>
+    <p>Desenvolvedor Sênior Backend no time de Fraude & Segurança, atuando na migração do ecossistema PAG! (monólito/microsserviços) para microsserviços no Will, com atualização de Java 8 > Java 11 e fortalecimento de controles de segurança (acesso, reconhecimento facial e antifraude). Foco em escalabilidade, confiabilidade e segurança em ambiente AWS, com observabilidade contínua (New Relic/Datadog).</p>
+    <br>
+    <div style="margin-left:1rem">
+        <b>Principais responsabilidades:</b>
+        <ul style="margin-left:1rem">
+            <li><b>Arquitetura & Migração:</b> estratégia Strangler para decomposição do monólito, canary releases e validação paralela; serviços Spring (Java 11) orientados a domínios de segurança.</li>
+            <li><b>Integração & Dados:</b> Kafka e AWS SQS para mensageria; MongoDB, MySQL e Redis para persistência e cache; Liquibase nas migrações.</li>
+            <li><b>Plataforma & Serverless:</b> Docker e Kubernetes (EKS) para orquestração; AWS Lambda para automações e integrações serverless (rotinas operacionais e glue entre serviços); implantação em AWS com práticas de resiliência e autosserviço.</li>
+            <li><b>Qualidade & Entrega:</b> princípios SOLID, testes automatizados, Maven + Jenkins (CI/CD), code review e políticas de release previsíveis.</li>
+            <li><b>Observabilidade & Operação:</b> New Relic/Datadog (APM, métricas, logs, dashboards e alertas) para reduzir MTTR e prevenir incidentes.</li>
+        </ul>
+    </div>
+    <br>
+    <br>
+
+    <h2>🏢 ICTS</h2>
+    <h3>Engenheiro de software sênior</h3>
+    <p><b>jan de 2019 - jan de 2021 · 2 anos 1 mês · Brasília e Região, Brasil</b></p>
+    <br>
+    <p>Responsável pelo SGE – Sistema de Gestão Empresarial (mais de 13 módulos: contas a pagar/receber, compras, orçamento, tributário etc.) para o Bancoob, entregando uma plataforma robusta, escalável e confiável em ambiente bancário. Atuei de ponta a ponta no back-end Java sob JBoss com foco em performance, consistência de dados e automação de fluxos operacionais.</p>
+    <br>
+    <div style="margin-left:1rem">
+        <b>Principais responsabilidades:</b>
+        <ul style="margin-left:1rem">
+            <li><b>Middleware & Plataforma:</b> JBoss (EAP) como servidor de aplicação; evolução do stack Java 6 → Java 8, ajustes de compatibilidade e boas práticas de implantação.</li>
+            <li><b>Camada de Negócio:</b> EJB (session beans) e JPA/Hibernate com uso combinado de Criteria API e native queries quando necessário para performance e reporting.</li>
+            <li><b>Performance & Dados:</b> tuning de SQL/queries, otimização de índices e planos de execução, revisão de transações/lock-contention, paginação eficiente e redução de round-trips ao banco.</li>
+            <li><b>Integração & Processos:</b> serviços REST internos, jobs de processamento e automações para conciliações e fechamentos (rotinas críticas do domínio financeiro).</li>
+            <li><b>Frontend legado:</b> manutenção/evolução de telas em ActionScript (Adobe Flex) integradas ao back-end Java.</li>
+            <li><b>Qualidade & Operação:</b> padronização de camadas (DAO/Service), tratamento de erros, logs estruturados e práticas de revisão de código.</li>
+        </ul>
+    </div>
+    <br>
+    <br>
+
+    <h2>🏢 Spassu Tecnologia e Serviços</h2>
+    <h3>Consultor de Sistemas Sênior</h3>
+    <p><b>set de 2018 - jan de 2021 · 2 anos 5 meses</b></p>
+    <br>
+    <p>Consultor Sênior atuando para o Banestes, alinhando demandas de negócio a arquiteturas robustas e práticas modernas de engenharia. Responsável por desenho de soluções, desenvolvimento e melhorias de performance/segurança, garantindo escalabilidade e manutenibilidade dos sistemas.</p>
+    <br>
+    <div style="margin-left:1rem">
+        <b>Principais responsabilidades:</b>
+        <ul style="margin-left:1rem">
+            <li><b>Arquitetura & Plataforma:</b> Java 8 em WildFly/WildFly Swarm (microservices), padronização de módulos e camadas (API, domínio, persistência) e definição de contratos.</li>
+            <li><b>Back-end & Dados:</b> EJB e JPA/Hibernate com MySQL; otimização de queries/índices, paginação eficiente e revisão de transações para performance consistente.</li>
+            <li><b>APIs & Integração:</b> serviços REST e GraphQL para exposição de capacidades do banco; versionamento de contratos e políticas de segurança/autorização.</li>
+            <li><b>Entrega Contínua:</b> pipelines com Jenkins e Git (build/test/release), qualidade via code review e automações de verificação.</li>
+            <li><b>Boas práticas:</b> logs estruturados, tratamento de erros, observabilidade básica e guidelines de código para equipes do cliente.</li>
+        </ul>
+    </div>
+    <br>
+    <br>
+
+    <h2>🏢 Abacomm Brasil</h2>
+    <h3>Full-stack Developer Angular/Java</h3>
+    <p><b>jun de 2017 - jan de 2020 · 2 anos 8 meses · Remoto</b></p>
+    <br>
+    <p>Desenvolvedor Full-stack Java atendendo múltiplos clientes em projetos web e APIs, com foco em JavaEE/JSF/CDI/JPA e Spring Boot, integrações REST, e entrega contínua (Jenkins/Git). Atuei em soluções com Angular, MySQL, e serviços em AWS, sempre priorizando qualidade, performance e manutenção simples.</p>
+    <br>
+    <div style="margin-left:1rem">
+        <b>Principais projetos:</b>
+        <ul style="margin-left:1rem">
+            <li><b>ABP (Associação Brasileira de Psicologia):</b> desenvolvimento e evolução de sistema JSF com REST, CDI e JPA/Hibernate; padronização de camadas (DAO/Service), paginação eficiente e melhoria de consultas no MySQL.</li>
+            <li><b>PwC:</b> APIs em Spring Boot orientadas a eventos (publicação/consumo), integração com serviços em AWS (armazenamento e automações), hardening de endpoints e documentação de contratos.</li>
+            <li><b>Oi (Promotor):</b> portal JSF com uso de Futures para processamento assíncrono, relatórios com JasperReports (PDF/Excel) e otimizações de performance; refino de código usando lambdas (Java 8) e boas práticas de concorrência.</li>
+        </ul>
+    </div>
+    <br>
+    <br>
+
+    <h2>🏢 Mirante Tecnologia</h2>
+    <h3>Analista de sistemas Java</h3>
+    <p><b>ago de 2015 - jun de 2017 · 1 ano 11 meses · Brasília e Região, Brasil</b></p>
+    <br>
+    <p>Responsável pelo desenvolvimento do SGE – Sistemas de gestão empresarial, aplicação que será utilizada pelo Bancoob, para gerenciar todas as funcionalidades que um banco precisa, como por exemplo: Contas a pagar, Contas a receber, Compras, Orçamento, Tributário dentre outros 13 módulos que está em desenvolvimento.</p>
+    <br>
+    <br>
+
+    <h2>🏢 CTIS Tecnologia S.A</h2>
+    <h3>Desenvolvedor Web/Java</h3>
+    <p><b>jun de 2014 - ago de 2015 · 1 ano 3 meses · Brasília e Região, Brasil</b></p>
+    <br>
+    <p>Desenvolvedor Pleno Java na CTIS (Fábrica de Software), atendendo o CNPq no eGAD – Gestão Arquivística de Documentos, com foco em protocolo, classificação, tramitação e guarda de documentos, garantindo rastreabilidade, performance e conformidade com práticas de gestão documental.</p>
+    <br>
+    <div style="margin-left:1rem">
+        <b>Principais responsabilidades:</b>
+        <ul style="margin-left:1rem">
+            <li><b>Back-end & Persistência:</b> EJB 3 e JPA/Hibernate para serviços de negócio e repositório; modelagem de entidades, queries otimizadas e controle transacional.</li>
+            <li><b>Front-end:</b> JSF 2 + PrimeFaces para telas ricas, formulários e validações; componentes customizados e UX voltada a alta produtividade.</li>
+            <li><b>Busca & Relatórios:</b> Apache Solr para full-text search (indexação de metadados/documentos) e iReport para relatórios operacionais/gerenciais (protocolos, movimentações, estatísticas).</li>
+            <li><b>Workflow & Processos:</b> JBPM para modelar fluxos de tramitação e regra de negócio (análises, aprovações, prazos), com monitoramento de tarefas.</li>
+            <li><b>Qualidade & Entrega:</b> build com Maven, versionamento em SVN, revisão de código e logs estruturados; ajustes de desempenho em consultas e paginação.</li>
+        </ul>
+    </div>
+    <br>
+    <br>
+
+    <h2>🏢 INDRA</h2>
+    <h3>Desenvolvedor Web/Java</h3>
+    <p><b>nov de 2013 - jun de 2014 · 8 meses · João Pessoa e Região, Brasil</b></p>
+    <br>
+    <p>Desenvolvedor Pleno Java prestando serviços para a Secretaria de Estado da Receita da Paraíba no Sistema ATF – Administração Tributária e Financeira, com foco em cálculo, emissão e processamento de recolhimentos, estabilidade das rotinas fiscais e consistência de dados em produção. Atuação em JSP/EJB/JDBC, padronização de camadas e otimização de SQL para alto desempenho.</p>
+    <br>
+    <div style="margin-left:1rem">
+        <b>Principais responsabilidades:</b>
+        <ul style="margin-left:1rem">
+            <li><b>Domínio fiscal (ATF):</b> implementação de regras para emissão de guias, apuração de tributos, isenções/penalidades/atualizações monetárias e validações cadastrais.</li>
+            <li><b>Integrações & Processamento:</b> rotinas de remessa/retorno bancário, conciliações de pagamentos e reconciliação de divergências.</li>
+            <li><b>Back-end:</b> EJB (session beans) com JDBC e SQL otimizado; controle transacional, concorrência e tratamento de erros.</li>
+            <li><b>Front-end:</b> JSP com formulários e validações server-side, seguindo padrões de segurança e usabilidade do órgão.</li>
+            <li><b>Qualidade & Entrega:</b> Maven (build/empacote), versionamento em CVS, logs estruturados e correções orientadas por incidentes/monitoramento.</li>
+        </ul>
+    </div>
+    <br>
+    <br>
+
+    <h2>🏢 Synctech Soluções em Informática</h2>
+    <h3>Desenvolvedor Delphi</h3>
+    <p><b>out de 2012 - nov de 2013 · 1 ano 2 meses · João Pessoa e Região, Brasil</b></p>
+    <br>
+    <p>Desenvolvedor Pleno atuando no desenvolvimento de ERP de automação comercial (múltiplos módulos: vendas, estoque, fiscal, precificação, relatórios gerenciais), com foco em performance, consistência de dados e rotinas fiscais. Entregas em Delphi 6 + Firebird 2.5 (desktop), C#/.NET para documentos fiscais eletrônicos e Android para operações de campo.</p>
+    <br>
+    <div style="margin-left:1rem">
+        <b>Principais responsabilidades:</b>
+        <ul style="margin-left:1rem">
+            <li><b>ERP (Delphi 6 + Firebird 2.5):</b> implementação/evolução de módulos de estoque, fiscal, precificação (incl. curva ABC) e relatórios; otimização de consultas, índices e rotinas críticas.</li>
+            <li><b>Componentes proprietários (Delphi):</b> criação e manutenção do SyncPDV (sincronização PDV ↔ retaguarda), SyncRetaguarda (replicação e consolidação) e SyncSped (exportações/rotinas fiscais).</li>
+            <li><b>Fiscais eletrônicos (C#/.NET):</b> SyncNFe para emissão/validação de NFe, tratamento de retornos e armazenamento; integrações com SQL Server e Firebird.</li>
+            <li><b>Frente de caixa/Backoffice:</b> ajustes de usabilidade, rotinas de fechamento e conciliações operacionais, melhoria de estabilidade e redução de erros operacionais.</li>
+            <li><b>Mobile (Android – Handroid):</b> app para inventário/conferência e apoio a operações de loja, com sincronização offline/online e comunicação com o ERP.</li>
+            <li><b>UI & Relatórios:</b> componentes DevExpress e relatórios operacionais/gerenciais.</li>
+        </ul>
+    </div>
+
+</section>

@@ -2,6 +2,9 @@
    TERMINAL - Área de Terminal e Logs
    ============================================ */
 
+/* ============================================
+   CONTAINER PRINCIPAL
+   ============================================ */
 .terminal {
   display: flex;
   flex-direction: column;
@@ -9,9 +12,25 @@
   overflow: hidden;
   background-color: var(--color-bg-accent);
   transition: margin var(--transition-normal);
+  position: relative;
+  flex-shrink: 0;
+  /* Permitir resize dinâmico */
+  resize: none; /* Desabilita resize padrão do navegador */
 }
 
+/* Esconde os inputs radio visualmente */
+.terminal > input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ============================================
+   HEADER - Fixo no topo
+   ============================================ */
 .terminal .header {
+  order: 1;
   border-top: 1px solid var(--color-border-accent);
   height: 35px;
   padding-left: var(--spacing-md);
@@ -19,7 +38,11 @@
   align-items: center;
   gap: var(--spacing-md);
   overflow-x: auto;
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: var(--color-bg-accent);
+  flex-shrink: 0;
 }
 
 .terminal .header label {
@@ -55,57 +78,69 @@
   margin-left: var(--spacing-xs);
 }
 
-.terminal .content {
-  order: 1;
-  font-style: normal;
-  font-size: var(--font-size-base);
-  padding: var(--spacing-md) var(--spacing-xl) var(--spacing-lg) var(--spacing-xl);
-  color: var(--color-text-primary);
-  overflow-y: auto;
-  overflow-x: hidden;
-  flex: 1;
-}
-
-/* Esconder todos os conteúdos por padrão */
-.terminal .content > div > .problems,
-.terminal .content > div > .output,
-.terminal .content > div > .terminal-content,
-.terminal .content > div > .debug,
-.terminal .content > div > .ports {
-  display: none !important;
-}
-
-/* Mostrar apenas o conteúdo da aba selecionada */
-.terminal .content > div > input[type="radio"]:checked ~ .problems {
-  display: block !important;
-}
-
-.terminal .content > div > input[type="radio"]:checked ~ .output,
-.terminal .content > div > input[type="radio"]:checked ~ .terminal-content,
-.terminal .content > div > input[type="radio"]:checked ~ .debug,
-.terminal .content > div > input[type="radio"]:checked ~ .ports {
-  display: flex !important;
-}
-
-/* Destaque de aba ativa */
-.terminal .content:has(div #problems:checked) ~ .header .problems,
+/* Destaque de aba ativa no header */
 .terminal:has(#problems:checked) .header .problems,
-.terminal .content:has(div #output:checked) ~ .header .output,
 .terminal:has(#output:checked) .header .output,
-.terminal .content:has(div #terminals:checked) ~ .header .terminals,
 .terminal:has(#terminals:checked) .header .terminals,
-.terminal .content:has(div #debug:checked) ~ .header .debug,
 .terminal:has(#debug:checked) .header .debug,
-.terminal .content:has(div #ports:checked) ~ .header .ports,
 .terminal:has(#ports:checked) .header .ports {
   color: var(--color-border-accent);
   border-bottom-color: var(--color-border-accent);
 }
 
-/* Problems Tab */
+/* ============================================
+   CONTENT - Área de conteúdo abaixo do header
+   ============================================ */
+.terminal .content {
+  order: 2;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Esconde todos os conteúdos de abas por padrão */
+.terminal .content .tab-content {
+  display: none !important;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Mostra APENAS o conteúdo da aba quando o radio correspondente está checked */
+.terminal:has(#problems:checked) .content .tab-content.problems-content {
+  display: flex !important;
+}
+
+.terminal:has(#output:checked) .content .tab-content.output-content {
+  display: flex !important;
+}
+
+.terminal:has(#terminals:checked) .content .tab-content.terminal-content {
+  display: flex !important;
+}
+
+.terminal:has(#debug:checked) .content .tab-content.debug-content {
+  display: flex !important;
+}
+
+.terminal:has(#ports:checked) .content .tab-content.ports-content {
+  display: flex !important;
+}
+
+/* ============================================
+   PROBLEMS TAB
+   ============================================ */
 .terminal .content .problems {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
   font-family: var(--font-family-mono);
-  padding: 0;
+  padding: var(--spacing-md) var(--spacing-xl);
 }
 
 .terminal .content .problem-item {
@@ -168,19 +203,24 @@
   white-space: nowrap;
 }
 
-/* Output Tab */
+/* ============================================
+   OUTPUT TAB
+   ============================================ */
 .terminal .content .output {
   display: flex;
   flex-direction: column;
   height: 100%;
   padding: 0;
+  overflow: hidden;
 }
 
+/* Selector fixo no topo - NÃO scrolla */
 .terminal .content .output-selector {
-  margin: 0 calc(-1 * var(--spacing-xl)) var(--spacing-md) calc(-1 * var(--spacing-xl));
+  flex-shrink: 0;
   padding: var(--spacing-md) var(--spacing-xl);
   border-bottom: 1px solid var(--color-border-primary);
   background-color: var(--color-bg-secondary);
+  margin: 0;
 }
 
 .terminal .content .output-selector select {
@@ -194,16 +234,16 @@
   width: 200px;
 }
 
-.terminal .content .output-content {
+/* Área de conteúdo com scroll - APENAS o texto scrolla */
+.terminal .content .output .output-content {
+  flex: 1;
+  min-height: 0;
   font-family: var(--font-family-mono);
   line-height: 1.2;
   white-space: pre-wrap;
-  padding: var(--spacing-md) 0;
+  padding: var(--spacing-md) var(--spacing-xl);
   overflow-y: auto;
   overflow-x: hidden;
-  flex: 1;
-  min-height: 0;
-  height: 100%;
 }
 
 .terminal .content .output-line {
@@ -211,37 +251,29 @@
   color: var(--color-text-primary);
 }
 
-/* Terminal Tab */
-.terminal .content .terminal-content {
+/* ============================================
+   TERMINAL TAB
+   ============================================ */
+.terminal .content .terminal-content-inner {
   display: flex;
   flex-direction: column;
   height: 100%;
   padding: 0;
   overflow: hidden;
-  margin-left: calc(-1 * var(--spacing-xl));
-  margin-right: calc(-1 * var(--spacing-xl));
+  margin: 0;
 }
 
-.terminal .content .terminal-content .terminal-tab {
+/* Tab do terminal fixo no topo - NÃO scrolla */
+.terminal .content .terminal-content-inner .terminal-tab {
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-xl);
   background-color: var(--color-bg-secondary);
   border-bottom: 1px solid var(--color-border-primary);
   font-size: 11px;
-  margin: calc(-1 * var(--spacing-md)) calc(-1 * var(--spacing-xl)) var(--spacing-md) calc(-1 * var(--spacing-xl));
-  padding-left: var(--spacing-xl);
-  padding-right: var(--spacing-xl);
   flex-shrink: 0;
-}
-
-.terminal .content .terminal-tab {
-  display: none;
-}
-
-.terminal .content .terminal-content .terminal-tab {
-  display: flex;
+  margin: 0;
 }
 
 .terminal .content .terminal-icon {
@@ -262,12 +294,14 @@
   color: var(--color-text-primary);
 }
 
+/* Área de output do terminal com scroll - APENAS o texto scrolla */
 .terminal .content .terminal-output {
+  flex: 1;
+  min-height: 0;
   font-family: var(--font-family-mono);
   line-height: 1.6;
   white-space: normal;
   padding: var(--spacing-md) var(--spacing-xl);
-  flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
   color: var(--color-text-primary);
@@ -277,11 +311,34 @@
 
 .terminal .content .terminal-output > div {
   white-space: pre-wrap;
+  margin-bottom: 2px;
+}
+
+.terminal .content .terminal-line {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 2px;
 }
 
 .terminal .content .terminal-prompt {
-  color: var(--color-border-accent);
-  margin-right: var(--spacing-md);
+  color: #00ff00;
+  margin-right: var(--spacing-sm);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+/* Cor do prompt para tema light */
+body:has(#theme:checked) .terminal .content .terminal-prompt {
+  color: #008000;
+}
+
+.terminal .content .terminal-command {
+  color: var(--color-text-primary);
+}
+
+.terminal .content .terminal-info {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-small);
 }
 
 .terminal .content .terminal-banner {
@@ -300,12 +357,62 @@
   color: var(--color-success);
 }
 
-/* Debug Console */
+/* Container do input do terminal */
+.terminal .content .terminal-input-container {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-xl);
+  background-color: var(--color-bg-accent);
+  border-top: 1px solid var(--color-border-primary);
+  flex-shrink: 0;
+  gap: var(--spacing-sm);
+}
+
+.terminal .content .terminal-prompt-input {
+  color: #00ff00;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+/* Cor do prompt do input para tema light */
+body:has(#theme:checked) .terminal .content .terminal-prompt-input {
+  color: #008000;
+}
+
+.terminal .content .terminal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-text-primary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-base);
+  padding: 0;
+  margin: 0;
+}
+
+.terminal .content .terminal-input::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 0.5;
+}
+
+/* Cursor piscante no input */
+.terminal .content .terminal-input:focus {
+  caret-color: var(--color-text-primary);
+}
+
+/* ============================================
+   DEBUG CONSOLE TAB
+   ============================================ */
 .terminal .content .debug {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 0;
+  padding: var(--spacing-md) var(--spacing-xl);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .terminal .content .debug-header {
@@ -315,9 +422,10 @@
   border-bottom: 1px solid var(--color-border-primary);
   margin-bottom: var(--spacing-md);
   font-weight: 600;
+  flex-shrink: 0;
 }
 
-.terminal .content .debug-content {
+.terminal .content .debug .debug-content {
   color: var(--color-text-secondary);
   font-size: var(--font-size-base);
   line-height: 1.6;
@@ -362,12 +470,16 @@
   color: var(--color-text-primary);
 }
 
-/* Ports Tab */
+/* ============================================
+   PORTS TAB
+   ============================================ */
 .terminal .content .ports {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 0;
+  padding: var(--spacing-md) var(--spacing-xl);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .terminal .content .ports-header {
@@ -380,6 +492,7 @@
   border-bottom: 1px solid var(--color-border-primary);
   margin-bottom: var(--spacing-md);
   font-weight: 600;
+  flex-shrink: 0;
 }
 
 .terminal .content .ports-count {
@@ -388,7 +501,7 @@
   font-weight: normal;
 }
 
-.terminal .content .ports-content {
+.terminal .content .ports .ports-content {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
@@ -463,6 +576,7 @@
   padding-top: var(--spacing-md);
   border-top: 1px solid var(--color-border-primary);
   margin-top: var(--spacing-md);
+  flex-shrink: 0;
 }
 
 .terminal .content .ports-hint {
@@ -471,7 +585,9 @@
   font-style: italic;
 }
 
-/* Terminal Toggle */
+/* ============================================
+   TERMINAL TOGGLE
+   ============================================ */
 .terminal .header input {
   display: none;
 }
@@ -499,4 +615,71 @@
 #terminalToggle:checked + label::before {
   transform: rotate(225deg);
   top: 1.5em;
+}
+
+/* ============================================
+   BARRA DE RESIZE DO TERMINAL
+   ============================================ */
+
+.terminal-resize-handle {
+  height: 4px;
+  min-height: 4px;
+  max-height: 4px;
+  width: 100%;
+  background-color: transparent;
+  cursor: row-resize;
+  position: relative;
+  z-index: 100;
+  flex-shrink: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  transition: background-color var(--transition-fast);
+  order: 0; /* Coloca antes do header */
+}
+
+/* Hover effect - mostra uma linha visual */
+.terminal-resize-handle:hover {
+  background-color: var(--color-border-accent);
+}
+
+/* Durante o resize, destaca mais a barra */
+body.resizing-terminal .terminal-resize-handle {
+  background-color: var(--color-border-accent);
+  height: 4px;
+}
+
+/* Indicador visual quando está sobre a barra */
+.terminal-resize-handle::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: var(--color-border-accent);
+  opacity: 0;
+  transform: translateY(-50%);
+  transition: opacity var(--transition-fast);
+}
+
+.terminal-resize-handle:hover::before {
+  opacity: 1;
+}
+
+/* Tema light */
+body:has(#theme:checked) .terminal-resize-handle:hover {
+  background-color: var(--color-border-accent);
+}
+
+body:has(#theme:checked) .terminal-resize-handle::before {
+  background-color: var(--color-border-accent);
+}
+
+/* Mobile - esconder barra de resize */
+@media (max-width: 768px) {
+  .terminal-resize-handle {
+    display: none !important;
+  }
 }

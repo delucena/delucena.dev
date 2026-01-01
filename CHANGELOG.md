@@ -5,6 +5,45 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+## [2.0.0] - 2025-01-01
+
+### Adicionado
+- Sistema de templates modulares para HTML (navigation, editor-header, terminal, footer, sections)
+- Página 404 personalizada com design consistente ao portfólio
+- Syntax highlighting com cores do Visual Studio Code (tema dark/light)
+- Meta tags completas de SEO (Open Graph, Twitter Cards)
+- Structured Data (JSON-LD) para melhor indexação
+- Arquivos de configuração SEO (robots.txt, sitemap.xml)
+- Configuração _headers para Cloudflare Pages (cache e segurança)
+- Script de otimização de imagens (WebP + fallback PNG)
+- Minificação automática de CSS e JS no build
+- Sistema de versionamento de assets (cache busting)
+- Skip link para acessibilidade
+- Classes utilitárias para screen readers (.sr-only)
+- Error handling e JSDoc em todos os módulos JavaScript
+- Suporte a lazy loading de imagens
+
+### Modificado
+- Refatoração completa do HTML monolítico em componentes modulares
+- Build system atualizado para processar templates e minificar assets
+- Melhorias de acessibilidade (ARIA labels, roles, skip links)
+- Melhorias de semântica HTML
+- JavaScript com error handling robusto e documentação JSDoc
+- CSS consolidado com variáveis de syntax highlighting
+- Estrutura de diretórios reorganizada (templates/, config/, scripts/)
+
+### Melhorado
+- Performance: minificação de assets, otimização de imagens
+- SEO: meta tags completas, structured data, sitemap
+- Acessibilidade: WCAG 2.1 compliance, navegação por teclado
+- Manutenibilidade: código modular, documentado e organizado
+- Cache: configuração otimizada para Cloudflare Pages
+- Segurança: headers de segurança implementados
+
+### Removido
+- style.css duplicado (mantido apenas sistema modular)
+- Código HTML monolítico (substituído por templates)
+
 ## [1.0.0] - 2025-12-31
 
 ### Adicionado
@@ -48,7 +87,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - Remoção de caminhos absolutos pessoais do código
 - Limpeza de console.log desnecessários
 - package.json com informações de repositório, engines e browserslist
-- LICENSE.txt atualizado com copyrights corretos
+- LICENSE atualizado com copyrights corretos
 
 ### Tecnologias
 - HTML5 semântico

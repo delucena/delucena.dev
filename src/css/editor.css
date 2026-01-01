@@ -8,6 +8,7 @@
   flex: 1;
   min-height: 0;
   overflow: hidden;
+  order: 1;
 }
 
 .editorContainer .editor {
@@ -182,10 +183,21 @@
   align-items: center;
 }
 
+/* Picture tag */
+#editor .editor .readme .readme-photo-wrapper picture {
+  display: block;
+  width: 200px;
+  height: 200px;
+}
+
 /* Foto circular */
 #editor .editor .readme .readme-photo {
   width: 200px;
   height: 200px;
+  min-width: 200px;
+  min-height: 200px;
+  max-width: 200px;
+  max-height: 200px;
   border-radius: 50%;
   object-fit: cover;
   object-position: center;
@@ -193,6 +205,8 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
   display: block;
   transition: transform var(--transition-normal);
+  aspect-ratio: 1 / 1;
+  box-sizing: border-box;
 }
 
 #editor .editor .readme .readme-photo:hover {
@@ -333,20 +347,28 @@
   z-index: 10;
   height: 100%;
   width: 100%;
+  /* Melhorias de visualização */
+  line-height: 1.8;
+  tab-size: 2;
+  -moz-tab-size: 2;
 }
 
 .code-view {
   margin: 0;
-  padding: 0;
+  padding: var(--spacing-lg);
   background: transparent;
   border: none;
   font-family: var(--font-family-mono);
   font-size: var(--font-size-base);
-  line-height: 1.6;
+  line-height: 1.8;
   color: var(--color-text-primary);
   white-space: pre;
   overflow-x: auto;
   overflow-y: visible;
+  /* Melhorias de legibilidade */
+  tab-size: 2;
+  -moz-tab-size: 2;
+  letter-spacing: 0.01em;
 }
 
 .code-view code {
@@ -363,111 +385,119 @@
   overflow-wrap: normal;
 }
 
-/* Syntax highlighting básico para HTML */
-.code-view code.language-html {
-  color: var(--color-text-primary);
+/* Syntax highlighting é gerenciado por syntax-highlight.css usando classes token.* */
+
+/* ============================================
+   CODE COPY BUTTON - Botão de copiar código
+   ============================================ */
+
+.code-copy-button {
+  position: absolute;
+  top: calc(var(--spacing-md) + 50px);
+  right: var(--spacing-md);
+  z-index: 101;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin: 0;
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 4px;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* Variáveis de cores para syntax highlighting - Tema Dark VSCode Dark+ */
-.code-view code.language-html {
-  /* Tags HTML - Amarelo pastel (padrão VSCode) */
-  --tag-color: #dcdcaa;
-  /* Nome da tag - Amarelo pastel */
-  --tag-name-color: #dcdcaa;
-  /* Atributos/Propriedades - Azul claro (padrão VSCode) */
-  --attr-color: #9cdcfe;
-  /* Valores/Strings - Laranja (padrão VSCode) */
-  --string-color: #ce9178;
-  /* Comentários - Verde escuro (padrão VSCode) */
-  --comment-color: #6a9955;
-  /* Texto - Cinza claro */
-  --text-color: #d4d4d4;
-  /* Operadores (=, /) - Cinza claro */
-  --operator-color: #d4d4d4;
-  /* Delimitadores (<, >) - Branco */
-  --delimiter-color: #d4d4d4;
+.code-copy-button:hover {
+  color: var(--color-border-accent);
+  background-color: var(--color-bg-primary);
+  border-color: var(--color-border-accent);
+  box-shadow: 0 4px 12px rgba(0, 122, 204, 0.3);
+  transform: translateY(-1px);
 }
 
-/* Estilos para syntax highlighting de HTML - Tema Dark */
-/* Tags HTML - Delimitadores e estrutura */
-.code-view code.language-html .html-tag {
-  color: var(--tag-color);
+.code-copy-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Nome da tag HTML */
-.code-view code.language-html .html-tag-name {
-  color: var(--tag-name-color);
-  font-weight: 500;
+.code-copy-button:focus {
+  outline: 2px solid var(--color-border-accent);
+  outline-offset: 2px;
 }
 
-/* Atributos/Propriedades das tags (type, for, name, id, class, etc.) */
-.code-view code.language-html .html-attribute {
-  color: var(--attr-color);
+.code-copy-button i {
+  font-size: 14px;
+  transition: transform var(--transition-fast);
 }
 
-/* Valores dos atributos (strings entre aspas) */
-.code-view code.language-html .html-string {
-  color: var(--string-color);
+.code-copy-button .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
-/* Comentários HTML */
-.code-view code.language-html .html-comment {
-  color: var(--comment-color);
-  font-style: italic;
-}
-
-/* Texto entre tags */
-.code-view code.language-html .html-text {
-  color: var(--text-color);
-}
-
-/* Operadores (=) */
-.code-view code.language-html .html-operator {
-  color: var(--operator-color);
-}
-
-/* Delimitadores (<, >) */
-.code-view code.language-html .html-delimiter {
-  color: var(--delimiter-color);
-}
-
-/* Ajuste para tema light - Cores padrão do mercado */
-body:has(#theme:checked) .code-view code.language-html {
-  /* Tags HTML - Vermelho escuro */
-  --tag-color: #800000;
-  /* Nome da tag - Vermelho escuro */
-  --tag-name-color: #800000;
-  /* Atributos - Azul escuro */
-  --attr-color: #001080;
-  /* Valores/Strings - Vermelho escuro */
-  --string-color: #a31515;
-  /* Comentários - Verde escuro */
-  --comment-color: #008000;
-  /* Texto - Preto */
-  --text-color: #000000;
-  /* Operadores - Preto */
-  --operator-color: #000000;
-  /* Delimitadores - Preto */
-  --delimiter-color: #000000;
-}
-
-/* Scrollbar do code view */
-.code-view-container::-webkit-scrollbar {
+/* Scrollbar do code view - aplicado em todos os elementos que podem ter scroll */
+.code-view-container::-webkit-scrollbar,
+.code-view::-webkit-scrollbar,
+.code-view-container .code-view::-webkit-scrollbar,
+.code-view-container code::-webkit-scrollbar,
+.code-view-container pre::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
-.code-view-container::-webkit-scrollbar-track {
+.code-view-container::-webkit-scrollbar-track,
+.code-view::-webkit-scrollbar-track,
+.code-view-container .code-view::-webkit-scrollbar-track,
+.code-view-container code::-webkit-scrollbar-track,
+.code-view-container pre::-webkit-scrollbar-track {
   background: var(--color-bg-secondary);
 }
 
-.code-view-container::-webkit-scrollbar-thumb {
+.code-view-container::-webkit-scrollbar-thumb,
+.code-view::-webkit-scrollbar-thumb,
+.code-view-container .code-view::-webkit-scrollbar-thumb,
+.code-view-container code::-webkit-scrollbar-thumb,
+.code-view-container pre::-webkit-scrollbar-thumb {
   background: var(--color-border-primary);
   border-radius: 4px;
 }
 
-.code-view-container::-webkit-scrollbar-thumb:hover {
+.code-view-container::-webkit-scrollbar-thumb:hover,
+.code-view::-webkit-scrollbar-thumb:hover,
+.code-view-container .code-view::-webkit-scrollbar-thumb:hover,
+.code-view-container code::-webkit-scrollbar-thumb:hover,
+.code-view-container pre::-webkit-scrollbar-thumb:hover {
   background: #4a4a4a;
+}
+
+/* Scrollbar para tema light */
+body:has(#theme:checked) .code-view-container::-webkit-scrollbar-thumb,
+body:has(#theme:checked) .code-view::-webkit-scrollbar-thumb,
+body:has(#theme:checked) .code-view-container .code-view::-webkit-scrollbar-thumb,
+body:has(#theme:checked) .code-view-container code::-webkit-scrollbar-thumb,
+body:has(#theme:checked) .code-view-container pre::-webkit-scrollbar-thumb {
+  background: #b0b0b0;
+}
+
+body:has(#theme:checked) .code-view-container::-webkit-scrollbar-thumb:hover,
+body:has(#theme:checked) .code-view::-webkit-scrollbar-thumb:hover,
+body:has(#theme:checked) .code-view-container .code-view::-webkit-scrollbar-thumb:hover,
+body:has(#theme:checked) .code-view-container code::-webkit-scrollbar-thumb:hover,
+body:has(#theme:checked) .code-view-container pre::-webkit-scrollbar-thumb:hover {
+  background: #909090;
 }
 
 /* Ajuste quando terminal está colapsado */
@@ -630,8 +660,47 @@ main:has(.terminal .header #terminalToggle:checked) .code-view-container {
 
 /* Responsividade para telas menores */
 @media (max-width: 768px) {
+  #editor {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+  
+  #editor .editorContainer {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+  
+  #editor .editor {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+  
+  #editor .editor section {
+    padding: calc(var(--spacing-md) + 50px) var(--spacing-md) var(--spacing-md) var(--spacing-md) !important;
+    font-size: var(--font-size-base);
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+  
+  #editor .editor section * {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
   #editor .editor .contact .contact-container {
     grid-template-columns: 1fr;
+    width: 100% !important;
+    max-width: 100% !important;
   }
   
   #editor .editor .contact h1 {
@@ -640,5 +709,98 @@ main:has(.terminal .header #terminalToggle:checked) .code-view-container {
   
   #editor .editor .contact .contact-card {
     padding: 1.5rem;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Ajustar foto do README para mobile - manter circular */
+  #editor .editor .readme .readme-photo-wrapper {
+    margin-bottom: var(--spacing-xl) !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+  }
+  
+  #editor .editor .readme .readme-photo-wrapper picture {
+    width: 150px !important;
+    height: 150px !important;
+    display: block !important;
+  }
+  
+  #editor .editor .readme .readme-photo {
+    width: 150px !important;
+    height: 150px !important;
+    min-width: 150px !important;
+    min-height: 150px !important;
+    max-width: 150px !important;
+    max-height: 150px !important;
+    border-radius: 50% !important;
+    aspect-ratio: 1 / 1 !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    border: 3px solid var(--color-border-accent) !important;
+    box-sizing: border-box !important;
+    margin: 0 auto !important;
+  }
+  
+  #header {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box !important;
+  }
+  
+  #header div {
+    min-width: fit-content;
+  }
+  
+  #header div label {
+    padding-left: 0.6em;
+    padding-right: 0.5em;
+    font-size: var(--font-size-small);
+    white-space: nowrap;
+  }
+  
+  /* Garantir que imagens e iframes não ultrapassem */
+  #editor .editor section img,
+  #editor .editor section iframe,
+  #editor .editor section video {
+    max-width: 100% !important;
+    height: auto !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Ajustar código view para mobile */
+  .code-view-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: auto !important;
+  }
+  
+  .code-view {
+    max-width: 100% !important;
+    overflow-x: auto !important;
+  }
+  
+  /* Em telas muito pequenas, reduzir ainda mais a foto do README */
+  @media (max-width: 480px) {
+    #editor .editor .readme .readme-photo-wrapper picture {
+      width: 120px !important;
+      height: 120px !important;
+    }
+    
+    #editor .editor .readme .readme-photo {
+      width: 120px !important;
+      height: 120px !important;
+      min-width: 120px !important;
+      min-height: 120px !important;
+      max-width: 120px !important;
+      max-height: 120px !important;
+      border: 2px solid var(--color-border-accent) !important;
+    }
   }
 }

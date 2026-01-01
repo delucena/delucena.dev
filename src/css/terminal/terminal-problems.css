@@ -1,0 +1,80 @@
+/* ============================================
+   TERMINAL PROBLEMS - Aba de Problemas
+   ============================================ */
+
+.terminal .terminal-problems {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  padding: 0;
+}
+
+.terminal .terminal-problems-scrollable {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  font-family: var(--font-family-mono);
+  padding: var(--spacing-md) var(--spacing-xl);
+}
+
+.terminal .terminal-problem-item {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm) 0;
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  cursor: pointer;
+}
+
+.terminal .terminal-problem-item:hover {
+  background-color: var(--color-bg-secondary);
+  padding-left: var(--spacing-sm);
+  margin-left: calc(-1 * var(--spacing-sm));
+  margin-right: calc(-1 * var(--spacing-sm));
+  border-radius: 2px;
+}
+
+.terminal .terminal-problem-icon {
+  margin-right: var(--spacing-md);
+  font-size: var(--font-size-small);
+  width: 12px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.terminal .terminal-problem-icon-error {
+  color: var(--color-error);
+}
+
+.terminal .terminal-problem-icon-warning {
+  color: var(--color-warning);
+  font-size: var(--font-size-base);
+}
+
+.terminal .terminal-problem-icon-info {
+  color: var(--color-info);
+}
+
+.terminal .terminal-problem-file {
+  color: var(--color-text-primary);
+  font-weight: 500;
+  margin-right: var(--spacing-md);
+  flex-shrink: 0;
+}
+
+.terminal .terminal-problem-location {
+  color: var(--color-text-secondary);
+  margin-right: var(--spacing-md);
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.terminal .terminal-problem-message {
+  color: var(--color-text-secondary);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

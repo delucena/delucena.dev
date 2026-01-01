@@ -22,6 +22,8 @@
   height: calc(100dvh - var(--height-footer));
   min-height: calc(100dvh - var(--height-footer));
   max-height: calc(100dvh - var(--height-footer));
+  /* Permitir resize dinâmico */
+  resize: none; /* Desabilita resize padrão do navegador */
 }
 
 .extensions > div:first-child {
@@ -31,6 +33,13 @@
   min-width: 0;
   min-height: 0;
   height: auto;
+}
+
+.extensions .title {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  padding: 0.48em;
 }
 
 .extensions .extension-item {
@@ -154,4 +163,277 @@
   margin-left: var(--spacing-lg);
   margin-right: var(--spacing-md);
   height: 1px;
+}
+
+/* ============================================
+   REGRAS PARA EXPANDIR/RETRAIR INSTALLED E RECOMMENDED
+   Abordagem robusta usando IDs específicos e seletores genéricos
+   ============================================ */
+
+/* Esconder os checkboxes (são controlados pelos labels) */
+.extensions .folder.subTitle ~ input[type="checkbox"],
+.extensions input[type="checkbox"]#folderToggleInstalled,
+.extensions input[type="checkbox"]#folderToggleRecommended {
+  display: none !important;
+}
+
+/* SOBRESCREVER COMPLETAMENTE a regra geral do explorer.css (.folder ~ input[type="checkbox"]:checked ~ ul) */
+/* Estado inicial: TODAS as listas começam escondidas por padrão */
+/* Esta regra deve ter prioridade sobre a regra geral do explorer.css */
+.extensions .folder.subTitle ~ input[type="checkbox"] ~ ul,
+.extensions .folder.subTitle ~ ul {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* IMPORTANTE: Garantir que as regras usando IDs específicos tenham prioridade ABSOLUTA */
+/* Estas regras devem ser aplicadas DEPOIS e ter prioridade sobre qualquer regra genérica */
+
+/* DESKTOP: INSTALLED - Quando checkbox está marcado - mostrar APENAS esta lista */
+/* Prioridade máxima usando ID específico */
+.extensions #folderToggleInstalled:checked ~ ul {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* DESKTOP: INSTALLED - Quando checkbox NÃO está marcado - esconder esta lista */
+/* Prioridade máxima usando ID específico */
+.extensions #folderToggleInstalled:not(:checked) ~ ul {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* DESKTOP: RECOMMENDED - Quando checkbox está marcado - mostrar APENAS esta lista */
+/* IMPORTANTE: Esta regra deve funcionar mesmo quando INSTALLED está expandido */
+/* Prioridade máxima usando ID específico - deve sobrescrever qualquer regra genérica */
+.extensions #folderToggleRecommended:checked ~ ul {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* DESKTOP: RECOMMENDED - Quando checkbox NÃO está marcado - esconder esta lista */
+/* IMPORTANTE: Esta regra deve funcionar mesmo quando INSTALLED está expandido */
+/* Prioridade máxima usando ID específico - deve sobrescrever qualquer regra genérica */
+.extensions #folderToggleRecommended:not(:checked) ~ ul {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* REMOVER regras genéricas que podem interferir */
+/* Usar APENAS regras específicas usando IDs para garantir funcionamento independente */
+/* As regras específicas acima (usando #folderToggleInstalled e #folderToggleRecommended) */
+/* devem ser suficientes e ter prioridade sobre qualquer regra genérica */
+
+/* ============================================
+   MOBILE: Abordagem ampla e robusta
+   ============================================ */
+@media (max-width: 768px) {
+  .extensions {
+    position: fixed !important;
+    display: block !important;
+    flex-direction: column !important;
+    margin-left: 0 !important;
+  }
+  
+  .extensions > div:first-child {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  
+  /* Garantir visibilidade dos elementos básicos */
+  .extensions .title,
+  .extensions .folder.subTitle,
+  .extensions .extension-item,
+  .extensions li {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  /* IMPORTANTE: Esconder checkboxes no mobile */
+  .extensions .folder.subTitle ~ input[type="checkbox"],
+  .extensions input[type="checkbox"]#folderToggleInstalled,
+  .extensions input[type="checkbox"]#folderToggleRecommended {
+    display: none !important;
+  }
+  
+  /* MOBILE: Estado inicial - TODAS as listas começam escondidas */
+  .extensions .folder.subTitle ~ input[type="checkbox"] ~ ul,
+  .extensions .folder.subTitle ~ ul,
+  .extensions #folderToggleInstalled ~ ul,
+  .extensions #folderToggleRecommended ~ ul {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+  }
+  
+  /* MOBILE: INSTALLED - Quando checkbox está marcado */
+  .extensions #folderToggleInstalled:checked ~ ul {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  
+  /* MOBILE: INSTALLED - Quando checkbox NÃO está marcado */
+  .extensions #folderToggleInstalled:not(:checked) ~ ul {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+  }
+  
+  /* MOBILE: RECOMMENDED - Quando checkbox está marcado */
+  .extensions #folderToggleRecommended:checked ~ ul {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  
+  /* MOBILE: RECOMMENDED - Quando checkbox NÃO está marcado */
+  .extensions #folderToggleRecommended:not(:checked) ~ ul {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+  }
+  
+  /* MOBILE: Regras genéricas como fallback */
+  .extensions .folder.subTitle ~ input[type="checkbox"]:checked ~ ul {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  
+  .extensions .folder.subTitle ~ input[type="checkbox"]:not(:checked) ~ ul {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+  }
+  
+  /* MOBILE: Quando a lista está visível, garantir que os itens também estejam */
+  .extensions .folder.subTitle ~ input[type="checkbox"]:checked ~ ul li,
+  .extensions #folderToggleInstalled:checked ~ ul li,
+  .extensions #folderToggleRecommended:checked ~ ul li {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  /* Ajustar folder.subTitle para manter título e contador na mesma linha */
+  .extensions .folder.subTitle {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    padding: var(--spacing-sm) var(--spacing-md) !important;
+    padding-left: var(--spacing-lg) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    gap: var(--spacing-sm) !important;
+    line-height: 1.2 !important;
+    flex-wrap: nowrap !important;
+  }
+  
+  /* Ajustar section-title para ficar na mesma linha que a bolinha */
+  .extensions .section-title {
+    display: inline-block !important;
+    margin-left: 1.2em !important;
+    margin-right: var(--spacing-sm) !important;
+    text-align: left !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    min-width: 0 !important;
+    line-height: 1.2 !important;
+    flex-shrink: 0 !important;
+    vertical-align: middle !important;
+  }
+  
+  /* Ajustar bolinha (section-count) para ficar na mesma linha */
+  .extensions .section-count {
+    background-color: var(--color-text-secondary) !important;
+    color: var(--color-bg-secondary) !important;
+    border-radius: 50% !important;
+    min-width: 14px !important;
+    width: 14px !important;
+    height: 14px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 8px !important;
+    font-weight: bold !important;
+    padding: 0 !important;
+    flex-shrink: 0 !important;
+    flex-grow: 0 !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+    margin-left: var(--spacing-sm) !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    box-sizing: border-box !important;
+    vertical-align: middle !important;
+  }
+  
+  /* Garantir que extension-item também fique bem formatado */
+  .extensions .extension-item {
+    padding: var(--spacing-md) var(--spacing-md) !important;
+    padding-left: var(--spacing-lg) !important;
+    font-size: var(--font-size-base) !important;
+  }
+  
+  /* Ajustar section-divider */
+  .extensions .section-divider {
+    margin-left: var(--spacing-lg) !important;
+    margin-right: var(--spacing-md) !important;
+  }
+  
+  /* Título do extensions em mobile */
+  .extensions .title {
+    padding: var(--spacing-md) var(--spacing-lg) !important;
+    font-size: var(--font-size-base) !important;
+    background-color: var(--color-bg-primary) !important;
+    border-bottom: 1px solid var(--color-border-primary) !important;
+    margin: 0 !important;
+  }
 }

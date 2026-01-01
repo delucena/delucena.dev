@@ -60,6 +60,23 @@
   --z-index-navigation: 10;
   --z-index-editor: 1;
   --z-index-dropdown: 1000;
+  
+  /* Syntax Highlighting - Tema Dark */
+  /* Tag e nome da tag - Azul */
+  --syntax-tag: #569CD6;
+  --syntax-tag-name: #569CD6;
+  /* Atributo - Azul claro */
+  --syntax-attribute: #9CDCFE;
+  /* Valor - Laranja */
+  --syntax-value: #CE9178;
+  /* Texto - Cinza claro */
+  --syntax-text: #D4D4D4;
+  /* Comentário - Verde */
+  --syntax-comment: #6A9955;
+  /* Símbolos (<, >, =) - Cinza */
+  --syntax-symbol: #808080;
+  --syntax-delimiter: #808080;
+  --syntax-operator: #808080;
 }
 
 /* Tema Light */
@@ -71,4 +88,21 @@ body:has(#theme:checked) {
   --color-text-secondary: rgb(111, 111, 111);
   --color-border-primary: rgb(222, 222, 222);
   --color-border-accent: rgb(140, 0, 255);
+  
+  /* Syntax Highlighting - Tema Light */
+  /* Tag e nome da tag - Azul */
+  --syntax-tag: #0000FF;
+  --syntax-tag-name: #0000FF;
+  /* Atributo - Azul escuro */
+  --syntax-attribute: #0451A5;
+  /* Valor - Vermelho */
+  --syntax-value: #A31515;
+  /* Texto - Preto */
+  --syntax-text: #000000;
+  /* Comentário - Verde */
+  --syntax-comment: #008000;
+  /* Símbolos (<, >, =) - Preto */
+  --syntax-symbol: #000000;
+  --syntax-delimiter: #000000;
+  --syntax-operator: #000000;
 }
