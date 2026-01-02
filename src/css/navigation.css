@@ -1,0 +1,663 @@
+/* ============================================
+   NAVEGAÇÃO - Sidebar e Menu
+   ============================================ */
+
+#navigation {
+  display: flex;
+  overflow: hidden;
+  min-width: 0;
+  gap: 0;
+  flex-shrink: 0;
+  position: relative;
+  z-index: var(--z-index-navigation);
+  height: calc(100dvh - var(--height-footer));
+  max-height: calc(100dvh - var(--height-footer));
+  min-height: calc(100dvh - var(--height-footer));
+}
+
+/* Menu Lateral */
+.menu {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: var(--spacing-md);
+  background-color: var(--color-bg-accent);
+  width: var(--width-menu);
+  min-width: var(--width-menu);
+  z-index: 1000;
+  position: relative;
+}
+
+.menu i {
+  color: var(--color-text-secondary);
+  display: block;
+  font-size: 22px;
+  cursor: pointer;
+  padding-block: var(--spacing-md);
+}
+
+.menu i.disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.menu i:first-child {
+  padding-top: 0.1em;
+}
+
+.menu label[for="menu"] {
+  color: var(--color-text-secondary) !important;
+  display: block;
+  font-size: 22px;
+  cursor: pointer;
+  padding-block: var(--spacing-md);
+  width: 100%;
+  text-align: center;
+}
+
+.menu label[for="menu"]:hover {
+  color: var(--color-text-primary) !important;
+}
+
+.menu label[for="menu"] i {
+  color: inherit !important;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+/* Ícones do menu - hamburger e close */
+.menu label[for="menu"] .hamburger-icon {
+  display: inline-block;
+  opacity: 1;
+}
+
+.menu label[for="menu"] .close-icon {
+  display: none;
+  opacity: 0;
+}
+
+#menu:not(:checked) + label[for="menu"] .hamburger-icon {
+  display: none;
+  opacity: 0;
+}
+
+#menu:not(:checked) + label[for="menu"] .close-icon {
+  display: inline-block;
+  opacity: 1;
+}
+
+.menu label,
+.menu label i {
+  color: var(--color-text-primary) !important;
+  width: 100%;
+  opacity: 1;
+  cursor: pointer;
+  padding-top: var(--spacing-md);
+}
+
+.menu label[for="explorerView"] {
+  display: block;
+  padding-block: var(--spacing-md);
+  text-align: center;
+}
+
+.menu label[for="explorerView"] i {
+  color: var(--color-text-secondary);
+}
+
+.menu label[for="explorerView"]:hover i {
+  color: var(--color-text-primary);
+}
+
+#navigation:has(#explorerView:checked) .menu label[for="explorerView"] i {
+  color: var(--color-text-primary);
+}
+
+#navigation:has(#extensionsView:checked) .menu label.extensions-icon {
+  color: var(--color-text-primary);
+}
+
+.menu a {
+  color: var(--color-text-secondary);
+  display: block;
+  font-size: 22px;
+  cursor: pointer;
+  padding-block: var(--spacing-md);
+  text-decoration: none;
+  width: 100%;
+  text-align: center;
+}
+
+.menu a:hover {
+  color: var(--color-text-primary);
+}
+
+.menu a i {
+  color: inherit;
+}
+
+.menu a.git-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: var(--spacing-md);
+}
+
+.menu a.git-icon svg {
+  width: 22px;
+  height: 22px;
+  color: var(--color-text-secondary);
+}
+
+.menu a.git-icon:hover svg {
+  color: var(--color-text-primary);
+}
+
+.menu label.extensions-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: var(--spacing-md);
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  width: 100%;
+}
+
+.menu label.extensions-icon:hover {
+  color: var(--color-text-primary);
+}
+
+.menu label.extensions-icon svg {
+  width: 22px;
+  height: 22px;
+  color: inherit;
+}
+
+/* Menu de configurações */
+.menu > div:last-child {
+  position: relative;
+  z-index: 1001;
+}
+
+.menu label.folder.settings {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: var(--spacing-md);
+  position: relative;
+}
+
+/* Badge de notificação para o menu de configurações */
+.menu label.folder.settings[for="folderToggleSettings"]::after {
+  content: "1";
+  position: absolute;
+  bottom: 0.2em;
+  right: 0.2em;
+  background-color: #007acc;
+  color: white;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  font-weight: bold;
+  line-height: 1;
+  z-index: 10;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Badge de notificação para o menu de account */
+.menu label.folder.settings[for="folderToggleAccounts"]::after {
+  content: "3";
+  position: absolute;
+  bottom: 0.2em;
+  right: 0.2em;
+  background-color: #007acc;
+  color: white;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  font-weight: bold;
+  line-height: 1;
+  z-index: 10;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.menu label.folder.settings svg {
+  width: 22px;
+  height: 22px;
+  color: var(--color-text-secondary);
+}
+
+.menu label.folder.settings:hover svg {
+  color: var(--color-text-primary);
+}
+
+.menu > div:last-child > div {
+  position: relative;
+  z-index: 1002;
+}
+
+.folder.settings ~ ul li input {
+  display: block;
+}
+
+.folder.settings ~ ul {
+  padding-block: var(--spacing-md);
+  padding-inline: var(--spacing-lg);
+  position: absolute;
+  display: none;
+  left: 66px;
+  bottom: 0;
+  min-width: 220px;
+  border: 1px solid var(--color-border-primary);
+  border-radius: 0.5rem;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+  box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.4);
+  list-style: none;
+  z-index: 1002;
+  font-size: var(--font-size-base);
+}
+
+.menu > div:last-child > div:first-child .folder.settings ~ ul {
+  bottom: 60px;
+}
+
+.menu > div:last-child > div:last-child .folder.settings ~ ul {
+  bottom: 0;
+}
+
+.folder.settings ~ ul li {
+  padding: var(--spacing-sm) var(--spacing-md);
+  cursor: pointer;
+  border-bottom: 1px solid var(--color-border-primary);
+  margin: 0;
+  transition: background-color var(--transition-fast);
+}
+
+.folder.settings ~ ul li:last-child {
+  border-bottom: none;
+}
+
+.folder.settings ~ ul li:hover {
+  background-color: var(--color-bg-primary);
+  border-radius: 0.2rem;
+}
+
+.folder.settings ~ ul li input[type="checkbox"] {
+  cursor: pointer;
+  width: auto;
+  margin: 0;
+  display: inline-block;
+  appearance: checkbox;
+  -webkit-appearance: checkbox;
+  -moz-appearance: checkbox;
+  width: 16px;
+  height: 16px;
+  margin-left: var(--spacing-md);
+}
+
+.folder.settings ~ ul li label {
+  cursor: pointer;
+  user-select: none;
+  font-size: var(--font-size-base);
+  line-height: 1.4;
+  padding: 0;
+  margin: 0;
+  display: block;
+  width: 100%;
+}
+
+.folder.settings ~ ul li a {
+  text-decoration: none;
+  color: var(--color-text-secondary);
+  display: block;
+  padding: 0;
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+  transition: color var(--transition-fast);
+}
+
+.folder.settings ~ ul li a:hover {
+  color: var(--color-text-primary);
+}
+
+.folder.settings ~ ul li:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-base);
+}
+
+.folder.settings ~ ul hr {
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-top: 1px solid var(--color-border-primary);
+  height: 0;
+}
+
+.folder.settings ~ input[type="radio"]:checked ~ ul,
+.menu > div:last-child > div:first-child .folder.settings ~ input[type="radio"]:checked ~ ul,
+.menu > div:last-child > div:last-child .folder.settings ~ input[type="radio"]:checked ~ ul {
+  display: block !important;
+}
+
+/* Mobile: menu lateral sempre visível minimizado */
+@media (max-width: 768px) {
+  /* Navigation sempre visível no lado esquerdo */
+  #navigation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 60px; /* Largura minimizada */
+    min-width: 60px;
+    max-width: 60px;
+    height: 100%;
+    z-index: 1000;
+    display: block; /* Mudar para block para permitir posicionamento absoluto dos filhos */
+    background-color: transparent;
+    transition: width var(--transition-normal);
+    overflow: visible; /* Permitir que explorer/extensions sejam visíveis */
+    box-sizing: border-box;
+  }
+  
+  /* Menu minimizado - apenas ícones verticais */
+  .menu {
+    width: 60px;
+    min-width: 60px;
+    height: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: var(--spacing-md) 0;
+    background-color: var(--color-bg-accent);
+    position: relative;
+    z-index: 1001;
+  }
+  
+  .menu > div:first-child {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 0;
+  }
+  
+  .menu > div:last-child {
+    display: none;
+  }
+  
+  /* Esconder hamburger em mobile - não precisamos mais */
+  .menu label[for="menu"] {
+    display: none;
+  }
+  
+  /* Ícones do menu em mobile - sempre visíveis */
+  .menu label[for="explorerView"],
+  .menu label.extensions-icon,
+  .menu a.git-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid var(--color-border-primary);
+  }
+  
+  .menu label[for="explorerView"]:hover,
+  .menu label.extensions-icon:hover,
+  .menu a.git-icon:hover {
+    background-color: var(--color-bg-primary);
+  }
+  
+  .menu label[for="explorerView"] i,
+  .menu label.extensions-icon svg,
+  .menu a.git-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  /* Destaque quando ativo - será tratado via JavaScript se necessário */
+  /* Por enquanto, o hover já indica interatividade */
+  
+  /* Explorer e Extensions - expandem quando ativos */
+  .explorer,
+  .extensions {
+    position: fixed; /* Mudar para fixed para ficar acima de tudo */
+    top: 0;
+    left: 60px; /* Começa depois do menu minimizado */
+    width: 0 !important; /* Forçar fechado por padrão em mobile */
+    min-width: 0 !important;
+    max-width: 0 !important;
+    height: 100%;
+    margin-left: 0;
+    opacity: 0 !important;
+    background-color: var(--color-bg-secondary);
+    border: none;
+    overflow: hidden;
+    transition: width var(--transition-normal), opacity var(--transition-normal), z-index var(--transition-normal);
+    z-index: 1; /* Atrás quando minimizado */
+    pointer-events: none;
+    visibility: hidden !important;
+  }
+  
+  /* Quando Explorer está selecionado, expande e vai para frente */
+  #explorerView:checked ~ .explorer {
+    width: 220px !important;
+    min-width: 220px !important;
+    max-width: 220px !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    z-index: 9999 !important; /* Muito alto para ficar na frente de tudo */
+    visibility: visible !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    display: block !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Garantir que conteúdo interno do explorer seja visível quando expandido */
+  /* Esconder estrutura de pastas em mobile */
+  #explorerView:checked ~ .explorer .desktop-only {
+    display: none !important;
+  }
+  
+  /* Mostrar apenas lista mobile simplificada */
+  #explorerView:checked ~ .explorer .mobile-only {
+    display: block !important;
+  }
+  
+  #explorerView:checked ~ .explorer .mobile-explorer-list,
+  #explorerView:checked ~ .explorer .mobile-explorer-list li,
+  #explorerView:checked ~ .explorer .mobile-explorer-list li label {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  /* Garantir que título apareça */
+  #explorerView:checked ~ .explorer .title {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  /* Quando Extensions está selecionado, expande e vai para frente */
+  #extensionsView:checked ~ .extensions {
+    width: 220px !important;
+    min-width: 220px !important;
+    max-width: 220px !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    z-index: 9999 !important; /* Muito alto para ficar na frente de tudo */
+    visibility: visible !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    display: block !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Garantir que conteúdo interno do extensions seja visível quando expandido */
+  #extensionsView:checked ~ .extensions .title,
+  #extensionsView:checked ~ .extensions .folder.subTitle,
+  #extensionsView:checked ~ .extensions .extension-item,
+  #extensionsView:checked ~ .extensions li {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  /* MOBILE: IMPORTANTE - ul são controladas pelos checkboxes individuais */
+  /* Estado inicial: todas as listas começam escondidas */
+  #extensionsView:checked ~ .extensions .folder.subTitle ~ input[type="checkbox"] ~ ul,
+  #extensionsView:checked ~ .extensions .folder.subTitle ~ ul,
+  #extensionsView:checked ~ .extensions #folderToggleInstalled ~ ul,
+  #extensionsView:checked ~ .extensions #folderToggleRecommended ~ ul {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+  }
+  
+  /* MOBILE: INSTALLED - Quando checkbox está marcado */
+  #extensionsView:checked ~ .extensions #folderToggleInstalled:checked ~ ul {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  
+  /* MOBILE: INSTALLED - Quando checkbox NÃO está marcado */
+  #extensionsView:checked ~ .extensions #folderToggleInstalled:not(:checked) ~ ul {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+  }
+  
+  /* MOBILE: RECOMMENDED - Quando checkbox está marcado */
+  #extensionsView:checked ~ .extensions #folderToggleRecommended:checked ~ ul {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  
+  /* MOBILE: RECOMMENDED - Quando checkbox NÃO está marcado */
+  #extensionsView:checked ~ .extensions #folderToggleRecommended:not(:checked) ~ ul {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+  }
+  
+  /* MOBILE: Regras genéricas como fallback */
+  #extensionsView:checked ~ .extensions .folder.subTitle ~ input[type="checkbox"]:checked ~ ul {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  
+  #extensionsView:checked ~ .extensions .folder.subTitle ~ input[type="checkbox"]:not(:checked) ~ ul {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+  }
+  
+  /* Quando um está ativo, o outro fica escondido e atrás */
+  #explorerView:checked ~ .extensions {
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    z-index: 1 !important; /* Atrás quando minimizado */
+    visibility: hidden !important;
+  }
+  
+  #extensionsView:checked ~ .explorer {
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    z-index: 1 !important; /* Atrás quando minimizado */
+    visibility: hidden !important;
+  }
+  
+  /* Ajustar conteúdo do explorer/extensions */
+  .explorer > div:first-child,
+  .extensions > div:first-child {
+    padding: 0; /* Sem padding em mobile para lista ocupar toda largura */
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    z-index: 1;
+    background-color: var(--color-bg-secondary);
+  }
+  
+  .explorer .title,
+  .extensions .title {
+    padding: var(--spacing-md);
+    font-size: var(--font-size-base);
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Mobile explorer list - ajustes */
+  .mobile-explorer-list {
+    padding: 0;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .mobile-explorer-list li {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .mobile-explorer-list li label {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-size-base);
+    position: relative;
+    z-index: 1;
+    display: block;
+  }
+  
+  /* Garantir que extension items também sejam visíveis */
+  .extensions .extension-item {
+    position: relative;
+    z-index: 1;
+  }
+}

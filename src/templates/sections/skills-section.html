@@ -1,0 +1,16 @@
+<section class="skills" id="_skills_">
+    <h1>🛠️ Skills & Competências</h1>
+    <br>
+    <br>
+
+    {{#each skills}}
+    <h3 style="font-size: var(--font-size-base); font-weight: 600; margin-top: 1rem; margin-bottom: 0.5rem;">{{title}}</h3>
+    <ul style="margin-left:2rem; font-size: var(--font-size-base);">
+        {{#each items}}
+        <li style="font-size: var(--font-size-base);">{{this}}</li>
+        {{/each}}
+    </ul>
+    <br>
+    <br>
+    {{/each}}
+</section>

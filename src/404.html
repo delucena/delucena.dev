@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Página não encontrada - delucena.dev">
+    <title>404 - Página não encontrada | delucena.dev</title>
+    <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
+    <link rel="alternate icon" href="./assets/favicon.ico">
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'>
+    <link rel="stylesheet" href="./css/main.css">
+    <style>
+        .error-404-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            text-align: center;
+            background: var(--color-bg-primary);
+            color: var(--color-text-primary);
+        }
+        
+        .error-404-code {
+            font-size: 8rem;
+            font-weight: bold;
+            color: var(--color-border-accent);
+            margin-bottom: 1rem;
+            font-family: var(--font-family-mono);
+        }
+        
+        .error-404-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--color-text-primary);
+        }
+        
+        .error-404-message {
+            font-size: 1.1rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+        
+        .error-404-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .error-404-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--color-border-accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: opacity 0.2s;
+            font-family: var(--font-family-mono);
+            font-size: var(--font-size-base);
+        }
+        
+        .error-404-button:hover {
+            opacity: 0.9;
+            color: white;
+        }
+        
+        .error-404-button.secondary {
+            background: var(--color-bg-secondary);
+            color: var(--color-text-primary);
+            border: 1px solid var(--color-border-primary);
+        }
+        
+        .error-404-button.secondary:hover {
+            background: var(--color-bg-accent);
+        }
+        
+        @media (max-width: 768px) {
+            .error-404-code {
+                font-size: 5rem;
+            }
+            
+            .error-404-title {
+                font-size: 1.5rem;
+            }
+            
+            .error-404-message {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="error-404-container">
+        <div class="error-404-code">404</div>
+        <h1 class="error-404-title">Página não encontrada</h1>
+        <p class="error-404-message">
+            Oops! A página que você está procurando não existe ou foi movida.
+            <br>
+            Parece que você tentou acessar um arquivo que não está no projeto.
+        </p>
+        <div class="error-404-actions">
+            <a href="./index.html" class="error-404-button">
+                <i class="fa-solid fa-home"></i>
+                Voltar ao início
+            </a>
+            <a href="https://github.com/delucena" target="_blank" class="error-404-button secondary">
+                <i class="fa-brands fa-github"></i>
+                Ver no GitHub
+            </a>
+        </div>
+    </div>
+    
+    <script src="./js/theme.js"></script>
+</body>
+
+</html>

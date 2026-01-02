@@ -1,0 +1,153 @@
+/* ============================================
+   SYNTAX HIGHLIGHTING - Colorização de Código
+   Cores baseadas no Visual Studio Code Dark+ e Light+
+   Usa classes token.* no padrão VS Code
+   ============================================ */
+
+/* Container de código */
+.code-view,
+pre code {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-base);
+  line-height: 1.8;
+  color: var(--syntax-text);
+  tab-size: 2;
+  -moz-tab-size: 2;
+}
+
+/* ============================================
+   TOKEN CLASSES - Padrão VS Code
+   ============================================ */
+
+/* Tag completa - usa a mesma cor do nome da tag */
+.token.tag {
+  color: var(--syntax-tag);
+}
+
+/* Nome da tag (div, span, section, etc.) */
+.token.tag-name {
+  color: var(--syntax-tag-name);
+}
+
+/* Atributo (class, id, type, etc.) */
+.token.attr-name {
+  color: var(--syntax-attribute);
+}
+
+/* Valor do atributo (strings entre aspas) */
+.token.attr-value {
+  color: var(--syntax-value);
+}
+
+/* Texto interno (conteúdo entre tags) */
+.token.text {
+  color: var(--syntax-text);
+}
+
+/* Comentário HTML (<!-- -->) */
+.token.comment {
+  color: var(--syntax-comment);
+  font-style: italic;
+}
+
+/* Símbolos de pontuação (<, >, =, /) */
+.token.punctuation {
+  color: var(--syntax-delimiter);
+}
+
+/* ============================================
+   APLICAÇÃO EM CONTEXTOS ESPECÍFICOS
+   ============================================ */
+
+/* Aplicar estilos quando código está dentro de code-view */
+.code-view .token.tag,
+.code-view .token.tag-name {
+  color: var(--syntax-tag-name);
+}
+
+.code-view .token.attr-name {
+  color: var(--syntax-attribute);
+}
+
+.code-view .token.attr-value {
+  color: var(--syntax-value);
+}
+
+.code-view .token.text {
+  color: var(--syntax-text);
+}
+
+.code-view .token.comment {
+  color: var(--syntax-comment);
+  font-style: italic;
+}
+
+.code-view .token.punctuation {
+  color: var(--syntax-delimiter);
+}
+
+/* Aplicar estilos quando código está dentro de language-html */
+.language-html .token.tag,
+.language-html .token.tag-name {
+  color: var(--syntax-tag-name);
+}
+
+.language-html .token.attr-name {
+  color: var(--syntax-attribute);
+}
+
+.language-html .token.attr-value {
+  color: var(--syntax-value);
+}
+
+.language-html .token.text {
+  color: var(--syntax-text);
+}
+
+.language-html .token.comment {
+  color: var(--syntax-comment);
+  font-style: italic;
+}
+
+.language-html .token.punctuation {
+  color: var(--syntax-delimiter);
+}
+
+/* ============================================
+   ESTILOS PARA ELEMENTOS DE CÓDIGO INLINE
+   ============================================ */
+
+code {
+  color: var(--syntax-text);
+  background: var(--color-bg-secondary);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: var(--font-family-mono);
+  font-size: 0.9em;
+}
+
+/* Estilos para blocos de código */
+pre {
+  background: var(--color-bg-secondary);
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  border: 1px solid var(--color-border-primary);
+}
+
+pre code {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  color: var(--syntax-text);
+}
+
+/* Aplicar cores específicas quando dentro de code-view-container */
+.code-view-container .code-view,
+.code-view-container code {
+  background: var(--color-bg-secondary);
+  padding: 1rem;
+  border-radius: 4px;
+  display: block;
+  overflow-x: auto;
+}

@@ -1,0 +1,14 @@
+# robots.txt para delucena.dev
+# https://delucena.dev/robots.txt
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://delucena.dev/sitemap.xml
+
+# Não indexar arquivos de build/config
+Disallow: /dist/
+Disallow: /target/
+Disallow: /node_modules/
+Disallow: /.git/

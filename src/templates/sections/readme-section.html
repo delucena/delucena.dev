@@ -1,0 +1,26 @@
+<section contenteditable="false" class="readme" id="_readme_">
+    <div class="readme-container">
+        <div class="readme-photo-wrapper">
+            <picture>
+                <source srcset="{{profile.profileImage.webp}}" type="image/webp">
+                <source srcset="{{profile.profileImage.webp}}" type="image/webp">
+                <img src="{{profile.profileImage.png}}" alt="{{profile.profileImage.alt}}" class="readme-photo" loading="lazy" onerror="this.onerror=null; this.src='{{profile.profileImage.png}}';">
+            </picture>
+        </div>
+        <div class="readme-content">
+            <h1>{{profile.readme.greeting}}</h1>
+            <p>{{profile.readme.tagline}}</p>
+            <p>{{profile.readme.description}}</p>
+            <p>
+                <a target="_blank" href="{{profile.readme.credlyUrl}}">
+                    <img src="https://img.shields.io/badge/Oracle-Java%20Certified-red?style=for-the-badge&logo=oracle"
+                         alt="Oracle Java Certified">
+                </a>
+            </p>
+            <p>
+                <img src="https://skillicons.dev/icons?i={{profile.readme.skillsIcons}}&perline=12"
+                     alt="My Skills">
+            </p>
+        </div>
+    </div>
+</section>

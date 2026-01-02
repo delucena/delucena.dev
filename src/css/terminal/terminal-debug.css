@@ -1,0 +1,74 @@
+/* ============================================
+   TERMINAL DEBUG - Aba de Debug Console
+   ============================================ */
+
+.terminal .terminal-debug {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  padding: 0;
+}
+
+.terminal .terminal-debug-scrollable {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--spacing-md) var(--spacing-xl);
+}
+
+.terminal .terminal-debug-header {
+  padding: var(--spacing-md) 0;
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  border-bottom: 1px solid var(--color-border-primary);
+  margin-bottom: var(--spacing-md);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.terminal .terminal-debug-content {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+}
+
+.terminal .terminal-debug-message {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  background-color: var(--color-bg-secondary);
+  border-radius: 3px;
+  margin-bottom: var(--spacing-xl);
+}
+
+.terminal .terminal-debug-message i {
+  color: var(--color-border-accent);
+  margin-top: var(--spacing-xs);
+  flex-shrink: 0;
+}
+
+.terminal .terminal-debug-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.terminal .terminal-debug-info-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) 0;
+  font-size: var(--font-size-base);
+}
+
+.terminal .terminal-debug-label {
+  color: var(--color-text-secondary);
+  min-width: 100px;
+}
+
+.terminal .terminal-debug-value {
+  color: var(--color-text-primary);
+}

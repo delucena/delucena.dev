@@ -1,0 +1,806 @@
+/* ============================================
+   EDITOR - Área Principal de Conteúdo
+   ============================================ */
+
+.editorContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  order: 1;
+}
+
+.editorContainer .editor {
+  display: flex;
+  flex-flow: column;
+  flex: 1;
+  min-height: 0;
+  order: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+#editor .editor {
+  cursor: text;
+}
+
+#editor .editor a {
+  cursor: pointer;
+}
+
+#editor .editor section {
+  display: none;
+  color: var(--color-text-secondary);
+  padding-top: calc(var(--spacing-md) + 50px); /* Espaço para o botão flutuante */
+  padding: calc(var(--spacing-md) + 50px) 4rem var(--spacing-md) var(--spacing-xl);
+  font-size: var(--font-size-large);
+  overflow-x: hidden;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+#editor:has(div #image:checked) ~ #navigation .explorer div .image {
+  background-color: var(--color-bg-primary);
+}
+
+#header:has(div #image:checked) ~ .editor .image {
+  margin-top: 2rem;
+  margin-inline: auto;
+  display: block;
+}
+
+/* Scrollbar do editor */
+#editor .editorContainer .editor section::-webkit-scrollbar {
+  height: 2px;
+}
+
+#editor .editorContainer .editor section::-webkit-scrollbar-track {
+  border-inline: 1px solid var(--color-border-primary);
+}
+
+#editor .editorContainer .editor section::-webkit-scrollbar-thumb {
+  background: #3c3c3c;
+}
+
+#editor .editorContainer .editor section::-webkit-scrollbar-thumb:hover {
+  background: #4a4a4a;
+}
+
+/* Header com abas */
+#header {
+  background-color: var(--color-bg-secondary);
+  height: var(--height-header);
+  display: flex;
+  overflow-y: hidden;
+  overflow-x: auto;
+  position: relative;
+}
+
+#header div label {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  padding-left: 0.8em;
+  padding-right: 0.7em;
+  border-right: 1px solid var(--color-border-primary);
+  cursor: pointer;
+  text-wrap: nowrap;
+  height: 100%;
+}
+
+#header div label::before {
+  content: "\f069";
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: var(--spacing-md);
+  color: var(--color-border-accent);
+}
+
+#header div label::after {
+  content: "\00d7";
+  opacity: 0;
+  font-size: 18px;
+  padding-left: var(--spacing-md);
+  color: white;
+  font-weight: 300;
+}
+
+#header div input[type="radio"]:checked ~ label {
+  background-color: var(--color-bg-primary);
+  border-bottom: 1px solid var(--color-border-accent);
+}
+
+#header div input[type="radio"]:checked ~ label:after {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* Scrollbar do header */
+#header::-webkit-scrollbar {
+  height: 2px;
+}
+
+#header::-webkit-scrollbar-track {
+  background: rgba(60, 60, 60, 0.5);
+}
+
+#header::-webkit-scrollbar-thumb {
+  background: #3c3c3c;
+}
+
+#header::-webkit-scrollbar-thumb:hover {
+  background: #4a4a4a;
+}
+
+/* Exibição de seções baseada em radio buttons */
+#header:has(div #index:checked) ~ .editor .index {
+  display: block !important;
+}
+
+#header:has(div #experience:checked) ~ .editor .experience {
+  display: block !important;
+}
+
+#header:has(div #contact:checked) ~ .editor .contact {
+  display: block !important;
+}
+
+#header:has(div #skills:checked) ~ .editor .skills {
+  display: block !important;
+}
+
+#header:has(div #readme:checked) ~ .editor .readme {
+  display: block !important;
+}
+
+/* Estilos específicos para README */
+#editor .editor .readme {
+  font-size: var(--font-size-base);
+  padding: 0.3rem 2rem 0.3rem var(--spacing-xl);
+}
+
+/* Container principal do README - centralizado */
+#editor .editor .readme .readme-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--spacing-xl) 0;
+}
+
+/* Wrapper da foto circular */
+#editor .editor .readme .readme-photo-wrapper {
+  margin-bottom: var(--spacing-2xl);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Picture tag */
+#editor .editor .readme .readme-photo-wrapper picture {
+  display: block;
+  width: 200px;
+  height: 200px;
+}
+
+/* Foto circular */
+#editor .editor .readme .readme-photo {
+  width: 200px;
+  height: 200px;
+  min-width: 200px;
+  min-height: 200px;
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  border: 4px solid var(--color-border-accent);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  display: block;
+  transition: transform var(--transition-normal);
+  aspect-ratio: 1 / 1;
+  box-sizing: border-box;
+}
+
+#editor .editor .readme .readme-photo:hover {
+  transform: scale(1.05);
+}
+
+/* Conteúdo centralizado */
+#editor .editor .readme .readme-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+#editor .editor .readme .readme-content h1 {
+  font-size: var(--font-size-title);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+  width: 100%;
+}
+
+#editor .editor .readme .readme-content p {
+  margin-bottom: var(--spacing-md);
+  line-height: 1.6;
+  text-align: center;
+  width: 100%;
+}
+
+#editor .editor .readme .readme-content p:last-child {
+  margin-bottom: 0;
+}
+
+#editor .editor .readme .readme-content img {
+  max-width: 100%;
+  height: auto;
+  max-height: 200px;
+}
+
+#editor .editor .readme .readme-content p img {
+  max-width: 500px;
+  max-height: 80px;
+  width: auto;
+  height: auto;
+  display: inline-block;
+  margin: var(--spacing-sm) 0;
+}
+
+#editor .editor .readme br {
+  line-height: 0.5;
+}
+
+/* Ajuste quando terminal está colapsado */
+/* Removido - regra vazia não necessária */
+
+/* ============================================
+   PREVIEW/CODE TOGGLE - Botão flutuante
+   ============================================ */
+
+/* Container flutuante do toggle */
+.floating-toggle {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Esconde o checkbox */
+.floating-toggle input[type="checkbox"] {
+  display: none;
+}
+
+/* Botão de toggle flutuante */
+.floating-toggle .preview-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 4px;
+  transition: all var(--transition-fast);
+  padding: 0;
+  margin: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.floating-toggle .preview-toggle-btn:hover {
+  color: var(--color-border-accent);
+  background-color: var(--color-bg-primary);
+  border-color: var(--color-border-accent);
+  box-shadow: 0 4px 12px rgba(0, 122, 204, 0.3);
+  transform: translateY(-1px);
+}
+
+.floating-toggle .preview-toggle-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.floating-toggle .preview-toggle-btn i {
+  font-size: 16px;
+  transition: transform var(--transition-fast);
+}
+
+.floating-toggle input[type="checkbox"]:checked ~ .preview-toggle-btn {
+  color: var(--color-border-accent);
+  background-color: var(--color-bg-primary);
+  border-color: var(--color-border-accent);
+}
+
+.floating-toggle input[type="checkbox"]:checked ~ .preview-toggle-btn i {
+  transform: scale(1.1);
+}
+
+/* ============================================
+   CODE VIEW - Visualização do código formatado
+   ============================================ */
+
+.code-view-container {
+  display: none;
+  padding: var(--spacing-xl);
+  padding-top: calc(var(--spacing-xl) + 50px); /* Espaço para o botão flutuante */
+  background-color: var(--color-bg-primary);
+  overflow: auto;
+  font-family: var(--font-family-mono);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  height: 100%;
+  width: 100%;
+  /* Melhorias de visualização */
+  line-height: 1.8;
+  tab-size: 2;
+  -moz-tab-size: 2;
+}
+
+.code-view {
+  margin: 0;
+  padding: var(--spacing-lg);
+  background: transparent;
+  border: none;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-base);
+  line-height: 1.8;
+  color: var(--color-text-primary);
+  white-space: pre;
+  overflow-x: auto;
+  overflow-y: visible;
+  /* Melhorias de legibilidade */
+  tab-size: 2;
+  -moz-tab-size: 2;
+  letter-spacing: 0.01em;
+}
+
+.code-view code {
+  display: block;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  white-space: pre;
+  word-wrap: normal;
+  overflow-wrap: normal;
+}
+
+/* Syntax highlighting é gerenciado por syntax-highlight.css usando classes token.* */
+
+/* ============================================
+   CODE COPY BUTTON - Botão de copiar código
+   ============================================ */
+
+.code-copy-button {
+  position: absolute;
+  top: calc(var(--spacing-md) + 50px);
+  right: var(--spacing-md);
+  z-index: 101;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin: 0;
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 4px;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.code-copy-button:hover {
+  color: var(--color-border-accent);
+  background-color: var(--color-bg-primary);
+  border-color: var(--color-border-accent);
+  box-shadow: 0 4px 12px rgba(0, 122, 204, 0.3);
+  transform: translateY(-1px);
+}
+
+.code-copy-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.code-copy-button:focus {
+  outline: 2px solid var(--color-border-accent);
+  outline-offset: 2px;
+}
+
+.code-copy-button i {
+  font-size: 14px;
+  transition: transform var(--transition-fast);
+}
+
+.code-copy-button .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Scrollbar do code view - aplicado em todos os elementos que podem ter scroll */
+.code-view-container::-webkit-scrollbar,
+.code-view::-webkit-scrollbar,
+.code-view-container .code-view::-webkit-scrollbar,
+.code-view-container code::-webkit-scrollbar,
+.code-view-container pre::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.code-view-container::-webkit-scrollbar-track,
+.code-view::-webkit-scrollbar-track,
+.code-view-container .code-view::-webkit-scrollbar-track,
+.code-view-container code::-webkit-scrollbar-track,
+.code-view-container pre::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+
+.code-view-container::-webkit-scrollbar-thumb,
+.code-view::-webkit-scrollbar-thumb,
+.code-view-container .code-view::-webkit-scrollbar-thumb,
+.code-view-container code::-webkit-scrollbar-thumb,
+.code-view-container pre::-webkit-scrollbar-thumb {
+  background: var(--color-border-primary);
+  border-radius: 4px;
+}
+
+.code-view-container::-webkit-scrollbar-thumb:hover,
+.code-view::-webkit-scrollbar-thumb:hover,
+.code-view-container .code-view::-webkit-scrollbar-thumb:hover,
+.code-view-container code::-webkit-scrollbar-thumb:hover,
+.code-view-container pre::-webkit-scrollbar-thumb:hover {
+  background: #4a4a4a;
+}
+
+/* Scrollbar para tema light */
+body:has(#theme:checked) .code-view-container::-webkit-scrollbar-thumb,
+body:has(#theme:checked) .code-view::-webkit-scrollbar-thumb,
+body:has(#theme:checked) .code-view-container .code-view::-webkit-scrollbar-thumb,
+body:has(#theme:checked) .code-view-container code::-webkit-scrollbar-thumb,
+body:has(#theme:checked) .code-view-container pre::-webkit-scrollbar-thumb {
+  background: #b0b0b0;
+}
+
+body:has(#theme:checked) .code-view-container::-webkit-scrollbar-thumb:hover,
+body:has(#theme:checked) .code-view::-webkit-scrollbar-thumb:hover,
+body:has(#theme:checked) .code-view-container .code-view::-webkit-scrollbar-thumb:hover,
+body:has(#theme:checked) .code-view-container code::-webkit-scrollbar-thumb:hover,
+body:has(#theme:checked) .code-view-container pre::-webkit-scrollbar-thumb:hover {
+  background: #909090;
+}
+
+/* Ajuste quando terminal está colapsado */
+main:has(.terminal .header #terminalToggle:checked) .code-view-container {
+  max-height: calc(100dvh - 75px);
+}
+
+/* Quando em modo código, esconde todas as seções */
+.editor.code-mode > section {
+  display: none !important;
+}
+
+/* Quando o code-view-container está visível, garante que ocupe todo o espaço */
+.editor:has(#codeViewContainer[style*="display: block"]) {
+  position: relative;
+}
+
+.editor:has(#codeViewContainer[style*="display: block"]) > section {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* ============================================
+   CONTACT PAGE - Estilos para página de contato
+   ============================================ */
+
+/* Container dos cards de contato */
+#editor .editor .contact .contact-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Desabilita seleção de texto na seção de contato */
+#editor .editor .contact {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Card individual de contato */
+#editor .editor .contact .contact-card {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 8px;
+  padding: 2rem;
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  pointer-events: auto;
+}
+
+#editor .editor .contact .contact-card:hover {
+  border-color: var(--color-border-accent);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 122, 204, 0.2);
+  background-color: var(--color-bg-primary);
+}
+
+/* Ícone do card */
+#editor .editor .contact .contact-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  transition: transform var(--transition-normal);
+}
+
+#editor .editor .contact .contact-card:hover .contact-icon {
+  transform: scale(1.1);
+}
+
+#editor .editor .contact .contact-icon.linkedin {
+  background-color: rgba(0, 119, 181, 0.2);
+  color: #0077b5;
+}
+
+#editor .editor .contact .contact-icon.github {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--color-text-primary);
+}
+
+#editor .editor .contact .contact-icon.email {
+  background-color: rgba(0, 122, 204, 0.2);
+  color: var(--color-border-accent);
+}
+
+/* Conteúdo do card */
+#editor .editor .contact .contact-content {
+  width: 100%;
+}
+
+#editor .editor .contact .contact-content h3 {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+#editor .editor .contact .contact-content p {
+  color: var(--color-text-secondary);
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Link de contato (agora é um span dentro do card clicável) */
+#editor .editor .contact .contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-border-accent);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color var(--transition-fast);
+  word-break: break-all;
+  pointer-events: none;
+}
+
+#editor .editor .contact .contact-card:hover .contact-link {
+  color: rgb(0, 150, 255);
+}
+
+#editor .editor .contact .contact-link i {
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+/* Título e subtítulo da página de contato */
+#editor .editor .contact h1 {
+  color: var(--color-text-primary);
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+#editor .editor .contact > p {
+  color: var(--color-text-secondary);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+  #editor {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+  
+  #editor .editorContainer {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+  
+  #editor .editor {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+  
+  #editor .editor section {
+    padding: calc(var(--spacing-md) + 50px) var(--spacing-md) var(--spacing-md) var(--spacing-md) !important;
+    font-size: var(--font-size-base);
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+  
+  #editor .editor section * {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  #editor .editor .contact .contact-container {
+    grid-template-columns: 1fr;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  #editor .editor .contact h1 {
+    font-size: 1.5rem;
+  }
+  
+  #editor .editor .contact .contact-card {
+    padding: 1.5rem;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Ajustar foto do README para mobile - manter circular */
+  #editor .editor .readme .readme-photo-wrapper {
+    margin-bottom: var(--spacing-xl) !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+  }
+  
+  #editor .editor .readme .readme-photo-wrapper picture {
+    width: 150px !important;
+    height: 150px !important;
+    display: block !important;
+  }
+  
+  #editor .editor .readme .readme-photo {
+    width: 150px !important;
+    height: 150px !important;
+    min-width: 150px !important;
+    min-height: 150px !important;
+    max-width: 150px !important;
+    max-height: 150px !important;
+    border-radius: 50% !important;
+    aspect-ratio: 1 / 1 !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    border: 3px solid var(--color-border-accent) !important;
+    box-sizing: border-box !important;
+    margin: 0 auto !important;
+  }
+  
+  #header {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box !important;
+  }
+  
+  #header div {
+    min-width: fit-content;
+  }
+  
+  #header div label {
+    padding-left: 0.6em;
+    padding-right: 0.5em;
+    font-size: var(--font-size-small);
+    white-space: nowrap;
+  }
+  
+  /* Garantir que imagens e iframes não ultrapassem */
+  #editor .editor section img,
+  #editor .editor section iframe,
+  #editor .editor section video {
+    max-width: 100% !important;
+    height: auto !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Ajustar código view para mobile */
+  .code-view-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: auto !important;
+  }
+  
+  .code-view {
+    max-width: 100% !important;
+    overflow-x: auto !important;
+  }
+  
+  /* Em telas muito pequenas, reduzir ainda mais a foto do README */
+  @media (max-width: 480px) {
+    #editor .editor .readme .readme-photo-wrapper picture {
+      width: 120px !important;
+      height: 120px !important;
+    }
+    
+    #editor .editor .readme .readme-photo {
+      width: 120px !important;
+      height: 120px !important;
+      min-width: 120px !important;
+      min-height: 120px !important;
+      max-width: 120px !important;
+      max-height: 120px !important;
+      border: 2px solid var(--color-border-accent) !important;
+    }
+  }
+}

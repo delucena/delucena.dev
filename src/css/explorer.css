@@ -1,0 +1,919 @@
+/* ============================================
+   EXPLORER - Árvore de Arquivos
+   ============================================ */
+
+.explorer {
+  background-color: var(--color-bg-secondary);
+  width: var(--width-navigation);
+  min-width: var(--width-navigation);
+  max-width: var(--width-navigation);
+  border: 1px solid var(--color-border-primary);
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(100dvh - var(--height-footer));
+  min-height: calc(100dvh - var(--height-footer));
+  max-height: calc(100dvh - var(--height-footer));
+  margin-left: calc(-1 * var(--width-navigation));
+  opacity: 0;
+  pointer-events: none;
+  position: relative;
+  z-index: 2;
+  transition: margin var(--transition-normal), opacity var(--transition-normal);
+  /* Permitir resize dinâmico */
+  resize: none; /* Desabilita resize padrão do navegador */
+}
+
+.explorer > div:first-child {
+  overflow-x: hidden;
+  overflow-y: auto;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  height: auto;
+}
+
+/* Scrollbar do explorer - mesmo estilo do code view */
+.explorer::-webkit-scrollbar,
+.explorer > div:first-child::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.explorer::-webkit-scrollbar-track,
+.explorer > div:first-child::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+
+.explorer::-webkit-scrollbar-thumb,
+.explorer > div:first-child::-webkit-scrollbar-thumb {
+  background: var(--color-border-primary);
+  border-radius: 4px;
+}
+
+.explorer::-webkit-scrollbar-thumb:hover,
+.explorer > div:first-child::-webkit-scrollbar-thumb:hover {
+  background: #4a4a4a;
+}
+
+/* Scrollbar para tema light */
+body:has(#theme:checked) .explorer::-webkit-scrollbar-thumb,
+body:has(#theme:checked) .explorer > div:first-child::-webkit-scrollbar-thumb {
+  background: #b0b0b0;
+}
+
+body:has(#theme:checked) .explorer::-webkit-scrollbar-thumb:hover,
+body:has(#theme:checked) .explorer > div:first-child::-webkit-scrollbar-thumb:hover {
+  background: #909090;
+}
+
+.explorer .title {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  padding: 0.48em;
+}
+
+.explorer .subTitle.folder {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  padding-block: 0.1em;
+  padding-left: var(--spacing-lg);
+  cursor: pointer;
+  position: relative;
+}
+
+.explorer .subTitle.folder::before {
+  content: none;
+}
+
+/* Projeto root no topo */
+.explorer .subTitle.project-root {
+  padding-left: var(--spacing-lg);
+  font-weight: normal;
+}
+
+/* Seção inferior do explorer (OUTLINE e TIMELINE) */
+.explorer-bottom {
+  border-top: 1px solid var(--color-border-primary);
+  padding-top: 0;
+  margin-top: auto;
+  flex-shrink: 0;
+  background-color: var(--color-bg-secondary);
+}
+
+.explorer-bottom .outline-section,
+.explorer-bottom .timeline-section {
+  padding-left: var(--spacing-lg);
+  margin: 0;
+  position: relative;
+}
+
+.explorer-bottom .outline-section {
+  border-top: 1px solid var(--color-border-primary);
+}
+
+.explorer-bottom .timeline-section {
+  border-top: 1px solid var(--color-border-primary);
+}
+
+/* Setas de expansão para OUTLINE e TIMELINE - usando o mesmo padrão das outras pastas */
+.explorer-bottom .outline-section:not(.disabled):has(+ input[type="checkbox"])::after,
+.explorer-bottom .timeline-section:not(.disabled):has(+ input[type="checkbox"])::after {
+  content: "▶";
+  position: absolute;
+  left: 0.2em;
+  top: 0.3em;
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  font-weight: normal;
+  line-height: 1;
+  transition: all var(--transition-fast);
+  pointer-events: none;
+}
+
+.explorer-bottom .outline-section:not(.disabled):has(+ input[type="checkbox"]:checked)::after,
+.explorer-bottom .timeline-section:not(.disabled):has(+ input[type="checkbox"]:checked)::after {
+  content: "▼";
+  transform: none;
+}
+
+/* Conteúdo das seções OUTLINE e TIMELINE */
+.explorer-bottom .outline-content,
+.explorer-bottom .timeline-content {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  padding-left: var(--spacing-xl);
+  display: block;
+}
+
+.explorer-bottom .outline-content li,
+.explorer-bottom .timeline-content li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Mensagens vazias */
+.explorer-empty-message {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  padding: 0.5em var(--spacing-lg);
+  opacity: 0.7;
+  font-style: italic;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Ocultar conteúdo quando colapsado */
+.explorer-bottom input[type="checkbox"]:not(:checked) ~ ul {
+  display: none;
+}
+
+.explorer label {
+  color: var(--color-text-secondary);
+  display: block;
+  font-size: var(--font-size-base);
+  cursor: pointer;
+  padding-block: 0.1em;
+  padding-left: 2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.explorer label::before {
+  content: "\f13b";
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  color: var(--color-icon-file);
+  padding-left: 2px;
+  pointer-events: none;
+}
+
+.explorer label:hover {
+  background-color: var(--color-bg-primary);
+}
+
+.explorer .folder {
+  position: relative;
+  color: var(--color-text-secondary);
+  display: block;
+  font-size: var(--font-size-base);
+  cursor: pointer;
+  padding-block: 0.1em;
+  padding-left: var(--spacing-lg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.explorer .folder::before {
+  content: "\f07b";
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  color: var(--color-icon-folder);
+  margin-left: 1.2em;
+  pointer-events: none;
+}
+
+.explorer .folder:not(.disabled):has(+ input)::before {
+  content: "\f07b";
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  color: var(--color-icon-folder);
+  margin-left: 1.2em;
+  pointer-events: none;
+}
+
+.explorer .folder:hover {
+  background-color: var(--color-bg-primary);
+}
+
+.explorer .folder.disabled {
+  margin-left: 0;
+  opacity: 0.5;
+  cursor: default;
+}
+
+.folder ~ ul .folder.disabled {
+  padding-left: 0 !important;
+}
+
+.explorer .file.disabled {
+  margin-left: 0;
+  opacity: 0.5;
+  cursor: default;
+}
+
+.folder ~ ul .file.disabled {
+  padding-left: 0 !important;
+}
+
+.folder ~ ul .file {
+  padding-left: 0 !important;
+}
+
+.explorer .file.disabled::before {
+  content: "\f87d";
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-small);
+  pointer-events: none;
+}
+
+/* Ícones por tipo de arquivo */
+.explorer .file.disabled.java::before {
+  content: "\f4e4";
+  color: var(--color-icon-java);
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  padding-left: 2px;
+  font-size: var(--font-size-base);
+  pointer-events: none;
+}
+
+.explorer .file.disabled.xml::before {
+  content: "\f1c9";
+  color: var(--color-icon-xml);
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  padding-left: 2px;
+  font-size: var(--font-size-base);
+  pointer-events: none;
+}
+
+.explorer .file.disabled.gitignore::before {
+  content: "\f1fb";
+  color: var(--color-icon-gitignore);
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  padding-left: 2px;
+  font-size: var(--font-size-base);
+  pointer-events: none;
+}
+
+.explorer .file.disabled.properties::before {
+  content: "\f1c9";
+  color: var(--color-icon-properties);
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  padding-left: 2px;
+  font-size: var(--font-size-base);
+  pointer-events: none;
+}
+
+.explorer .file.disabled.yml::before {
+  content: "\f1c9";
+  color: var(--color-icon-yml);
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  padding-left: 2px;
+  font-size: var(--font-size-base);
+  pointer-events: none;
+}
+
+.explorer .file.disabled.sql::before {
+  content: "\f1c0";
+  color: var(--color-icon-file);
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  padding-left: 2px;
+  font-size: var(--font-size-base);
+  pointer-events: none;
+}
+
+.explorer .file.disabled.sh::before,
+.explorer .file.disabled[class*="sh"]::before {
+  content: "\f120";
+  color: var(--color-icon-file);
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  padding-left: 2px;
+  font-size: var(--font-size-base);
+  pointer-events: none;
+}
+
+.explorer .file.disabled.json::before {
+  content: "\f1c9";
+  color: var(--color-icon-file);
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  padding-left: 2px;
+  font-size: var(--font-size-base);
+  pointer-events: none;
+}
+
+.explorer .file.disabled.markdown::before,
+.explorer .file.disabled.md::before {
+  content: "\f0f6";
+  color: var(--color-icon-markdown);
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  padding-left: 2px;
+  font-size: var(--font-size-base);
+  pointer-events: none;
+}
+
+.explorer .file.disabled.dockerfile::before {
+  content: "\f1c9";
+  color: #0db7ed;
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  padding-left: 2px;
+  font-size: var(--font-size-base);
+  pointer-events: none;
+}
+
+.explorer .file.disabled.dockerignore::before {
+  content: "\f1fb";
+  color: var(--color-icon-gitignore);
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  padding-left: 2px;
+  font-size: var(--font-size-base);
+  pointer-events: none;
+}
+
+.explorer .file.disabled.editorconfig::before {
+  content: "\f013";
+  color: var(--color-icon-file);
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  padding-left: 2px;
+  font-size: var(--font-size-base);
+  pointer-events: none;
+}
+
+.explorer .file.disabled.gitattributes::before {
+  content: "\f1fb";
+  color: var(--color-icon-gitignore);
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  padding-left: 2px;
+  font-size: var(--font-size-base);
+  pointer-events: none;
+}
+
+.explorer .file.disabled.html::before,
+.explorer .file.html::before {
+  content: "\f13b";
+  color: var(--color-icon-html);
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  padding-left: 2px;
+  font-size: var(--font-size-base);
+  pointer-events: none;
+}
+
+.explorer .file.html {
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+}
+
+.explorer .readme::before {
+  content: "\f87d";
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  color: var(--color-icon-file);
+  padding-left: 2px;
+  pointer-events: none;
+}
+
+.explorer .readme.markdown::before {
+  content: "\f0f6";
+  color: var(--color-icon-markdown);
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  padding-left: 2px;
+  font-size: var(--font-size-base);
+  pointer-events: none;
+}
+
+.explorer .readme {
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+}
+
+/* Sistema de setas para expansão */
+.explorer .folder:not(.disabled):has(+ input[type="checkbox"])::after {
+  content: "▶";
+  position: absolute;
+  left: 0.2em;
+  top: 0.3em;
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  font-weight: normal;
+  line-height: 1;
+  transition: all var(--transition-fast);
+  pointer-events: none;
+}
+
+.folder ~ ul .folder:not(.disabled):has(+ input[type="checkbox"])::after {
+  content: "▶";
+  position: absolute;
+  left: 0.2em;
+  top: 0.3em;
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  font-weight: normal;
+  line-height: 1;
+  transition: all var(--transition-fast);
+  pointer-events: none;
+}
+
+.explorer .folder:not(.disabled):has(+ input[type="checkbox"]:checked)::after,
+.folder ~ ul .folder:not(.disabled):has(+ input[type="checkbox"]:checked)::after {
+  content: "▼";
+  transform: none;
+}
+
+.folder ~ input[type="checkbox"] {
+  display: none;
+}
+
+.folder ~ ul {
+  position: relative;
+  display: none;
+  list-style: none;
+  margin-left: 0;
+  padding-left: var(--spacing-xl);
+  overflow-x: hidden;
+  min-width: 0;
+}
+
+.folder ~ ul li {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.folder ~ ul > li > label {
+  padding-left: 0 !important;
+}
+
+.folder ~ ul ul {
+  padding-left: var(--spacing-xl);
+}
+
+.folder ~ ul ul > li > label {
+  padding-left: 0 !important;
+}
+
+.folder ~ ul a {
+  text-decoration: none;
+}
+
+.folder ~ ul .img::before {
+  content: "\f1c5" !important;
+  color: var(--color-icon-file) !important;
+}
+
+.folder ~ ul .img {
+  padding-left: 0 !important;
+}
+
+.folder ~ input[type="checkbox"]:checked ~ ul {
+  display: block;
+}
+
+/* Destaque de arquivo ativo */
+main:has(#editor .editorContainer #header div #index:checked) #navigation .explorer .index,
+main:has(#editor .editorContainer #header div #experience:checked) #navigation .explorer .experience,
+main:has(#editor .editorContainer #header div #contact:checked) #navigation .explorer .contact,
+main:has(#editor .editorContainer #header div #skills:checked) #navigation .explorer .skills,
+main:has(#editor .editorContainer #header div #readme:checked) #navigation .explorer div .readme {
+  background-color: var(--color-bg-primary);
+}
+
+/* Alternância entre explorer e extensions */
+.menu:has(div #menu:checked) ~ #explorerView:checked ~ .explorer {
+  margin-left: 0;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.menu:has(div #menu:checked) ~ #explorerView:checked ~ .extensions {
+  margin-left: calc(-1 * var(--width-navigation));
+  opacity: 0;
+  pointer-events: none;
+}
+
+.menu:has(div #menu:checked) ~ #extensionsView:checked ~ .explorer {
+  margin-left: calc(-1 * var(--width-navigation));
+  opacity: 0;
+  pointer-events: none;
+}
+
+.menu:has(div #menu:checked) ~ #extensionsView:checked ~ .extensions {
+  margin-left: 0;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.menu:has(div #menu:not(:checked)) ~ .explorer,
+.menu:has(div #menu:not(:checked)) ~ .extensions {
+  margin-left: calc(-1 * var(--width-navigation));
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Mobile Explorer - Menu simplificado */
+.mobile-explorer-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mobile-explorer-list li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mobile-explorer-list li label {
+  color: var(--color-text-secondary);
+  display: block;
+  font-size: var(--font-size-base);
+  cursor: pointer;
+  padding-block: 0.1em;
+  padding-left: 2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.mobile-explorer-list li label:hover {
+  background-color: var(--color-bg-primary);
+}
+
+.mobile-explorer-list li label::before {
+  content: "\f13b";
+  font-family: FontAwesome;
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  padding-right: 0.7em;
+  color: var(--color-icon-file);
+  padding-left: 2px;
+  pointer-events: none;
+}
+
+.mobile-explorer-list li label.readme.markdown::before {
+  content: "\f0f6";
+  color: var(--color-icon-markdown);
+}
+
+.mobile-explorer-list li label.html::before {
+  content: "\f13b";
+  color: var(--color-icon-html);
+}
+
+@media (max-width: 992px) {
+  .explorer {
+    margin-left: 0px;
+    opacity: 1;
+  }
+
+  .menu:has(div #menu:checked) ~ .explorer {
+    margin-left: calc(-1 * var(--width-navigation));
+    opacity: 0;
+  }
+}
+
+/* Mobile: garantir que estilos mobile tenham prioridade */
+@media (max-width: 768px) {
+  .explorer {
+    position: fixed !important;
+    display: block !important;
+    flex-direction: column !important;
+    margin-left: 0 !important;
+  }
+  
+  .explorer > div:first-child {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    padding: 0 !important;
+  }
+  
+  /* Esconder estrutura de pastas em mobile */
+  .explorer .desktop-only {
+    display: none !important;
+  }
+  
+  /* Mostrar apenas a lista mobile simplificada */
+  .explorer .mobile-only {
+    display: block !important;
+  }
+  
+  /* Estilizar a lista mobile - linhas simples */
+  .explorer .mobile-explorer-list {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+  
+  .explorer .mobile-explorer-list li {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    border-bottom: 1px solid var(--color-border-primary);
+  }
+  
+  .explorer .mobile-explorer-list li:last-child {
+    border-bottom: none;
+  }
+  
+  .explorer .mobile-explorer-list li label {
+    display: block !important;
+    padding: var(--spacing-md) var(--spacing-lg) !important;
+    font-size: var(--font-size-base) !important;
+    color: var(--color-text-secondary) !important;
+    cursor: pointer !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    transition: background-color var(--transition-fast) !important;
+  }
+  
+  .explorer .mobile-explorer-list li label:hover {
+    background-color: var(--color-bg-primary) !important;
+    color: var(--color-text-primary) !important;
+  }
+  
+  /* Ícones para os arquivos */
+  .explorer .mobile-explorer-list li label::before {
+    content: "\f13b" !important;
+    font-family: FontAwesome !important;
+    display: inline-block !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    text-decoration: inherit !important;
+    padding-right: 0.7em !important;
+    color: var(--color-icon-file) !important;
+    padding-left: 2px !important;
+    pointer-events: none !important;
+  }
+  
+  .explorer .mobile-explorer-list li label.readme.markdown::before {
+    content: "\f0f6" !important;
+    color: var(--color-icon-markdown) !important;
+  }
+  
+  .explorer .mobile-explorer-list li label.html::before {
+    content: "\f13b" !important;
+    color: var(--color-icon-html) !important;
+  }
+  
+  /* Título do explorer em mobile */
+  .explorer .title {
+    padding: var(--spacing-md) var(--spacing-lg) !important;
+    font-size: var(--font-size-base) !important;
+    background-color: var(--color-bg-primary) !important;
+    border-bottom: 1px solid var(--color-border-primary) !important;
+    margin: 0 !important;
+  }
+  
+  /* Garantir visibilidade do conteúdo mobile */
+  .explorer .title,
+  .explorer .mobile-explorer-list,
+  .explorer .mobile-explorer-list li,
+  .explorer .mobile-explorer-list li label {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
+
+/* Mobile: ajustes específicos */
+@media (max-width: 768px) {
+  .explorer {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+  
+  .explorer .title {
+    padding: 0.6em;
+    font-size: var(--font-size-base);
+  }
+  
+  /* Garantir que o menu mobile funcione corretamente */
+  .menu:has(div #menu:checked) ~ #explorerView:checked ~ .explorer {
+    margin-left: 0;
+    opacity: 1;
+    pointer-events: auto;
+  }
+  
+  .menu:has(div #menu:not(:checked)) ~ .explorer {
+    margin-left: calc(-100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+/* ============================================
+   BARRA DE RESIZE DO EXPLORER/EXTENSIONS
+   ============================================ */
+
+.explorer-resize-handle {
+  width: 4px;
+  min-width: 4px;
+  max-width: 4px;
+  background-color: transparent;
+  cursor: col-resize;
+  position: relative;
+  z-index: 100;
+  flex-shrink: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  transition: background-color var(--transition-fast);
+  height: calc(100dvh - var(--height-footer));
+  display: none; /* Escondido por padrão */
+}
+
+/* Só mostra a barra quando explorer ou extensions estão visíveis */
+.menu:has(div #menu:checked) ~ #explorerView:checked ~ .explorer-resize-handle,
+.menu:has(div #menu:checked) ~ #extensionsView:checked ~ .explorer-resize-handle {
+  display: block;
+}
+
+.menu:has(div #menu:not(:checked)) ~ .explorer-resize-handle {
+  display: none;
+}
+
+/* Hover effect - mostra uma linha visual */
+.explorer-resize-handle:hover {
+  background-color: var(--color-border-accent);
+}
+
+/* Durante o resize, destaca mais a barra */
+body.resizing .explorer-resize-handle {
+  background-color: var(--color-border-accent);
+  width: 4px;
+}
+
+/* Indicador visual quando está sobre a barra */
+.explorer-resize-handle::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: var(--color-border-accent);
+  opacity: 0;
+  transform: translateX(-50%);
+  transition: opacity var(--transition-fast);
+}
+
+.explorer-resize-handle:hover::before {
+  opacity: 1;
+}
+
+/* Tema light */
+body:has(#theme:checked) .explorer-resize-handle:hover {
+  background-color: var(--color-border-accent);
+}
+
+body:has(#theme:checked) .explorer-resize-handle::before {
+  background-color: var(--color-border-accent);
+}
+
+/* Mobile - esconder barra de resize */
+@media (max-width: 768px) {
+  .explorer-resize-handle {
+    display: none !important;
+  }
+}

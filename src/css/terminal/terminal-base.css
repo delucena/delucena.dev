@@ -1,0 +1,188 @@
+/* ============================================
+   TERMINAL BASE - Container, Header, Toggle
+   ============================================ */
+
+/* ============================================
+   CONTAINER PRINCIPAL
+   ============================================ */
+.terminal {
+  display: flex;
+  flex-direction: column;
+  height: var(--height-terminal);
+  overflow: hidden;
+  background-color: var(--color-bg-accent);
+  transition: margin var(--transition-normal);
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Esconde os inputs radio visualmente */
+.terminal > input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ============================================
+   HEADER - Fixo no topo, sempre visível
+   ============================================ */
+.terminal .terminal-header {
+  order: 1;
+  border-top: 1px solid var(--color-border-accent);
+  height: 35px;
+  padding-left: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  overflow-x: auto;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 20 !important;
+  background-color: var(--color-bg-accent);
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+.terminal .terminal-header label {
+  font-style: normal;
+  font-size: 11px;
+  padding: 0.4em var(--spacing-lg);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.terminal .terminal-header label i {
+  font-size: var(--font-size-base);
+  opacity: 0.8;
+}
+
+.terminal .terminal-header label:hover {
+  color: var(--color-text-primary);
+}
+
+.terminal .terminal-header label .terminal-tab-count {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  padding: 0.1em 0.4em;
+  border-radius: 10px;
+  font-size: var(--font-size-small);
+  font-weight: bold;
+  margin-left: var(--spacing-xs);
+}
+
+/* Destaque de aba ativa no header */
+.terminal:has(#problems:checked) .terminal-header .terminal-tab-problems,
+.terminal:has(#output:checked) .terminal-header .terminal-tab-output,
+.terminal:has(#terminals:checked) .terminal-header .terminal-tab-terminals,
+.terminal:has(#debug:checked) .terminal-header .terminal-tab-debug,
+.terminal:has(#ports:checked) .terminal-header .terminal-tab-ports {
+  color: var(--color-border-accent);
+  border-bottom-color: var(--color-border-accent);
+}
+
+/* ============================================
+   CONTENT - Área de conteúdo abaixo do header
+   ============================================ */
+.terminal .content {
+  order: 2;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: 100%;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+/* Esconde todos os conteúdos de abas por padrão */
+.terminal .content .tab-content {
+  display: none !important;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  min-height: 0;
+  position: relative;
+}
+
+/* Mostra APENAS o conteúdo da aba quando o radio correspondente está checked */
+.terminal:has(#problems:checked) .content .tab-content.terminal-content-problems {
+  display: flex !important;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.terminal:has(#output:checked) .content .tab-content.terminal-content-output {
+  display: flex !important;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.terminal:has(#terminals:checked) .content .tab-content.terminal-content-terminal {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  width: 100% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  flex: 1 1 auto !important;
+  overflow: hidden !important;
+}
+
+.terminal:has(#debug:checked) .content .tab-content.terminal-content-debug {
+  display: flex !important;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.terminal:has(#ports:checked) .content .tab-content.terminal-content-ports {
+  display: flex !important;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+/* ============================================
+   TERMINAL TOGGLE
+   ============================================ */
+.terminal .terminal-header input {
+  display: none;
+}
+
+.terminal-toggle::before {
+  content: "";
+  position: absolute;
+  border: solid var(--color-text-secondary);
+  border-width: 0 1px 1px 0;
+  display: inline-block;
+  padding: 3px;
+  width: 3px;
+  top: 1em;
+  right: 1em;
+  margin-inline: var(--spacing-xl);
+  margin-bottom: 3px;
+  transform: rotate(45deg);
+  transition: transform var(--transition-normal);
+}
+
+.terminal:has(.terminal-header #terminalToggle:checked) {
+  margin-bottom: -220px;
+}
+
+#terminalToggle:checked + label::before {
+  transform: rotate(225deg);
+  top: 1.5em;
+}

@@ -1,0 +1,38 @@
+<section class="experience" id="_experience_">
+    <h1>💼 Experiência Profissional</h1>
+    <br>
+    <br>
+
+    {{#each experience}}
+    <h2>{{icon}} {{company}}</h2>
+    <h3>{{position}}</h3>
+    <p><b>{{period}}</b></p>
+    <br>
+    <p>{{description}}</p>
+    <br>
+    {{#if responsibilities}}
+    <div style="margin-left:1rem">
+        <b>Principais responsabilidades:</b>
+        <ul style="margin-left:1rem">
+            {{#each responsibilities}}
+            <li><b>{{title}}:</b> {{description}}</li>
+            {{/each}}
+        </ul>
+        <br>
+    </div>
+    {{/if}}
+    {{#if projects}}
+    <div style="margin-left:1rem">
+        <b>Projetos:</b>
+        <ul style="margin-left:1rem">
+            {{#each projects}}
+            <li><b>{{name}}:</b> {{description}}</li>
+            {{/each}}
+        </ul>
+    </div>
+    {{/if}}
+    <br>
+    <br>
+    {{/each}}
+
+</section>

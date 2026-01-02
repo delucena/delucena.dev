@@ -1,0 +1,93 @@
+# Cloudflare Pages Headers Configuration
+# https://developers.cloudflare.com/pages/platform/headers/
+# Otimizado para máxima performance e cache no Cloudflare
+
+# HTML files - no cache, always fresh (Cloudflare cachea automaticamente por curto período)
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  Vary: Accept-Encoding
+
+# CSS files - cache for 1 year (com versionamento via query string)
+/*.css
+  Cache-Control: public, max-age=31536000, immutable
+  Content-Type: text/css; charset=utf-8
+  Vary: Accept-Encoding
+  X-Content-Type-Options: nosniff
+
+# JavaScript files - cache for 1 year (com versionamento via query string)
+/*.js
+  Cache-Control: public, max-age=31536000, immutable
+  Content-Type: application/javascript; charset=utf-8
+  Vary: Accept-Encoding
+  X-Content-Type-Options: nosniff
+
+# Images - cache for 1 year (Cloudflare otimiza automaticamente)
+/*.png
+  Cache-Control: public, max-age=31536000, immutable
+  Vary: Accept-Encoding
+
+/*.jpg
+  Cache-Control: public, max-age=31536000, immutable
+  Vary: Accept-Encoding
+
+/*.jpeg
+  Cache-Control: public, max-age=31536000, immutable
+  Vary: Accept-Encoding
+
+/*.webp
+  Cache-Control: public, max-age=31536000, immutable
+  Vary: Accept-Encoding
+
+/*.svg
+  Cache-Control: public, max-age=31536000, immutable
+  Content-Type: image/svg+xml; charset=utf-8
+  Vary: Accept-Encoding
+
+/*.gif
+  Cache-Control: public, max-age=31536000, immutable
+  Vary: Accept-Encoding
+
+# Fonts - cache for 1 year (com CORS para CDNs)
+/*.woff
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+  Vary: Accept-Encoding
+
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+  Vary: Accept-Encoding
+
+/*.ttf
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+  Vary: Accept-Encoding
+
+/*.otf
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+  Vary: Accept-Encoding
+
+# JSON files (dados estáticos) - cache moderado
+/*.json
+  Cache-Control: public, max-age=3600, must-revalidate
+  Content-Type: application/json; charset=utf-8
+  Vary: Accept-Encoding
+
+# Security headers for all files
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
+# Content Security Policy (ajustar conforme necessário)
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; img-src 'self' data: https:; font-src 'self' data: https://cdnjs.cloudflare.com; connect-src 'self' https:;

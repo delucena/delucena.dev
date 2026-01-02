@@ -1,0 +1,110 @@
+/* ============================================
+   TERMINAL OUTPUT - Aba de Output
+   ============================================ */
+
+/* Container da aba output */
+.terminal .terminal-content-output {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.terminal .terminal-output {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  min-height: 0 !important;
+  position: relative;
+}
+
+/* Selector fixo no topo - NÃO scrolla, sempre visível */
+.terminal .terminal-output-selector {
+  flex: 0 0 auto !important;
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-bottom: 1px solid var(--color-border-primary);
+  background-color: var(--color-bg-secondary);
+  margin: 0;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  order: 1;
+}
+
+.terminal .terminal-output-selector select {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-primary);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 11px;
+  border-radius: 3px;
+  cursor: pointer;
+  width: 200px;
+}
+
+/* Área de conteúdo com scroll - APENAS o texto scrolla */
+.terminal .terminal-output-scrollable {
+  flex: 1 1 0% !important;
+  min-height: 0 !important;
+  font-family: var(--font-family-mono);
+  font-size: 0.875rem; /* Fonte reduzida para melhor legibilidade */
+  line-height: 1.2;
+  white-space: pre;
+  padding: var(--spacing-md) var(--spacing-xl);
+  padding-bottom: 2.5rem !important; /* Espaço extra no final para última linha ser totalmente visível */
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  position: relative;
+  -webkit-overflow-scrolling: touch; /* Melhora scroll no iOS */
+  background-color: var(--color-bg-accent);
+  order: 2;
+  width: 100% !important;
+  box-sizing: border-box;
+  /* Força scroll a funcionar */
+  height: 0;
+  color: var(--color-text-primary);
+  margin: 0;
+  margin-bottom: 0 !important;
+  /* Garante que o conteúdo final seja visível */
+  scroll-padding-bottom: calc(var(--spacing-xl) * 2);
+  scroll-margin-bottom: calc(var(--spacing-xl) * 1.5);
+}
+
+.terminal .terminal-output-line {
+  display: none; /* Não usado mais, texto é direto */
+}
+
+/* Scrollbar do output-tab - mesmo estilo do explorer e code view */
+.terminal .terminal-output-scrollable::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.terminal .terminal-output-scrollable::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+
+.terminal .terminal-output-scrollable::-webkit-scrollbar-thumb {
+  background: var(--color-border-primary);
+  border-radius: 4px;
+}
+
+.terminal .terminal-output-scrollable::-webkit-scrollbar-thumb:hover {
+  background: #4a4a4a;
+}
+
+/* Scrollbar para tema light */
+body:has(#theme:checked) .terminal .terminal-output-scrollable::-webkit-scrollbar-thumb {
+  background: #b0b0b0;
+}
+
+body:has(#theme:checked) .terminal .terminal-output-scrollable::-webkit-scrollbar-thumb:hover {
+  background: #909090;
+}

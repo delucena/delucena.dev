@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>{{meta.title}}</title>
+    <meta name="title" content="{{meta.title}}">
+    <meta name="description" content="{{meta.description}}">
+    <meta name="keywords" content="{{meta.keywords}}">
+    <meta name="author" content="{{meta.author}}">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="{{meta.language}}">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="{{meta.og.type}}">
+    <meta property="og:url" content="{{meta.og.url}}">
+    <meta property="og:title" content="{{meta.og.title}}">
+    <meta property="og:description" content="{{meta.og.description}}">
+    <meta property="og:image" content="{{meta.og.image}}">
+    <meta property="og:locale" content="{{meta.og.locale}}">
+    <meta property="og:site_name" content="{{meta.og.siteName}}">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="{{meta.twitter.card}}">
+    <meta name="twitter:url" content="{{meta.twitter.url}}">
+    <meta name="twitter:title" content="{{meta.twitter.title}}">
+    <meta name="twitter:description" content="{{meta.twitter.description}}">
+    <meta name="twitter:image" content="{{meta.twitter.image}}">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{meta.canonicalUrl}}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
+    <link rel="alternate icon" href="./assets/favicon.ico">
+    
+    <!-- Preconnect para CDNs -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Stylesheets -->
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'>
+    <link rel="stylesheet" href="./css/main.css">
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {{meta.structuredData}}
+    </script>
+</head>
+
+<body>
+<a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+<main id="main-content" role="main">
+    <!-- TEMPLATE: navigation.html -->
+    
+    <section id="editor" role="region" aria-label="Editor de código">
+        <div class="editorContainer">
+            <!-- TEMPLATE: editor-header.html -->
+            
+            <div contenteditable class="editor" role="textbox" aria-label="Conteúdo do portfólio" aria-multiline="true">
+                <!-- Toggle Preview/Code Button - Flutuante -->
+                <div class="floating-toggle" role="toolbar" aria-label="Controles do editor">
+                    <input type="checkbox" id="togglePreviewCode" aria-label="Alternar entre preview e código">
+                    <label for="togglePreviewCode" class="preview-toggle-btn" title="Alternar entre preview e código" role="button" tabindex="0">
+                        <i class="fa-solid fa-code" aria-hidden="true"></i>
+                        <span class="sr-only">Alternar entre visualização e código</span>
+                    </label>
+                </div>
+                <!-- Code View Container -->
+                <div class="code-view-container" id="codeViewContainer" style="display: none;" role="region" aria-label="Visualização de código">
+                    <pre class="code-view" role="textbox" aria-label="Código HTML formatado"><code id="codeViewContent" class="language-html"></code></pre>
+                </div>
+                <!-- TEMPLATE: sections/index-section.html -->
+                <!-- TEMPLATE: sections/experience-section.html -->
+                <!-- TEMPLATE: sections/skills-section.html -->
+                <!-- TEMPLATE: sections/contact-section.html -->
+                <!-- TEMPLATE: sections/readme-section.html -->
+            </div>
+        </div>
+        <!-- TEMPLATE: terminal.html -->
+    </section>
+</main>
+<!-- TEMPLATE: footer.html -->
+    <!-- JavaScript Modular -->
+    <script src="./js/theme.js" defer></script>
+    <script src="./js/navigation.js" defer></script>
+    <script src="./js/terminal/terminal-core.js" defer></script>
+    <script src="./js/terminal/terminal-terminal.js" defer></script>
+    <script src="./js/terminal/terminal-output.js" defer></script>
+    <script src="./js/code-highlighter.js" defer></script>
+    <script src="./js/code-copy.js" defer></script>
+    <script src="./js/preview-toggle.js" defer></script>
+    <script src="./js/explorer-resize.js" defer></script>
+    <script src="./js/terminal-resize.js" defer></script>
+    <script src="./js/main.js" defer></script>
+</body>
+
+</html>

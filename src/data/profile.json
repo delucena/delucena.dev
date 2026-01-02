@@ -1,0 +1,30 @@
+{
+  "name": "José Paulo de Lucena",
+  "fullName": "José Paulo de Lucena Oliveira",
+  "alternateName": "delucena",
+  "nickname": "Zé",
+  "title": "Engenheiro de Software Sênior",
+  "titleEmoji": "🚀",
+  "description": "Engenheiro de Software Sênior com sólida experiência em desenvolvimento backend, arquitetura de microsserviços e sistemas distribuídos de alta escalabilidade e performance.",
+  "bio": [
+    "Engenheiro de Software Sênior com sólida experiência em desenvolvimento backend, arquitetura de microsserviços e sistemas distribuídos de alta escalabilidade e performance.",
+    "Atuei em projetos estratégicos de transformação digital em instituições financeiras e ambientes corporativos complexos, liderando iniciativas de modernização, integração de sistemas críticos e otimização de performance.",
+    "Especialista em Java, Go (Golang), arquitetura de microsserviços, sistemas distribuídos e práticas de DevOps. Experiência com Kubernetes, AWS, observabilidade (Datadog, New Relic, Grafana) e cultura de qualidade com testes automatizados e code review.",
+    "Sempre aberto a colaborações, aprendizado contínuo e desafios!"
+  ],
+  "readme": {
+    "greeting": "👋 Opa, meu nome é Zé, mas pode me chamar de Zé 😄",
+    "tagline": "se penso, logo codifico.",
+    "description": "Backend, cloud, microsserviços e sistemas distribuídos.",
+    "credlyUrl": "https://www.credly.com/users/jose-paulo-de-lucena-oliveira",
+    "skillsIcons": "java,go,spring,aws,docker,kubernetes,mysql,postgres,redis,kafka,grafana,prometheus"
+  },
+  "profileImage": {
+    "png": "./assets/images/profile.png",
+    "webp": "./assets/images/profile.webp",
+    "alt": "José Paulo de Lucena"
+  },
+  "domain": "delucena.dev",
+  "url": "https://delucena.dev",
+  "currentCompany": "Mercado Livre"
+}

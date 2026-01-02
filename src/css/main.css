@@ -1,0 +1,20 @@
+/* ============================================
+   MAIN.CSS - Arquivo Principal
+   Importa todos os módulos CSS
+   ============================================ */
+
+@import url('./variables.css');
+@import url('./reset.css');
+@import url('./layout.css');
+@import url('./navigation.css');
+@import url('./explorer.css');
+@import url('./extensions.css');
+@import url('./editor.css');
+@import url('./terminal/terminal-base.css');
+@import url('./terminal/terminal-problems.css');
+@import url('./terminal/terminal-output.css');
+@import url('./terminal/terminal-terminal.css');
+@import url('./terminal/terminal-debug.css');
+@import url('./terminal/terminal-ports.css');
+@import url('./syntax-highlight.css');
+@import url('./utilities.css');
