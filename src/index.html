@@ -6,32 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- Primary Meta Tags -->
-    <title>delucena.dev - José Paulo de Lucena | Engenheiro de Software Sênior</title>
-    <meta name="title" content="delucena.dev - José Paulo de Lucena | Engenheiro de Software Sênior">
-    <meta name="description" content="Engenheiro de Software Sênior especializado em Java, Go, microsserviços e sistemas distribuídos. Experiência em arquitetura de alta escalabilidade e performance.">
-    <meta name="keywords" content="desenvolvedor, software engineer, java, golang, microsserviços, backend, spring boot, kubernetes, aws">
-    <meta name="author" content="José Paulo de Lucena Oliveira">
+    <title>{{meta.title}}</title>
+    <meta name="title" content="{{meta.title}}">
+    <meta name="description" content="{{meta.description}}">
+    <meta name="keywords" content="{{meta.keywords}}">
+    <meta name="author" content="{{meta.author}}">
     <meta name="robots" content="index, follow">
-    <meta name="language" content="Portuguese">
+    <meta name="language" content="{{meta.language}}">
     
     <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://delucena.dev/">
-    <meta property="og:title" content="delucena.dev - José Paulo de Lucena | Engenheiro de Software Sênior">
-    <meta property="og:description" content="Engenheiro de Software Sênior especializado em Java, Go, microsserviços e sistemas distribuídos.">
-    <meta property="og:image" content="https://delucena.dev/assets/images/profile.png">
-    <meta property="og:locale" content="pt_BR">
-    <meta property="og:site_name" content="delucena.dev">
+    <meta property="og:type" content="{{meta.og.type}}">
+    <meta property="og:url" content="{{meta.og.url}}">
+    <meta property="og:title" content="{{meta.og.title}}">
+    <meta property="og:description" content="{{meta.og.description}}">
+    <meta property="og:image" content="{{meta.og.image}}">
+    <meta property="og:locale" content="{{meta.og.locale}}">
+    <meta property="og:site_name" content="{{meta.og.siteName}}">
     
     <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://delucena.dev/">
-    <meta name="twitter:title" content="delucena.dev - José Paulo de Lucena | Engenheiro de Software Sênior">
-    <meta name="twitter:description" content="Engenheiro de Software Sênior especializado em Java, Go, microsserviços e sistemas distribuídos.">
-    <meta name="twitter:image" content="https://delucena.dev/assets/images/profile.png">
+    <meta name="twitter:card" content="{{meta.twitter.card}}">
+    <meta name="twitter:url" content="{{meta.twitter.url}}">
+    <meta name="twitter:title" content="{{meta.twitter.title}}">
+    <meta name="twitter:description" content="{{meta.twitter.description}}">
+    <meta name="twitter:image" content="{{meta.twitter.image}}">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://delucena.dev/">
+    <link rel="canonical" href="{{meta.canonicalUrl}}">
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
@@ -50,33 +50,7 @@
     
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "José Paulo de Lucena Oliveira",
-      "alternateName": "delucena",
-      "url": "https://delucena.dev",
-      "image": "https://delucena.dev/assets/images/profile.png",
-      "jobTitle": "Engenheiro de Software Sênior",
-      "worksFor": {
-        "@type": "Organization",
-        "name": "Mercado Livre"
-      },
-      "sameAs": [
-        "https://www.linkedin.com/in/delucena",
-        "https://github.com/delucena"
-      ],
-      "email": "josepaulo@delucena.dev",
-      "knowsAbout": [
-        "Java",
-        "Go (Golang)",
-        "Microsserviços",
-        "Sistemas Distribuídos",
-        "Spring Boot",
-        "Kubernetes",
-        "AWS"
-      ]
-    }
+    {{meta.structuredData}}
     </script>
 </head>
 

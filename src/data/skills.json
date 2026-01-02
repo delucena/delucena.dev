@@ -1,0 +1,111 @@
+{
+  "languages": {
+    "title": "💻 Linguagens e Frameworks",
+    "items": [
+      "Java 8+ (Spring Boot, Spring Framework, Spring Security, Spring Cloud)",
+      "Go (Golang)",
+      "JavaEE (JSF, EJB, JPA/Hibernate)",
+      "Python (automação e testes E2E)"
+    ]
+  },
+  "architecture": {
+    "title": "🏗️ Arquitetura e Design",
+    "items": [
+      "Microsserviços e Sistemas Distribuídos",
+      "SOLID, DDD (Domain-Driven Design)",
+      "CQRS (Command Query Responsibility Segregation)",
+      "Event Sourcing e SAGA Pattern",
+      "Clean Code e Design Patterns"
+    ]
+  },
+  "integration": {
+    "title": "🔌 Integração e Comunicação",
+    "items": [
+      "API REST e SOAP",
+      "OpenAPI/Swagger",
+      "Apache Kafka",
+      "AWS SQS",
+      "GraphQL"
+    ]
+  },
+  "databases": {
+    "title": "💾 Banco de Dados e Cache",
+    "items": [
+      "MySQL, PostgreSQL, DB2",
+      "Redis (Key-Value Store)",
+      "MongoDB",
+      "Apache Solr (busca full-text)"
+    ]
+  },
+  "devops": {
+    "title": "☁️ DevOps e Infraestrutura",
+    "items": [
+      "Docker e Containerização",
+      "Kubernetes (EKS) - probes, services, deploys, kubectl",
+      "GitHub Actions (tags/releases)",
+      "AWS (VPC, RDS, IAM, Route53, Lambda, SQS)",
+      "WildFly/JBoss EAP (JBoss CLI, configurações de middleware)",
+      "IBM WebSphere Application Server 9.0 (WAS 9)",
+      "Jenkins e GitLab CI (pipelines CI/CD)"
+    ]
+  },
+  "observability": {
+    "title": "📊 Monitoramento e Observabilidade",
+    "items": [
+      "Grafana e Prometheus",
+      "Datadog (APM, métricas, logs, dashboards, alertas)",
+      "New Relic (APM, métricas, logs, dashboards, alertas)",
+      "Graylog (centralização de logs)",
+      "OpenTelemetry",
+      "Kibana"
+    ]
+  },
+  "security": {
+    "title": "🔒 Segurança & Plataforma",
+    "items": [
+      "External Secrets",
+      "cert-manager",
+      "Ingress Controllers",
+      "Spring Security",
+      "IBM API Connect (governança de APIs)"
+    ]
+  },
+  "testing": {
+    "title": "✅ Qualidade e Testes Automatizados",
+    "items": [
+      "JUnit 5",
+      "Mockito e PowerMock",
+      "Testcontainers",
+      "Testes E2E (Python scripts)",
+      "Code Review e Quality Gates"
+    ]
+  },
+  "culture": {
+    "title": "👥 Cultura e Práticas",
+    "items": [
+      "Squads ágeis",
+      "DevSecOps",
+      "Code Review",
+      "Quality Gates",
+      "Git/GitHub/GitLab (versionamento)",
+      "Maven e build automation"
+    ]
+  },
+  "spokenLanguages": {
+    "title": "🌐 Idiomas",
+    "items": [
+      "Português (Nativo)",
+      "Inglês (Técnico/Profissional)"
+    ]
+  },
+  "softSkills": {
+    "title": "💡 Soft Skills",
+    "items": [
+      "Excelente comunicação",
+      "Alta disciplina e organização",
+      "Mente criativa e solucionadora de problemas",
+      "Trabalho em equipe e colaboração",
+      "Liderança técnica e mentoria"
+    ]
+  }
+}

@@ -2,23 +2,23 @@
     <div class="readme-container">
         <div class="readme-photo-wrapper">
             <picture>
-                <source srcset="./assets/images/profile.webp" type="image/webp">
-                <source srcset="assets/images/profile.webp" type="image/webp">
-                <img src="./assets/images/profile.png" alt="José Paulo de Lucena" class="readme-photo" loading="lazy" onerror="this.onerror=null; this.src='assets/images/profile.png';">
+                <source srcset="{{profile.profileImage.webp}}" type="image/webp">
+                <source srcset="{{profile.profileImage.webp}}" type="image/webp">
+                <img src="{{profile.profileImage.png}}" alt="{{profile.profileImage.alt}}" class="readme-photo" loading="lazy" onerror="this.onerror=null; this.src='{{profile.profileImage.png}}';">
             </picture>
         </div>
         <div class="readme-content">
-            <h1>👋 Opa, meu nome é Zé, mas pode me chamar de Zé 😄</h1>
-            <p>se penso, logo codifico.</p>
-            <p>Backend, cloud, microsserviços e sistemas distribuídos.</p>
+            <h1>{{profile.readme.greeting}}</h1>
+            <p>{{profile.readme.tagline}}</p>
+            <p>{{profile.readme.description}}</p>
             <p>
-                <a target="_blank" href="https://www.credly.com/users/jose-paulo-de-lucena-oliveira">
+                <a target="_blank" href="{{profile.readme.credlyUrl}}">
                     <img src="https://img.shields.io/badge/Oracle-Java%20Certified-red?style=for-the-badge&logo=oracle"
                          alt="Oracle Java Certified">
                 </a>
             </p>
             <p>
-                <img src="https://skillicons.dev/icons?i=java,go,spring,aws,docker,kubernetes,mysql,postgres,redis,kafka,grafana,prometheus&perline=12"
+                <img src="https://skillicons.dev/icons?i={{profile.readme.skillsIcons}}&perline=12"
                      alt="My Skills">
             </p>
         </div>

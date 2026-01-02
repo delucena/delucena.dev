@@ -9,45 +9,45 @@
 
     <div class="contact-container">
         <!-- LinkedIn Card -->
-        <a href="https://www.linkedin.com/in/delucena" target="_blank" class="contact-card">
+        <a href="{{contact.linkedin.url}}" target="_blank" class="contact-card">
             <div class="contact-icon linkedin">
                 <i class="fa-brands fa-linkedin"></i>
             </div>
             <div class="contact-content">
                 <h3>LinkedIn</h3>
-                <p>Conecte-se comigo profissionalmente</p>
+                <p>{{contact.linkedin.label}}</p>
                 <span class="contact-link">
-                    linkedin.com/in/delucena
+                    {{contact.linkedin.display}}
                     <i class="fa-solid fa-external-link-alt"></i>
                 </span>
             </div>
         </a>
 
         <!-- GitHub Card -->
-        <a href="https://github.com/delucena" target="_blank" class="contact-card">
+        <a href="{{contact.github.url}}" target="_blank" class="contact-card">
             <div class="contact-icon github">
                 <i class="fa-brands fa-github"></i>
             </div>
             <div class="contact-content">
                 <h3>GitHub</h3>
-                <p>Veja meus projetos e contribuições</p>
+                <p>{{contact.github.label}}</p>
                 <span class="contact-link">
-                    github.com/delucena
+                    {{contact.github.display}}
                     <i class="fa-solid fa-external-link-alt"></i>
                 </span>
             </div>
         </a>
 
         <!-- Email Card -->
-        <a href="mailto:josepaulo@delucena.dev" target="_blank" class="contact-card">
+        <a href="{{contact.email.url}}" target="_blank" class="contact-card">
             <div class="contact-icon email">
                 <i class="fa-solid fa-envelope"></i>
             </div>
             <div class="contact-content">
                 <h3>Email</h3>
-                <p>Envie uma mensagem direta</p>
+                <p>{{contact.email.label}}</p>
                 <span class="contact-link">
-                    josepaulo@delucena.dev
+                    {{contact.email.address}}
                     <i class="fa-solid fa-external-link-alt"></i>
                 </span>
             </div>

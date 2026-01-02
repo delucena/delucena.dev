@@ -6,6 +6,7 @@ const path = require('path');
 const srcDir = path.join(__dirname, 'src');
 const distDir = path.join(__dirname, 'dist');
 const templatesDir = path.join(srcDir, 'templates');
+const dataDir = path.join(srcDir, 'data');
 if (!fs.existsSync(distDir)) {
   fs.mkdirSync(distDir, { recursive: true });
 }
@@ -108,17 +109,219 @@ function readTemplate(templatePath) {
   return '';
 }
 
+function loadData() {
+  const dataFiles = {
+    profile: 'profile.json',
+    experience: 'experience.json',
+    skills: 'skills.json',
+    contact: 'contact.json',
+    meta: 'meta.json'
+  };
+  
+  const data = {};
+  for (const [key, filename] of Object.entries(dataFiles)) {
+    const filePath = path.join(dataDir, filename);
+    if (fs.existsSync(filePath)) {
+      try {
+        data[key] = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+        console.log(`✓ Carregado: ${filename}`);
+      } catch (err) {
+        console.warn(`⚠ Erro ao carregar ${filename}: ${err.message}`);
+        data[key] = {};
+      }
+    } else {
+      console.warn(`⚠ Arquivo de dados não encontrado: ${filename}`);
+      data[key] = {};
+    }
+  }
+  return data;
+}
+
+function getNestedValue(obj, path) {
+  return path.split('.').reduce((current, key) => {
+    return current && current[key] !== undefined ? current[key] : null;
+  }, obj);
+}
+
+function renderTemplate(template, data) {
+  let result = template;
+  
+  // Função auxiliar para processar um único nível de loops
+  function processLoops(str, ctx) {
+    let result = str;
+    let changed = true;
+    let iterations = 0;
+    
+    while (changed && iterations < 20) {
+      iterations++;
+      const before = result;
+      
+      // Encontrar o primeiro {{#each}} não processado
+      const eachMatch = result.match(/\{\{#each\s+([^}]+)\}\}/);
+      if (!eachMatch) {
+        break; // Não há mais loops para processar
+      }
+      
+      const startIndex = eachMatch.index;
+      const arrayPath = eachMatch[1].trim();
+      
+      // Encontrar o {{/each}} correspondente (contando aninhamento)
+      let depth = 1;
+      let currentIndex = startIndex + eachMatch[0].length;
+      let endIndex = -1;
+      
+      while (depth > 0 && currentIndex < result.length) {
+        const nextEach = result.indexOf('{{#each', currentIndex);
+        const nextEndEach = result.indexOf('{{/each}}', currentIndex);
+        
+        if (nextEndEach === -1) break;
+        
+        if (nextEach !== -1 && nextEach < nextEndEach) {
+          depth++;
+          currentIndex = nextEach + 7;
+        } else {
+          depth--;
+          if (depth === 0) {
+            endIndex = nextEndEach;
+            break;
+          }
+          currentIndex = nextEndEach + 9;
+        }
+      }
+      
+      if (endIndex === -1) {
+        break; // Não encontrou o fechamento correspondente
+      }
+      
+      const loopTemplate = result.substring(startIndex + eachMatch[0].length, endIndex);
+      const fullMatch = result.substring(startIndex, endIndex + 9);
+      
+      const array = getNestedValue(ctx, arrayPath);
+      let replacement = '';
+      
+      if (Array.isArray(array)) {
+        replacement = array.map((item) => {
+          // Criar contexto mesclando contexto global com propriedades do item
+          const itemData = { ...ctx };
+          // Se o item for um objeto, adicionar suas propriedades ao contexto
+          if (item && typeof item === 'object') {
+            Object.keys(item).forEach(key => {
+              itemData[key] = item[key];
+            });
+          }
+          // Adicionar 'this' para referenciar o item atual (útil para arrays de strings)
+          itemData.this = item;
+          // Processar template recursivamente (processa loops aninhados e placeholders)
+          return processTemplate(loopTemplate, itemData);
+        }).join('');
+      } else if (array && typeof array === 'object' && !Array.isArray(array)) {
+        // Para objetos (como skills)
+        replacement = Object.entries(array).map(([key, value]) => {
+          if (value && typeof value === 'object' && 'title' in value && 'items' in value) {
+            // Criar contexto com todas as propriedades do objeto value
+            const itemData = { ...ctx };
+            Object.keys(value).forEach(prop => {
+              itemData[prop] = value[prop];
+            });
+            // Também adicionar como category, title, items para compatibilidade
+            itemData.category = value;
+            itemData.title = value.title;
+            itemData.items = value.items;
+            return processTemplate(loopTemplate, itemData);
+          }
+          return '';
+        }).join('');
+      }
+      
+      result = result.replace(fullMatch, replacement);
+      changed = (before !== result);
+    }
+    
+    return result;
+  }
+  
+  // Função auxiliar para processar condicionais
+  function processConditionals(str, ctx) {
+    return str.replace(/\{\{#if\s+([^}]+)\}\}([\s\S]*?)\{\{\/if\}\}/g, (match, varPath, content) => {
+      const value = getNestedValue(ctx, varPath.trim());
+      const hasValue = value !== null && value !== undefined && value !== false && 
+                       (!Array.isArray(value) || value.length > 0) &&
+                       (typeof value !== 'object' || Object.keys(value).length > 0);
+      return hasValue ? content : '';
+    });
+  }
+  
+  // Função auxiliar para processar placeholders
+  function processPlaceholders(str, ctx) {
+    return str.replace(/\{\{([^}]+)\}\}/g, (match, varPath) => {
+      const trimmedPath = varPath.trim();
+      // Ignorar se já foi processado por um loop ou condicional
+      if (trimmedPath.startsWith('#') || trimmedPath.startsWith('/')) {
+        return match;
+      }
+      // Tratar 'this' como referência ao item atual
+      let value;
+      if (trimmedPath === 'this') {
+        value = ctx.this;
+      } else {
+        value = getNestedValue(ctx, trimmedPath);
+      }
+      if (value === null || value === undefined) {
+        return '';
+      }
+      // Se for objeto ou array, converter para JSON (útil para structured data)
+      if (typeof value === 'object' && !Array.isArray(value)) {
+        return JSON.stringify(value, null, 2);
+      }
+      return String(value);
+    });
+  }
+  
+  // Função principal de processamento recursivo
+  function processTemplate(tmpl, ctx) {
+    let processed = tmpl;
+    let changed = true;
+    let iterations = 0;
+    const maxIterations = 15;
+    
+    while (changed && iterations < maxIterations) {
+      iterations++;
+      const before = processed;
+      
+      // Processar loops primeiro (processa loops aninhados recursivamente)
+      processed = processLoops(processed, ctx);
+      // Processar condicionais
+      processed = processConditionals(processed, ctx);
+      // Processar placeholders
+      processed = processPlaceholders(processed, ctx);
+      
+      changed = (before !== processed);
+    }
+    
+    return processed;
+  }
+  
+  // Primeiro, processar loops externos que podem conter loops aninhados
+  result = processTemplate(result, data);
+  
+  return result;
+}
+
 function buildIndexHtml() {
+  // Carregar dados JSON
+  const data = loadData();
+  
   const baseHtml = fs.readFileSync(path.join(srcDir, 'index.html'), 'utf8');
   let html = baseHtml;
   
-  html = html.replace('<!-- TEMPLATE: navigation.html -->', readTemplate('navigation.html'));
+  // Processar templates com dados
+  html = html.replace('<!-- TEMPLATE: navigation.html -->', renderTemplate(readTemplate('navigation.html'), data));
   html = html.replace('<!-- TEMPLATE: editor-header.html -->', readTemplate('editor-header.html'));
-  html = html.replace('<!-- TEMPLATE: sections/index-section.html -->', readTemplate('sections/index-section.html'));
-  html = html.replace('<!-- TEMPLATE: sections/experience-section.html -->', readTemplate('sections/experience-section.html'));
-  html = html.replace('<!-- TEMPLATE: sections/skills-section.html -->', readTemplate('sections/skills-section.html'));
-  html = html.replace('<!-- TEMPLATE: sections/contact-section.html -->', readTemplate('sections/contact-section.html'));
-  html = html.replace('<!-- TEMPLATE: sections/readme-section.html -->', readTemplate('sections/readme-section.html'));
+  html = html.replace('<!-- TEMPLATE: sections/index-section.html -->', renderTemplate(readTemplate('sections/index-section.html'), data));
+  html = html.replace('<!-- TEMPLATE: sections/experience-section.html -->', renderTemplate(readTemplate('sections/experience-section.html'), data));
+  html = html.replace('<!-- TEMPLATE: sections/skills-section.html -->', renderTemplate(readTemplate('sections/skills-section.html'), data));
+  html = html.replace('<!-- TEMPLATE: sections/contact-section.html -->', renderTemplate(readTemplate('sections/contact-section.html'), data));
+  html = html.replace('<!-- TEMPLATE: sections/readme-section.html -->', renderTemplate(readTemplate('sections/readme-section.html'), data));
   
   let terminalHtml = readTemplate('terminal/terminal.html');
   terminalHtml = terminalHtml.replace('<!-- TEMPLATE: terminal-header.html -->', readTemplate('terminal/terminal-header.html'));
@@ -129,11 +332,14 @@ function buildIndexHtml() {
   terminalHtml = terminalHtml.replace('<!-- TEMPLATE: terminal-tabs/ports-tab.html -->', readTemplate('terminal/terminal-tabs/ports-tab.html'));
   html = html.replace('<!-- TEMPLATE: terminal.html -->', terminalHtml);
   
-  html = html.replace('<!-- TEMPLATE: footer.html -->', readTemplate('footer.html'));
+  html = html.replace('<!-- TEMPLATE: footer.html -->', renderTemplate(readTemplate('footer.html'), data));
+  
+  // Processar o HTML base com dados (meta tags, etc)
+  html = renderTemplate(html, data);
   
   const distIndexPath = path.join(distDir, 'index.html');
   fs.writeFileSync(distIndexPath, html, 'utf8');
-  console.log('✓ Montado: index.html (a partir de templates)');
+  console.log('✓ Montado: index.html (a partir de templates com dados injetados)');
 }
 
 const indexPath = path.join(srcDir, 'index.html');

@@ -1,0 +1,52 @@
+{
+  "title": "delucena.dev - José Paulo de Lucena | Engenheiro de Software Sênior",
+  "description": "Engenheiro de Software Sênior especializado em Java, Go, microsserviços e sistemas distribuídos. Experiência em arquitetura de alta escalabilidade e performance.",
+  "keywords": "desenvolvedor, software engineer, java, golang, microsserviços, backend, spring boot, kubernetes, aws",
+  "author": "José Paulo de Lucena Oliveira",
+  "language": "pt-BR",
+  "locale": "pt_BR",
+  "canonicalUrl": "https://delucena.dev/",
+  "og": {
+    "type": "website",
+    "url": "https://delucena.dev/",
+    "title": "delucena.dev - José Paulo de Lucena | Engenheiro de Software Sênior",
+    "description": "Engenheiro de Software Sênior especializado em Java, Go, microsserviços e sistemas distribuídos.",
+    "image": "https://delucena.dev/assets/images/profile.png",
+    "locale": "pt_BR",
+    "siteName": "delucena.dev"
+  },
+  "twitter": {
+    "card": "summary_large_image",
+    "url": "https://delucena.dev/",
+    "title": "delucena.dev - José Paulo de Lucena | Engenheiro de Software Sênior",
+    "description": "Engenheiro de Software Sênior especializado em Java, Go, microsserviços e sistemas distribuídos.",
+    "image": "https://delucena.dev/assets/images/profile.png"
+  },
+  "structuredData": {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "José Paulo de Lucena Oliveira",
+    "alternateName": "delucena",
+    "url": "https://delucena.dev",
+    "image": "https://delucena.dev/assets/images/profile.png",
+    "jobTitle": "Engenheiro de Software Sênior",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Mercado Livre"
+    },
+    "sameAs": [
+      "https://www.linkedin.com/in/delucena",
+      "https://github.com/delucena"
+    ],
+    "email": "josepaulo@delucena.dev",
+    "knowsAbout": [
+      "Java",
+      "Go (Golang)",
+      "Microsserviços",
+      "Sistemas Distribuídos",
+      "Spring Boot",
+      "Kubernetes",
+      "AWS"
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "linkedin": {
+    "url": "https://www.linkedin.com/in/delucena",
+    "username": "delucena",
+    "display": "linkedin.com/in/delucena",
+    "label": "Conecte-se comigo profissionalmente"
+  },
+  "github": {
+    "url": "https://github.com/delucena",
+    "username": "delucena",
+    "display": "github.com/delucena",
+    "label": "Veja meus projetos e contribuições"
+  },
+  "email": {
+    "address": "josepaulo@delucena.dev",
+    "url": "mailto:josepaulo@delucena.dev",
+    "label": "Envie uma mensagem direta"
+  }
+}

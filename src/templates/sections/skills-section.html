@@ -3,121 +3,14 @@
     <br>
     <br>
 
-    <h2>💻 Linguagens e Frameworks</h2>
-    <ul style="margin-left:2rem">
-        <li>Java 8+ (Spring Boot, Spring Framework, Spring Security, Spring Cloud)</li>
-        <li>Go (Golang)</li>
-        <li>JavaEE (JSF, EJB, JPA/Hibernate)</li>
-        <li>Python (automação e testes E2E)</li>
+    {{#each skills}}
+    <h3 style="font-size: var(--font-size-base); font-weight: 600; margin-top: 1rem; margin-bottom: 0.5rem;">{{title}}</h3>
+    <ul style="margin-left:2rem; font-size: var(--font-size-base);">
+        {{#each items}}
+        <li style="font-size: var(--font-size-base);">{{this}}</li>
+        {{/each}}
     </ul>
     <br>
     <br>
-
-    <h2>🏗️ Arquitetura e Design</h2>
-    <ul style="margin-left:2rem">
-        <li>Microsserviços e Sistemas Distribuídos</li>
-        <li>SOLID, DDD (Domain-Driven Design)</li>
-        <li>CQRS (Command Query Responsibility Segregation)</li>
-        <li>Event Sourcing e SAGA Pattern</li>
-        <li>Clean Code e Design Patterns</li>
-    </ul>
-    <br>
-    <br>
-
-    <h2>🔌 Integração e Comunicação</h2>
-    <ul style="margin-left:2rem">
-        <li>API REST e SOAP</li>
-        <li>OpenAPI/Swagger</li>
-        <li>Apache Kafka</li>
-        <li>AWS SQS</li>
-        <li>GraphQL</li>
-    </ul>
-    <br>
-    <br>
-
-    <h2>💾 Banco de Dados e Cache</h2>
-    <ul style="margin-left:2rem">
-        <li>MySQL, PostgreSQL, DB2</li>
-        <li>Redis (Key-Value Store)</li>
-        <li>MongoDB</li>
-        <li>Apache Solr (busca full-text)</li>
-    </ul>
-    <br>
-    <br>
-
-    <h2>☁️ DevOps e Infraestrutura</h2>
-    <ul style="margin-left:2rem">
-        <li>Docker e Containerização</li>
-        <li>Kubernetes (EKS) - probes, services, deploys, kubectl</li>
-        <li>GitHub Actions (tags/releases)</li>
-        <li>AWS (VPC, RDS, IAM, Route53, Lambda, SQS)</li>
-        <li>WildFly/JBoss EAP (JBoss CLI, configurações de middleware)</li>
-        <li>IBM WebSphere Application Server 9.0 (WAS 9)</li>
-        <li>Jenkins e GitLab CI (pipelines CI/CD)</li>
-    </ul>
-    <br>
-    <br>
-
-    <h2>📊 Monitoramento e Observabilidade</h2>
-    <ul style="margin-left:2rem">
-        <li>Grafana e Prometheus</li>
-        <li>Datadog (APM, métricas, logs, dashboards, alertas)</li>
-        <li>New Relic (APM, métricas, logs, dashboards, alertas)</li>
-        <li>Graylog (centralização de logs)</li>
-        <li>OpenTelemetry</li>
-        <li>Kibana</li>
-    </ul>
-    <br>
-    <br>
-
-    <h2>🔒 Segurança & Plataforma</h2>
-    <ul style="margin-left:2rem">
-        <li>External Secrets</li>
-        <li>cert-manager</li>
-        <li>Ingress Controllers</li>
-        <li>Spring Security</li>
-        <li>IBM API Connect (governança de APIs)</li>
-    </ul>
-    <br>
-    <br>
-
-    <h2>✅ Qualidade e Testes Automatizados</h2>
-    <ul style="margin-left:2rem">
-        <li>JUnit 5</li>
-        <li>Mockito e PowerMock</li>
-        <li>Testcontainers</li>
-        <li>Testes E2E (Python scripts)</li>
-        <li>Code Review e Quality Gates</li>
-    </ul>
-    <br>
-    <br>
-
-    <h2>👥 Cultura e Práticas</h2>
-    <ul style="margin-left:2rem">
-        <li>Squads ágeis</li>
-        <li>DevSecOps</li>
-        <li>Code Review</li>
-        <li>Quality Gates</li>
-        <li>Git/GitHub/GitLab (versionamento)</li>
-        <li>Maven e build automation</li>
-    </ul>
-    <br>
-    <br>
-
-    <h2>🌐 Idiomas</h2>
-    <ul style="margin-left:2rem">
-        <li>Português (Nativo)</li>
-        <li>Inglês (Técnico/Profissional)</li>
-    </ul>
-    <br>
-    <br>
-
-    <h2>💡 Soft Skills</h2>
-    <ul style="margin-left:2rem">
-        <li>Excelente comunicação</li>
-        <li>Alta disciplina e organização</li>
-        <li>Mente criativa e solucionadora de problemas</li>
-        <li>Trabalho em equipe e colaboração</li>
-        <li>Liderança técnica e mentoria</li>
-    </ul>
+    {{/each}}
 </section>
