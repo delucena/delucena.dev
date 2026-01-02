@@ -533,7 +533,7 @@ main:has(.terminal .header #terminalToggle:checked) .code-view-container {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
   margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 0;
 }
 
 /* Desabilita seleção de texto na seção de contato */
