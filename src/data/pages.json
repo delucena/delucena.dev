@@ -1,0 +1,24 @@
+{
+  "sections": {
+    "index": {
+      "enabled": true,
+      "template": "sections/index-section.html"
+    },
+    "experience": {
+      "enabled": false,
+      "template": "sections/experience-section.html"
+    },
+    "skills": {
+      "enabled": true,
+      "template": "sections/skills-section.html"
+    },
+    "contact": {
+      "enabled": true,
+      "template": "sections/contact-section.html"
+    },
+    "readme": {
+      "enabled": true,
+      "template": "sections/readme-section.html"
+    }
+  }
+}

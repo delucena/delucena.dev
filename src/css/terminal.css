@@ -609,7 +609,30 @@ body:has(#theme:checked) .terminal .content .terminal-prompt-input {
 }
 
 .terminal:has(.header #terminalToggle:checked) {
-  margin-bottom: -220px;
+  height: 35px !important;
+  min-height: 35px !important;
+  max-height: 35px !important;
+  overflow: hidden;
+}
+
+.terminal:has(.header #terminalToggle:checked) .content {
+  display: none !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  flex: 0 0 0 !important;
+  visibility: hidden !important;
+}
+
+.terminal:has(.header #terminalToggle:checked) .terminal-header {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: 35px !important;
+  min-height: 35px !important;
+  max-height: 35px !important;
+  flex-shrink: 0 !important;
 }
 
 #terminalToggle:checked + label::before {

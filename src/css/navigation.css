@@ -4,7 +4,7 @@
 
 #navigation {
   display: flex;
-  overflow: hidden;
+  overflow: visible; /* Mudado de hidden para visible para permitir menus dropdown */
   min-width: 0;
   gap: 0;
   flex-shrink: 0;
@@ -27,6 +27,7 @@
   min-width: var(--width-menu);
   z-index: 1000;
   position: relative;
+  overflow: visible; /* Garantir que menus dropdown não sejam cortados */
 }
 
 .menu i {
@@ -76,14 +77,26 @@
   opacity: 0;
 }
 
-#menu:not(:checked) + label[for="menu"] .hamburger-icon {
+/* Quando menu está checked (aberto), mostra close icon */
+#menu:checked + label[for="menu"] .hamburger-icon {
   display: none;
   opacity: 0;
 }
 
-#menu:not(:checked) + label[for="menu"] .close-icon {
+#menu:checked + label[for="menu"] .close-icon {
   display: inline-block;
   opacity: 1;
+}
+
+/* Quando menu não está checked (fechado), mostra hamburger icon */
+#menu:not(:checked) + label[for="menu"] .hamburger-icon {
+  display: inline-block;
+  opacity: 1;
+}
+
+#menu:not(:checked) + label[for="menu"] .close-icon {
+  display: none;
+  opacity: 0;
 }
 
 .menu label,
@@ -177,6 +190,7 @@
 .menu > div:last-child {
   position: relative;
   z-index: 1001;
+  overflow: visible; /* Garantir que menus dropdown não sejam cortados */
 }
 
 .menu label.folder.settings {
@@ -262,7 +276,7 @@
   color: var(--color-text-secondary);
   box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.4);
   list-style: none;
-  z-index: 1002;
+  z-index: 10003; /* Z-index muito alto para aparecer acima de tudo */
   font-size: var(--font-size-base);
 }
 
@@ -351,8 +365,29 @@
   display: block !important;
 }
 
+/* Garantir que menus account e settings sempre sejam visíveis e funcionem */
+.menu > div:last-child {
+  display: flex !important;
+  flex-direction: column;
+}
+
+.menu > div:last-child .folder.settings {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Garantir que menus dropdown apareçam mesmo com hamburger fechado */
+.menu > div:last-child .folder.settings ~ input[type="radio"]:checked ~ ul {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 1003 !important;
+}
+
 /* Mobile: menu lateral sempre visível minimizado */
-@media (max-width: 768px) {
+@media (max-width: 768px), (max-width: 1024px) and (max-height: 600px) and (orientation: landscape) {
   /* Navigation sempre visível no lado esquerdo */
   #navigation {
     position: fixed;
@@ -398,7 +433,12 @@
   
   /* Esconder hamburger em mobile - não precisamos mais */
   .menu label[for="menu"] {
-    display: none;
+    display: none !important;
+  }
+  
+  /* Garantir que o menu checkbox também esteja escondido em mobile */
+  #menu.desktop-only {
+    display: none !important;
   }
   
   /* Ícones do menu em mobile - sempre visíveis */

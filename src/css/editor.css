@@ -533,7 +533,7 @@ main:has(.terminal .header #terminalToggle:checked) .code-view-container {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
   margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 0;
 }
 
 /* Desabilita seleção de texto na seção de contato */
@@ -656,6 +656,85 @@ main:has(.terminal .header #terminalToggle:checked) .code-view-container {
   color: var(--color-text-secondary);
   margin-bottom: 2rem;
   line-height: 1.6;
+}
+
+/* Responsividade para telas muito largas e baixas */
+@media (min-width: 1200px) and (max-height: 600px) {
+  #editor {
+    min-width: 0;
+    overflow: hidden;
+  }
+  
+  #editor .editor section {
+    padding: calc(var(--spacing-md) + 50px) var(--spacing-xl) var(--spacing-md) var(--spacing-xl);
+    font-size: var(--font-size-base);
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  
+  #header {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+/* Responsividade para mobile em landscape */
+@media (max-width: 1024px) and (max-height: 600px) and (orientation: landscape) {
+  #editor {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+  
+  #editor .editorContainer {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+  
+  #editor .editor {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+  
+  #editor .editor section {
+    padding: calc(var(--spacing-md) + 50px) var(--spacing-md) var(--spacing-md) var(--spacing-md) !important;
+    font-size: var(--font-size-base);
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+  
+  #editor .editor section * {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  #header {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box !important;
+  }
+  
+  #header div {
+    min-width: fit-content;
+  }
+  
+  #header div label {
+    padding-left: 0.6em;
+    padding-right: 0.5em;
+    font-size: var(--font-size-small);
+    white-space: nowrap;
+  }
 }
 
 /* Responsividade para telas menores */

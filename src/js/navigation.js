@@ -38,7 +38,9 @@
   }
 
   function isMobile() {
-    return window.innerWidth <= MOBILE_BREAKPOINT;
+    // Considera mobile se largura <= 768px OU se for landscape com altura <= 600px
+    return window.innerWidth <= MOBILE_BREAKPOINT || 
+           (window.innerWidth <= 1024 && window.innerHeight <= 600);
   }
 
   function openMenuIfNeeded() {
@@ -99,54 +101,40 @@
   }
 
   function initAccountAndSettingsToggle() {
-    // Rastreia o estado anterior dos radios
-    let accountWasChecked = false;
-    let settingsWasChecked = false;
-    
-    if (elements.accountRadio && elements.closeRadio) {
-      // Listener no change do radio para rastrear quando é selecionado
-      elements.accountRadio.addEventListener('change', () => {
-        // Se já estava checked antes e foi selecionado novamente, fecha
-        if (accountWasChecked && elements.accountRadio.checked) {
+    // Toggle para Account
+    if (elements.accountLabel && elements.accountRadio && elements.closeRadio) {
+      elements.accountLabel.addEventListener('mousedown', (event) => {
+        // Verifica o estado ANTES do clique processar
+        const wasChecked = elements.accountRadio.checked;
+        
+        // Se já estava checked, previne o comportamento padrão e fecha
+        if (wasChecked) {
+          event.preventDefault();
+          // Usa setTimeout para garantir que o estado seja atualizado após o preventDefault
           setTimeout(() => {
             elements.closeRadio.checked = true;
           }, 0);
         }
-        accountWasChecked = elements.accountRadio.checked;
+        // Se não estava checked, deixa o comportamento padrão acontecer (abre o menu)
       });
-      
-      // Atualiza o estado inicial
-      accountWasChecked = elements.accountRadio.checked;
-      
-      // Listener no label para atualizar o estado antes do clique
-      if (elements.accountLabel) {
-        elements.accountLabel.addEventListener('mousedown', () => {
-          accountWasChecked = elements.accountRadio.checked;
-        });
-      }
     }
     
-    if (elements.settingsRadio && elements.closeRadio) {
-      // Listener no change do radio para rastrear quando é selecionado
-      elements.settingsRadio.addEventListener('change', () => {
-        // Se já estava checked antes e foi selecionado novamente, fecha
-        if (settingsWasChecked && elements.settingsRadio.checked) {
+    // Toggle para Settings
+    if (elements.settingsLabel && elements.settingsRadio && elements.closeRadio) {
+      elements.settingsLabel.addEventListener('mousedown', (event) => {
+        // Verifica o estado ANTES do clique processar
+        const wasChecked = elements.settingsRadio.checked;
+        
+        // Se já estava checked, previne o comportamento padrão e fecha
+        if (wasChecked) {
+          event.preventDefault();
+          // Usa setTimeout para garantir que o estado seja atualizado após o preventDefault
           setTimeout(() => {
             elements.closeRadio.checked = true;
           }, 0);
         }
-        settingsWasChecked = elements.settingsRadio.checked;
+        // Se não estava checked, deixa o comportamento padrão acontecer (abre o menu)
       });
-      
-      // Atualiza o estado inicial
-      settingsWasChecked = elements.settingsRadio.checked;
-      
-      // Listener no label para atualizar o estado antes do clique
-      if (elements.settingsLabel) {
-        elements.settingsLabel.addEventListener('mousedown', () => {
-          settingsWasChecked = elements.settingsRadio.checked;
-        });
-      }
     }
   }
 
@@ -171,8 +159,17 @@
   }
 
   function handleResize() {
+    // Fecha menus mobile quando redimensiona
     if (isMobile()) {
       closeMobileMenus();
+    }
+    
+    // Garante que o menu hamburger funcione corretamente em desktop
+    if (!isMobile() && elements.menu) {
+      // Se não é mobile e o menu está fechado, garante que explorer/extensions funcionem
+      if (!elements.menu.checked && (elements.explorerView?.checked || elements.extensionsView?.checked)) {
+        elements.menu.checked = true;
+      }
     }
   }
 

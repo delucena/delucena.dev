@@ -6,9 +6,10 @@
     "label": "Conecte-se comigo profissionalmente"
   },
   "github": {
-    "url": "https://github.com/delucena",
+    "url": "https://github.com/delucena/delucena.dev",
+    "main": "https://github.com/delucena/delucena.dev/tree/main",
     "username": "delucena",
-    "display": "github.com/delucena",
+    "display": "github.com/delucena/delucena.dev",
     "label": "Veja meus projetos e contribuições"
   },
   "email": {

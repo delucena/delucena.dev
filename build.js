@@ -115,7 +115,8 @@ function loadData() {
     experience: 'experience.json',
     skills: 'skills.json',
     contact: 'contact.json',
-    meta: 'meta.json'
+    meta: 'meta.json',
+    pages: 'pages.json'
   };
   
   const data = {};
@@ -319,17 +320,92 @@ function buildIndexHtml() {
   // Carregar dados JSON
   const data = loadData();
   
+  // Normalizar configuração de páginas com valores padrão
+  const defaultSections = {
+    index: { enabled: true },
+    experience: { enabled: true },
+    skills: { enabled: true },
+    contact: { enabled: true },
+    readme: { enabled: true }
+  };
+  
+  const pagesConfig = data.pages && data.pages.sections ? data.pages.sections : {};
+  
+  // Garantir que todas as seções tenham configuração (mesclar com padrões)
+  if (!data.pages) {
+    data.pages = {};
+  }
+  if (!data.pages.sections) {
+    data.pages.sections = {};
+  }
+  
+  // Mesclar configurações do usuário com padrões
+  Object.keys(defaultSections).forEach(key => {
+    if (!data.pages.sections[key]) {
+      data.pages.sections[key] = defaultSections[key];
+    } else {
+      // Garantir que 'enabled' existe (padrão true se não especificado)
+      if (data.pages.sections[key].enabled === undefined) {
+        data.pages.sections[key].enabled = true;
+      }
+    }
+  });
+  
   const baseHtml = fs.readFileSync(path.join(srcDir, 'index.html'), 'utf8');
   let html = baseHtml;
   
   // Processar templates com dados
   html = html.replace('<!-- TEMPLATE: navigation.html -->', renderTemplate(readTemplate('navigation.html'), data));
-  html = html.replace('<!-- TEMPLATE: editor-header.html -->', readTemplate('editor-header.html'));
-  html = html.replace('<!-- TEMPLATE: sections/index-section.html -->', renderTemplate(readTemplate('sections/index-section.html'), data));
-  html = html.replace('<!-- TEMPLATE: sections/experience-section.html -->', renderTemplate(readTemplate('sections/experience-section.html'), data));
-  html = html.replace('<!-- TEMPLATE: sections/skills-section.html -->', renderTemplate(readTemplate('sections/skills-section.html'), data));
-  html = html.replace('<!-- TEMPLATE: sections/contact-section.html -->', renderTemplate(readTemplate('sections/contact-section.html'), data));
-  html = html.replace('<!-- TEMPLATE: sections/readme-section.html -->', renderTemplate(readTemplate('sections/readme-section.html'), data));
+  
+  // Processar editor-header e garantir que o primeiro item habilitado tenha checked
+  let editorHeader = renderTemplate(readTemplate('editor-header.html'), data);
+  // Encontrar o primeiro input radio habilitado e adicionar checked
+  const enabledSections = ['readme', 'index', 'experience', 'skills', 'contact'];
+  let firstChecked = false;
+  enabledSections.forEach(sectionKey => {
+    if (data.pages.sections[sectionKey] && data.pages.sections[sectionKey].enabled !== false) {
+      if (!firstChecked) {
+        // Adicionar checked ao primeiro item habilitado
+        editorHeader = editorHeader.replace(
+          new RegExp(`(<input type="radio" name="openedFile" id="${sectionKey}")([^>]*>)`, 'i'),
+          `$1 checked$2`
+        );
+        firstChecked = true;
+      } else {
+        // Remover checked de outros itens
+        editorHeader = editorHeader.replace(
+          new RegExp(`(<input type="radio" name="openedFile" id="${sectionKey}")([^>]*checked[^>]*>)`, 'i'),
+          `$1>`
+        );
+      }
+    }
+  });
+  html = html.replace('<!-- TEMPLATE: editor-header.html -->', editorHeader);
+  
+  // Processar seções baseado na configuração de páginas
+  const sections = [
+    { key: 'index', template: 'sections/index-section.html' },
+    { key: 'experience', template: 'sections/experience-section.html' },
+    { key: 'skills', template: 'sections/skills-section.html' },
+    { key: 'contact', template: 'sections/contact-section.html' },
+    { key: 'readme', template: 'sections/readme-section.html' }
+  ];
+  
+  sections.forEach(section => {
+    const sectionConfig = data.pages.sections[section.key];
+    const isEnabled = sectionConfig && sectionConfig.enabled !== false;
+    
+    if (isEnabled) {
+      const templatePath = section.template;
+      const templateContent = renderTemplate(readTemplate(templatePath), data);
+      html = html.replace(`<!-- TEMPLATE: ${templatePath} -->`, templateContent);
+      console.log(`✓ Seção incluída: ${section.key}`);
+    } else {
+      // Remover o placeholder da seção desabilitada
+      html = html.replace(`<!-- TEMPLATE: ${section.template} -->`, '');
+      console.log(`⊘ Seção desabilitada: ${section.key}`);
+    }
+  });
   
   let terminalHtml = readTemplate('terminal/terminal.html');
   terminalHtml = terminalHtml.replace('<!-- TEMPLATE: terminal-header.html -->', readTemplate('terminal/terminal-header.html'));

@@ -1,23 +1,33 @@
 <div id="header">
     <!-- ADD FILE -->
+  {{#if pages.sections.readme.enabled}}
   <div>
-    <input type="radio" name="openedFile" id="readme" checked>
+    <input type="radio" name="openedFile" id="readme">
     <label for="readme">README.md(preview)</label>
   </div>
+  {{/if}}
+    {{#if pages.sections.index.enabled}}
     <div>
         <input type="radio" name="openedFile" id="index">
         <label for="index">index.html(preview)</label>
     </div>
+    {{/if}}
+    {{#if pages.sections.experience.enabled}}
     <div>
         <input type="radio" name="openedFile" id="experience">
         <label for="experience">experience.html(preview)</label>
     </div>
+    {{/if}}
+    {{#if pages.sections.skills.enabled}}
     <div>
         <input type="radio" name="openedFile" id="skills">
         <label for="skills">skills.html(preview)</label>
     </div>
+    {{/if}}
+    {{#if pages.sections.contact.enabled}}
     <div>
         <input type="radio" name="openedFile" id="contact">
         <label for="contact">contact.html(preview)</label>
     </div>
+    {{/if}}
 </div>

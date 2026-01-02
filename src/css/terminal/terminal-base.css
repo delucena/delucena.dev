@@ -178,11 +178,106 @@
   transition: transform var(--transition-normal);
 }
 
+/* Terminal minimizado quando toggle está checked */
 .terminal:has(.terminal-header #terminalToggle:checked) {
-  margin-bottom: -220px;
+  height: 35px !important;
+  min-height: 35px !important;
+  max-height: 35px !important;
+  overflow: hidden;
+}
+
+/* Garantir que o conteúdo fique escondido quando minimizado */
+.terminal:has(.terminal-header #terminalToggle:checked) .content {
+  display: none !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  flex: 0 0 0 !important;
+  visibility: hidden !important;
+}
+
+/* Garantir que o header fique visível quando minimizado */
+.terminal:has(.terminal-header #terminalToggle:checked) .terminal-header {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: 35px !important;
+  min-height: 35px !important;
+  max-height: 35px !important;
+  flex-shrink: 0 !important;
 }
 
 #terminalToggle:checked + label::before {
   transform: rotate(225deg);
   top: 1.5em;
+}
+
+/* ============================================
+   RESPONSIVIDADE - Telas largas e baixas
+   ============================================ */
+
+/* Telas muito largas e baixas (wide screens) */
+@media (min-width: 1200px) and (max-height: 600px) {
+  .terminal {
+    max-height: 40vh;
+    height: auto;
+  }
+  
+  .terminal .terminal-header {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  .terminal .content {
+    max-height: calc(40vh - 35px);
+    overflow-y: auto;
+  }
+}
+
+/* Mobile em landscape */
+@media (max-width: 1024px) and (max-height: 600px) and (orientation: landscape) {
+  .terminal {
+    max-height: 30vh;
+    height: auto;
+  }
+  
+  .terminal .terminal-header {
+    overflow-x: auto;
+    white-space: nowrap;
+    font-size: 10px;
+  }
+  
+  .terminal .terminal-header label {
+    padding: 0.3em var(--spacing-md);
+    font-size: 10px;
+  }
+  
+  .terminal .content {
+    max-height: calc(30vh - 35px);
+    overflow-y: auto;
+  }
+  
+  .terminal:has(.terminal-header #terminalToggle:checked) {
+    height: 35px !important;
+    min-height: 35px !important;
+    max-height: 35px !important;
+    overflow: hidden;
+  }
+  
+  .terminal:has(.terminal-header #terminalToggle:checked) .content {
+    display: none !important;
+    height: 0 !important;
+    overflow: hidden !important;
+  }
+  
+  .terminal:has(.terminal-header #terminalToggle:checked) .terminal-header {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: 35px !important;
+    min-height: 35px !important;
+    max-height: 35px !important;
+    flex-shrink: 0 !important;
+  }
 }
