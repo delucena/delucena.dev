@@ -1,0 +1,474 @@
+/* ============================================
+   EDITOR UI WRAPPER - Isolamento Completo
+   Protege a UI simulada (VS Code / Explorer / Terminal)
+   contra herança de estilos globais
+   ============================================ */
+
+/* ============================================
+   ⚠️ REGRAS DE SEGURANÇA - ISOLAMENTO DA UI SIMULADA
+   ============================================
+   
+   📦 CONTAINER PRINCIPAL: `.editor-ui`
+      - Responsável por: Layout e estilos da UI simulada (VS Code / Explorer / Terminal)
+      - Componentes isolados:
+        * #navigation (menu lateral + explorer/extensions)
+        * #editor .editorContainer (container do editor)
+        * #header (abas do editor)
+        * .terminal (terminal inferior)
+      - NÃO inclui: Conteúdo do site dentro de `#editor .editor section`
+   
+   🚫 CSS GLOBAL PROIBIDO DENTRO DESTE ARQUIVO:
+      - NUNCA usar seletores sem `.editor-ui` como prefixo
+      - NUNCA afetar elementos fora do escopo `.editor-ui`
+      - NUNCA usar seletores globais (*, body, html) que possam vazar para o conteúdo
+      - NUNCA estilizar `#editor .editor section` ou seus filhos diretamente
+   
+   ✅ REGRAS OBRIGATÓRIAS:
+      - TODOS os seletores devem começar com `.editor-ui`
+      - Isolamento de tipografia: font-size, line-height definidos explicitamente
+      - Isolamento de display: flex/grid definidos explicitamente
+      - Proteção contra herança: reset de propriedades críticas
+   
+   ⚠️ ATENÇÃO:
+      - O conteúdo do site (`#editor .editor section`) está DENTRO de `.editor-ui`
+      - Mas seus estilos devem ser definidos em OUTROS arquivos (critical.css, main.css)
+      - Este arquivo é APENAS para a UI simulada, não para o conteúdo
+   
+   ============================================ */
+
+/* ============================================
+   WRAPPER PRINCIPAL
+   ============================================ */
+.editor-ui {
+  /* Reset completo de propriedades que podem ser herdadas */
+  font-size: initial;
+  line-height: initial;
+  font-family: initial;
+  color: initial;
+  display: initial;
+  
+  /* Isolamento de tipografia - valores específicos para UI */
+  font-size: var(--font-size-base, 12px);
+  line-height: var(--line-height-base, 1.4);
+  font-family: var(--font-family-base, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+  
+  /* LAYOUT FLEX - Container raiz da UI simulada */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  
+  /* Proteção contra herança de propriedades globais */
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  
+  /* Isolamento de cores - usa variáveis específicas */
+  color: var(--color-text-primary, rgb(212, 212, 212));
+  background-color: transparent;
+}
+
+/* ============================================
+   PROTEÇÃO CONTRA HERANÇA - Reset de propriedades críticas
+   ============================================ */
+
+/* Garantir que elementos dentro do wrapper não herdem estilos globais
+   de tipografia, mas sem propagar automaticamente display/flex */
+.editor-ui *,
+.editor-ui *::before,
+.editor-ui *::after {
+  /* Tipografia base herdada apenas do wrapper/containers explícitos */
+  font-size: inherit;
+  line-height: inherit;
+  font-family: inherit;
+
+  /* Reset de box-sizing */
+  box-sizing: border-box;
+
+  /* Reset de margin/padding que podem vir de resets globais */
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================
+   NAVIGATION - Isolamento completo
+   ============================================ */
+.editor-ui #navigation {
+  /* Display isolado - não herda de body/main */
+  display: flex;
+  flex-direction: row;
+  
+  /* Tipografia isolada */
+  font-size: var(--font-size-base, 12px);
+  line-height: var(--line-height-base, 1.4);
+  font-family: var(--font-family-base, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+  
+  /* Proteção contra herança */
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Menu Lateral - isolado */
+.editor-ui .menu {
+  /* Display isolado */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  
+  /* Tipografia isolada */
+  font-size: var(--font-size-base, 12px);
+  line-height: var(--line-height-base, 1.4);
+  
+  /* Proteção contra herança */
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.editor-ui .menu i,
+.editor-ui .menu label,
+.editor-ui .menu a {
+  /* Display isolado */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* Tipografia isolada */
+  font-size: 20px;
+  line-height: 1;
+  
+  /* Proteção contra herança */
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================
+   EXPLORER - Isolamento completo
+   ============================================ */
+.editor-ui .explorer {
+  /* Display isolado */
+  display: flex;
+  flex-direction: column;
+  
+  /* Tipografia isolada */
+  font-size: var(--font-size-base, 12px);
+  line-height: var(--line-height-base, 1.4);
+  font-family: var(--font-family-base, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+  
+  /* Proteção contra herança */
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.editor-ui .explorer .title,
+.editor-ui .explorer .subTitle,
+.editor-ui .explorer label,
+.editor-ui .explorer .folder {
+  /* Tipografia isolada */
+  font-size: var(--font-size-base, 12px);
+  line-height: var(--line-height-base, 1.4);
+  
+  /* Display isolado */
+  display: block;
+  
+  /* Proteção contra herança */
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================
+   EDITOR - Isolamento completo
+   ============================================ */
+.editor-ui #editor {
+  /* Display isolado */
+  display: flex;
+  flex-direction: column;
+  
+  /* Tipografia isolada */
+  font-size: var(--font-size-base, 12px);
+  line-height: var(--line-height-base, 1.4);
+  font-family: var(--font-family-base, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+  
+  /* Proteção contra herança */
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.editor-ui .editorContainer {
+  /* Display isolado */
+  display: flex;
+  flex-direction: column;
+  
+  /* Proteção contra herança */
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.editor-ui .editorContainer .editor {
+  /* Display isolado */
+  display: flex;
+  flex-flow: column;
+  
+  /* Tipografia isolada */
+  font-size: var(--font-size-base, 12px);
+  line-height: var(--line-height-base, 1.4);
+  
+  /* Proteção contra herança */
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.editor-ui #header {
+  /* Display isolado */
+  display: flex;
+  flex-direction: row;
+  
+  /* Tipografia isolada */
+  font-size: var(--font-size-base, 12px);
+  line-height: var(--line-height-base, 1.4);
+  
+  /* Proteção contra herança */
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.editor-ui #header div label {
+  /* Tipografia isolada */
+  font-size: var(--font-size-base, 12px);
+  line-height: var(--line-height-base, 1.4);
+  
+  /* Display isolado */
+  display: flex;
+  align-items: center;
+  
+  /* Proteção contra herança */
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================
+   TERMINAL - Isolamento completo
+   ============================================ */
+.editor-ui .terminal {
+  /* Display isolado */
+  display: flex;
+  flex-direction: column;
+  
+  /* Tipografia isolada */
+  font-size: var(--font-size-base, 12px);
+  line-height: var(--line-height-base, 1.4);
+  font-family: var(--font-family-mono, ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace);
+  
+  /* Proteção contra herança */
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.editor-ui .terminal .header {
+  /* Display isolado */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  
+  /* Tipografia isolada */
+  font-size: var(--font-size-base, 12px);
+  line-height: var(--line-height-base, 1.4);
+  
+  /* Proteção contra herança */
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.editor-ui .terminal .header label {
+  /* Tipografia isolada */
+  font-size: 11px;
+  line-height: var(--line-height-base, 1.4);
+  
+  /* Display isolado */
+  display: flex;
+  align-items: center;
+  
+  /* Proteção contra herança */
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.editor-ui .terminal .content {
+  /* Display isolado */
+  display: flex;
+  flex-direction: column;
+  
+  /* Tipografia isolada */
+  font-size: var(--font-size-base, 12px);
+  line-height: var(--line-height-base, 1.4);
+  font-family: var(--font-family-mono, ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace);
+  
+  /* Proteção contra herança */
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================
+   PROTEÇÃO ESPECÍFICA CONTRA HERANÇA
+   ============================================ */
+
+/* Garantir que mudanças globais de font-size não afetem a UI */
+body:not(.editor-ui) * {
+  /* Esta regra não afeta elementos dentro de .editor-ui */
+}
+
+/* Proteção contra herança de line-height global */
+.editor-ui,
+.editor-ui * {
+  /* Força line-height específico se não definido */
+  line-height: var(--line-height-base, 1.4);
+}
+
+/* Proteção contra herança de display global */
+.editor-ui #navigation,
+.editor-ui .menu,
+.editor-ui .explorer,
+.editor-ui #editor,
+.editor-ui .editorContainer,
+.editor-ui .editor,
+.editor-ui #header,
+.editor-ui .terminal {
+  /* Display sempre definido explicitamente */
+  display: flex;
+}
+
+/* Proteção contra herança de font-size global */
+.editor-ui #navigation,
+.editor-ui .menu,
+.editor-ui .explorer,
+.editor-ui #editor,
+.editor-ui .editorContainer,
+.editor-ui .editor,
+.editor-ui #header,
+.editor-ui .terminal {
+  /* Font-size sempre definido explicitamente */
+  font-size: var(--font-size-base, 12px);
+}
+
+/* ============================================
+   ISOLAMENTO DE FLEX/GRID
+   ============================================ */
+
+/* Garantir que flex/grid sejam definidos apenas dentro do escopo */
+.editor-ui #navigation {
+  display: flex !important;
+  flex-direction: row !important;
+}
+
+.editor-ui .menu {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.editor-ui .explorer {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.editor-ui #editor {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.editor-ui .editorContainer {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.editor-ui .editorContainer .editor {
+  display: flex !important;
+  flex-flow: column !important;
+}
+
+.editor-ui #header {
+  display: flex !important;
+  flex-direction: row !important;
+}
+
+.editor-ui .terminal {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.editor-ui .terminal .header {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+}
+
+.editor-ui .terminal .content {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* ============================================
+   ISOLAMENTO DE TIPOGRAFIA
+   ============================================ */
+
+/* Garantir que font-size seja definido apenas dentro do escopo */
+.editor-ui #navigation,
+.editor-ui .menu,
+.editor-ui .explorer,
+.editor-ui #editor,
+.editor-ui .editorContainer,
+.editor-ui .editor,
+.editor-ui #header,
+.editor-ui .terminal {
+  font-size: var(--font-size-base, 12px) !important;
+}
+
+/* Elementos específicos com font-size próprio */
+.editor-ui .menu i,
+.editor-ui .menu label,
+.editor-ui .menu a {
+  font-size: 20px !important;
+}
+
+.editor-ui .terminal .header label {
+  font-size: 11px !important;
+}
+
+/* ============================================
+   ISOLAMENTO DE LINE-HEIGHT
+   ============================================ */
+
+/* Garantir que line-height seja definido apenas dentro do escopo */
+.editor-ui #navigation,
+.editor-ui .menu,
+.editor-ui .explorer,
+.editor-ui .extensions,
+.editor-ui #editor,
+.editor-ui .editorContainer,
+.editor-ui .editor,
+.editor-ui #header,
+.editor-ui .terminal {
+  line-height: var(--line-height-base, 1.4) !important;
+}
+
+/* Elementos específicos com line-height próprio */
+.editor-ui .menu i,
+.editor-ui .menu label,
+.editor-ui .menu a {
+  line-height: 1 !important;
+}

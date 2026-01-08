@@ -95,19 +95,20 @@
     if (!copyButton) return;
     
     const originalTitle = copyButton.getAttribute('title') || copyButton.getAttribute('aria-label') || '';
-    const icon = copyButton.querySelector('i');
+    const icon = copyButton.querySelector('svg');
     
     // Atualiza o ícone temporariamente
     if (icon) {
-      const originalClass = icon.className;
-      icon.className = 'fa-solid fa-check';
+      const originalHTML = icon.outerHTML;
+      icon.outerHTML = '<svg class="icon icon--md" width="20" height="20" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><use href="#icon-check"></use></svg>';
       copyButton.setAttribute('title', 'Copiado!');
       copyButton.setAttribute('aria-label', 'Código copiado com sucesso');
       
       // Restaura após 2 segundos
       setTimeout(() => {
-        if (icon) {
-          icon.className = originalClass;
+        const currentIcon = copyButton.querySelector('svg');
+        if (currentIcon) {
+          currentIcon.outerHTML = originalHTML;
         }
         copyButton.setAttribute('title', originalTitle);
         copyButton.setAttribute('aria-label', originalTitle);
@@ -120,7 +121,6 @@
    */
   async function handleCopyClick() {
     if (!codeViewContent) {
-      console.warn('Elemento de código não encontrado');
       return;
     }
     
@@ -128,7 +128,6 @@
     const plainText = extractPlainText(codeViewContent);
     
     if (!plainText) {
-      console.warn('Nenhum código para copiar');
       return;
     }
     
@@ -164,7 +163,7 @@
     button.setAttribute('type', 'button');
     button.setAttribute('aria-label', 'Copiar código');
     button.setAttribute('title', 'Copiar código');
-    button.innerHTML = '<i class="fa-solid fa-copy" aria-hidden="true"></i><span class="sr-only">Copiar código</span>';
+    button.innerHTML = '<svg class="icon icon--md" width="20" height="20" viewBox="0 0 1920 1920" fill="currentColor" aria-hidden="true"><use href="#icon-copy"></use></svg><span class="sr-only">Copiar código</span>';
     
     // Adiciona o evento de clique
     button.addEventListener('click', handleCopyClick);

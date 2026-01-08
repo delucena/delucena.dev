@@ -227,3 +227,34 @@ body:has(#theme:checked) .terminal .terminal-terminal-scrollable::-webkit-scroll
 body:has(#theme:checked) .terminal .terminal-terminal-scrollable::-webkit-scrollbar-thumb:hover {
   background: #909090;
 }
+
+/* Placeholder para prevenir CLS durante carregamento */
+.terminal .terminal-placeholder {
+  display: block;
+  min-height: 40px;
+  padding: var(--spacing-md) 0;
+}
+
+.terminal .terminal-placeholder-line {
+  display: block;
+  height: 14px;
+  background-color: var(--color-bg-secondary);
+  border-radius: 2px;
+  margin-bottom: var(--spacing-sm);
+  width: 100%;
+  max-width: 100%;
+  opacity: 0.3;
+}
+
+.terminal .terminal-placeholder-line:nth-child(1) {
+  width: 80%;
+}
+
+.terminal .terminal-placeholder-line:nth-child(2) {
+  width: 65%;
+}
+
+/* Esconde placeholder quando conteúdo é carregado */
+.terminal #terminalOutput:not(:empty) .terminal-placeholder {
+  display: none;
+}

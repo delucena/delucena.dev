@@ -33,17 +33,112 @@ Este projeto é o **portfólio pessoal de delucena.dev**, apresentado em formato
 
 ```
 delucena/
-├── build.js                    # Script de build Node.js
-├── build.sh                    # Script de build Shell
+├── build.js                    # Script de build Node.js (templates, minificação, hash)
+├── build.sh                    # Script de build Shell (alternativo)
 ├── package.json                # Configuração do projeto Node.js
 ├── package-lock.json           # Lock file do npm
 ├── LICENSE                     # Licença MIT
-├── README.md                   # Documentação original do projeto
+├── README.md                   # Documentação principal
 ├── DOCUMENTACAO.md            # Esta documentação completa
+├── ESTRUTURA_PROJETO.md       # Estrutura detalhada do projeto
+├── CONTRIBUTING.md            # Guia de contribuição
+├── SECURITY.md                # Política de segurança
+├── CHANGELOG.md               # Histórico de mudanças
+│
+├── scripts/                    # Scripts auxiliares
+│   ├── optimize-images.js     # Otimização de imagens
+│   └── generate-lcp-images.js # Geração de imagens LCP
 │
 ├── src/                        # Código-fonte
-│   ├── index.html             # HTML principal (portfólio VS Code)
-│   ├── style.css              # Estilos CSS principais
+│   ├── index.html             # HTML base (montado a partir de templates)
+│   ├── 404.html               # Página de erro 404
+│   │
+│   ├── templates/             # Templates HTML modulares
+│   │   ├── top-header.html    # Cabeçalho superior
+│   │   ├── navigation.html    # Barra lateral de navegação
+│   │   ├── editor-header.html # Cabeçalho do editor (abas)
+│   │   ├── footer.html        # Rodapé
+│   │   ├── sections/          # Seções de conteúdo
+│   │   │   ├── index-section.html
+│   │   │   ├── experience-section.html
+│   │   │   ├── skills-section.html
+│   │   │   ├── contact-section.html
+│   │   │   └── readme-section.html
+│   │   └── terminal/          # Terminal modular
+│   │       ├── terminal.html
+│   │       ├── terminal-header.html
+│   │       └── terminal-tabs/
+│   │           ├── problems-tab.html
+│   │           ├── output-tab.html
+│   │           ├── terminal-tab.html
+│   │           ├── debug-tab.html
+│   │           └── ports-tab.html
+│   │
+│   ├── css/                   # CSS modular
+│   │   ├── main.css           # Arquivo principal (importa todos)
+│   │   ├── critical.css       # CSS crítico (above the fold)
+│   │   ├── variables.css      # Variáveis CSS (tema, cores)
+│   │   ├── reset.css          # Reset CSS
+│   │   ├── layout.css         # Layout principal
+│   │   ├── icons.css          # Ícones
+│   │   ├── editor-ui-wrapper.css # Wrapper do editor
+│   │   ├── navigation.css     # Barra de navegação
+│   │   ├── explorer.css       # Explorer de arquivos
+│   │   ├── extensions.css     # Extensões/Formação
+│   │   ├── editor.css         # Editor de código
+│   │   ├── syntax-highlight.css # Syntax highlighting
+│   │   ├── terminal.css       # Terminal (wrapper)
+│   │   ├── utilities.css      # Utilitários
+│   │   └── terminal/          # CSS modular do terminal
+│   │       ├── terminal-base.css
+│   │       ├── terminal-problems.css
+│   │       ├── terminal-output.css
+│   │       ├── terminal-terminal.css
+│   │       ├── terminal-debug.css
+│   │       └── terminal-ports.css
+│   │
+│   ├── js/                    # JavaScript modular
+│   │   ├── main.js            # Inicialização de módulos
+│   │   ├── theme.js           # Gerenciamento de temas
+│   │   ├── navigation.js      # Navegação e explorer
+│   │   ├── header-command-palette.js # Command palette
+│   │   ├── editor-tabs.js     # Gerenciamento de abas
+│   │   ├── code-highlighter.js # Syntax highlighting
+│   │   ├── code-copy.js       # Cópia de código
+│   │   ├── preview-toggle.js  # Alternância preview/código
+│   │   ├── explorer-actions.js # Ações do explorer
+│   │   ├── explorer-controls.js # Controles do explorer
+│   │   ├── explorer-highlight.js # Destaque do explorer
+│   │   ├── explorer-resize.js # Redimensionamento do explorer
+│   │   ├── terminal.js        # Terminal (wrapper)
+│   │   ├── terminal-resize.js # Redimensionamento do terminal
+│   │   ├── output.js          # Simulação de output Maven
+│   │   └── terminal/          # Módulos do terminal
+│   │       ├── terminal-core.js
+│   │       ├── terminal-terminal.js
+│   │       └── terminal-output.js
+│   │
+│   ├── data/                  # Dados do portfólio (JSON)
+│   │   ├── profile.json       # Perfil pessoal
+│   │   ├── experience.json    # Experiências profissionais
+│   │   ├── skills.json        # Habilidades técnicas
+│   │   ├── contact.json       # Informações de contato
+│   │   ├── meta.json          # Meta tags SEO
+│   │   ├── pages.json         # Configuração de páginas
+│   │   └── README.md          # Documentação dos dados
+│   │
+│   ├── assets/                # Recursos estáticos
+│   │   ├── favicon.svg        # Favicon
+│   │   ├── icons.svg          # Ícones SVG
+│   │   └── images/            # Imagens
+│   │       ├── profile.png
+│   │       ├── profile.webp
+│   │       └── profile-*.avif # Versões otimizadas
+│   │
+│   ├── config/                # Arquivos de configuração
+│   │   ├── _headers           # Headers Cloudflare Pages
+│   │   ├── robots.txt         # Configuração para crawlers
+│   │   └── sitemap.xml        # Mapa do site
 │   │
 │   └── main/                  # Estrutura Spring Boot
 │       ├── java/
@@ -53,22 +148,27 @@ delucena/
 │       │               └── Application.java    # Classe principal Spring Boot
 │       │
 │       └── resources/
-│           ├── application.properties         # Configurações Spring (vazio)
-│           ├── application.yml                # Configurações Spring YAML (vazio)
-│           │
+│           ├── application.properties         # Configurações Spring
+│           ├── application.yml                # Configurações Spring YAML
 │           └── static/                        # Arquivos estáticos HTML
-│               ├── index.html                # Página inicial do portfólio
-│               ├── contact.html              # Página de contato
-│               ├── experience.html           # Página de experiência
-│               └── skills.html               # Página de habilidades
+│               ├── index.html
+│               ├── contact.html
+│               ├── experience.html
+│               └── skills.html
 │
-├── dist/                       # Arquivos compilados (gerados pelo build)
-│   ├── index.html             # HTML final
-│   └── style.css              # CSS final
-│
-└── target/                     # Arquivos compilados Java (Maven)
-    ├── classes/               # Classes compiladas
-    └── test-classes/          # Classes de teste compiladas
+└── dist/                       # Arquivos compilados (gerados pelo build)
+    ├── index.html             # HTML final (montado e minificado)
+    ├── 404.html               # Página 404 minificada
+    ├── css/                   # CSS consolidado e minificado
+    │   ├── main.css           # CSS consolidado (sem @import)
+    │   └── main.{hash}.min.css # CSS minificado com hash
+    ├── js/                    # JS minificado
+    │   ├── *.min.js           # Scripts minificados
+    │   └── non-essential-bundle.{hash}.min.js # Bundle não essencial
+    ├── assets/                # Assets copiados
+    ├── robots.txt             # Configuração SEO
+    ├── sitemap.xml            # Mapa do site
+    └── _headers                # Headers Cloudflare
 ```
 
 ---
@@ -78,45 +178,115 @@ delucena/
 ### 1. **Frontend - Portfólio delucena.dev (CSS-Only)**
 
 #### `src/index.html`
-O arquivo HTML principal contém toda a estrutura do portfólio:
+O arquivo HTML base contém placeholders para templates modulares:
 
-- **Navegação Lateral (Sidebar)**
-  - Menu com ícones (hamburger, explorer, extensions, GitHub)
-  - Explorer de arquivos (estrutura do projeto)
-  - Extensions (formação acadêmica e certificações)
-  - Menu de configurações (tema claro/escuro, contatos)
+- **Estrutura Principal**
+  - Placeholders para templates (`<!-- TEMPLATE: ... -->`)
+  - Meta tags dinâmicas (preenchidas com dados de `meta.json`)
+  - Links para CSS e JavaScript
 
-- **Editor Principal**
-  - Abas de arquivos (index.html, experience.html, skills.html, contact.html, README.md)
-  - Conteúdo editável com informações do portfólio
-  - Seções:
-    - **Index**: Apresentação pessoal
-    - **Experience**: Projetos e experiências profissionais
-    - **Skills**: Habilidades técnicas e pessoais
-    - **Contact**: Informações de contato e redes sociais
-    - **README**: Informações adicionais e badges
+- **Templates Modulares**
+  - `top-header.html`: Cabeçalho superior com meta tags
+  - `navigation.html`: Barra lateral completa
+  - `editor-header.html`: Cabeçalho do editor com abas
+  - `sections/*.html`: Seções de conteúdo do portfólio
+  - `terminal/*.html`: Terminal e suas abas
+  - `footer.html`: Rodapé com informações de status
 
-- **Terminal Simulado**
-  - Aba Problems (erros, warnings, infos)
-  - Aba Output (logs Maven/Spring Boot)
-  - Aba Terminal (simulação de execução)
-  - Aba Debug Console
-  - Aba Ports (portas em uso)
+#### Sistema de Templates e Dados JSON
 
-- **Footer**
-  - Informações de status (branch, erros, encoding, linguagem)
+O projeto utiliza um sistema de templates com injeção de dados:
 
-#### `src/style.css`
-Arquivo CSS extenso (1900+ linhas) que implementa toda a funcionalidade:
+- **Dados JSON** (`src/data/`):
+  - `profile.json`: Informações pessoais e biografia
+  - `experience.json`: Experiências profissionais
+  - `skills.json`: Habilidades técnicas organizadas por categoria
+  - `contact.json`: Links de contato e redes sociais
+  - `meta.json`: Meta tags para SEO e redes sociais
+  - `pages.json`: Configuração de páginas (habilitar/desabilitar seções)
 
+- **Sintaxe de Templates**:
+  - `{{variavel}}`: Placeholder simples
+  - `{{#each array}}...{{/each}}`: Loops
+  - `{{#if condicao}}...{{/if}}`: Condicionais
+  - Acesso aninhado: `{{profile.name}}`, `{{contact.linkedin.url}}`
+
+#### `src/css/` - CSS Modular
+
+O CSS está organizado em módulos separados:
+
+- **`main.css`**: Arquivo principal que importa todos os módulos via `@import`
+- **`critical.css`**: CSS crítico (above the fold) injetado inline no `<head>`
+- **`variables.css`**: Variáveis CSS para temas (dark/light)
+- **`reset.css`**: Reset CSS e normalização
+- **`layout.css`**: Layout principal (grid, flexbox)
+- **`navigation.css`**: Barra lateral de navegação
+- **`explorer.css`**: Explorer de arquivos
+- **`extensions.css`**: Extensões/Formação acadêmica
+- **`editor.css`**: Editor de código e abas
+- **`syntax-highlight.css`**: Syntax highlighting (cores VSCode)
+- **`terminal.css`**: Terminal (wrapper)
+- **`terminal/*.css`**: Módulos CSS do terminal (6 arquivos)
+- **`utilities.css`**: Classes utilitárias
+- **`icons.css`**: Estilos de ícones
+- **`editor-ui-wrapper.css`**: Wrapper do editor
+
+**Características do CSS**:
 - **Variáveis CSS** para temas (claro/escuro)
 - **Seletores avançados** (`:has()`, `:checked`, pseudo-classes)
 - **Sistema de navegação** baseado em radio buttons e checkboxes
 - **Animações e transições** suaves
 - **Layout responsivo** com media queries
-- **Estilos para todos os componentes** (explorer, editor, terminal, etc.)
+- **Consolidação automática**: Build resolve todos os `@import` em um único arquivo
 
-### 2. **Backend - Spring Boot Application**
+### 2. **Sistema de Build Otimizado**
+
+#### `build.js` - Script de Build Node.js
+
+O script de build realiza várias otimizações:
+
+1. **Montagem de Templates**:
+   - Lê `src/index.html` com placeholders
+   - Carrega dados JSON de `src/data/`
+   - Processa templates com injeção de dados
+   - Gera `dist/index.html` final
+
+2. **Consolidação de CSS**:
+   - Resolve todos os `@import` em `main.css`
+   - Gera `main.css` consolidado (sem dependências)
+   - Minifica CSS usando CleanCSS
+   - Gera versão com hash para cache: `main.{hash}.min.css`
+
+3. **Otimização de JavaScript**:
+   - Minifica todos os arquivos JS usando Terser
+   - Gera versões com hash: `*.{hash}.min.js`
+   - Cria bundle não essencial: `non-essential-bundle.{hash}.min.js`
+   - Scripts essenciais carregam com `defer`
+   - Bundle não essencial carrega após FCP (First Contentful Paint)
+
+4. **CSS Crítico Inline**:
+   - Injeta `critical.css` minificado inline no `<head>`
+   - Melhora First Contentful Paint (FCP)
+
+5. **Minificação de HTML**:
+   - Minifica HTML usando html-minifier-terser
+   - Remove comentários e espaços desnecessários
+
+6. **Otimização de Assets**:
+   - Copia assets (imagens, favicons)
+   - Executa script de otimização de imagens (se disponível)
+   - Copia arquivos de configuração (robots.txt, sitemap.xml, _headers)
+
+**Funcionalidades do Build**:
+- ✅ Consolidação automática de CSS (`@import` resolvidos)
+- ✅ Minificação agressiva (CSS, JS, HTML)
+- ✅ Versionamento com hash (cache busting)
+- ✅ Bundle de scripts não essenciais
+- ✅ CSS crítico inline
+- ✅ Tree-shaking CSS (PurgeCSS, opcional)
+- ✅ Suporte a templates com loops e condicionais
+
+### 3. **Backend - Spring Boot Application**
 
 #### `src/main/java/com/delucena/dev/Application.java`
 Aplicação Spring Boot básica:
@@ -133,36 +303,30 @@ public class Application {
 **Status**: Aplicação mínima, sem controllers ou lógica de negócio implementada.
 
 #### Arquivos de Configuração
-- `application.properties`: Vazio
-- `application.yml`: Vazio
+- `application.properties`: Configurações Spring
+- `application.yml`: Configurações Spring YAML
 
-**Nota**: As configurações Spring Boot não estão definidas, indicando que o backend ainda não está totalmente implementado.
-
-### 3. **Arquivos Estáticos HTML**
-
-Localizados em `src/main/resources/static/`:
-
-- **index.html**: Página inicial simples
-- **contact.html**: Página de contato simples
-- **experience.html**: Página de experiência simples
-- **skills.html**: Página de habilidades simples
-
-**Status**: Arquivos básicos com estrutura mínima. O conteúdo principal está no `src/index.html` (portfólio delucena.dev).
+**Nota**: O backend Spring Boot está presente na estrutura, mas o portfólio principal é estático e não depende dele. Os arquivos em `src/main/resources/static/` são básicos e não são usados pelo portfólio principal.
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
 ### Frontend
-- **HTML5**: Estrutura semântica
-- **CSS3**: 
+- **HTML5**: Estrutura semântica com templates modulares
+- **CSS3 Modular**: 
   - Variáveis CSS (Custom Properties)
-  - Seletores `:has()`
+  - Seletores `:has()` (parent selector)
   - Pseudo-classes (`:checked`, `:hover`, etc.)
   - Flexbox e Grid
   - Media Queries
   - Transições e animações
-- **JavaScript** (mínimo): Apenas para simulação de terminal e output
+  - CSS crítico inline
+- **JavaScript ES6+ Modular**: 
+  - Módulos IIFE (Immediately Invoked Function Expression)
+  - Scripts essenciais (theme, navigation, editor-tabs)
+  - Scripts não essenciais (terminal, syntax highlight) em bundle
+  - Carregamento otimizado (defer, requestIdleCallback)
 - **Bootstrap 5.3.2** (CDN): Utilitários opcionais
 - **Font Awesome 6.5.1** (CDN): Ícones
 
@@ -172,8 +336,15 @@ Localizados em `src/main/resources/static/`:
 - **Maven**: Gerenciador de dependências (implícito pela estrutura)
 
 ### Ferramentas de Build
-- **Node.js**: Para script `build.js`
-- **Bash**: Para script `build.sh`
+- **Node.js**: Script `build.js` com otimizações avançadas
+- **Bash**: Script `build.sh` (alternativo simples)
+- **Bibliotecas NPM**:
+  - `html-minifier-terser`: Minificação de HTML
+  - `terser`: Minificação de JavaScript
+  - `clean-css`: Minificação de CSS
+  - `purgecss`: Tree-shaking de CSS (opcional)
+  - `sharp`: Otimização de imagens
+  - `glob`: Busca de arquivos
 
 ---
 
@@ -269,25 +440,29 @@ Spring Boot Application
 
 ## 🔨 Scripts de Build
 
-### 1. **build.js** (Node.js)
+### 1. **build.js** (Node.js) - Build Otimizado
 
-```javascript
-// Copia arquivos de src/ para dist/
-// - index.html
-// - style.css
-```
+O script `build.js` realiza um build completo e otimizado:
+
+**Funcionalidades**:
+- ✅ Monta `index.html` a partir de templates modulares
+- ✅ Injeta dados JSON nos templates
+- ✅ Consolida CSS (resolve todos os `@import`)
+- ✅ Minifica CSS, JS e HTML
+- ✅ Gera versões com hash para cache busting
+- ✅ Cria bundle de scripts não essenciais
+- ✅ Injeta CSS crítico inline no `<head>`
+- ✅ Otimiza imagens (se script disponível)
+- ✅ Copia assets e arquivos de configuração
 
 **Uso**:
 ```bash
 npm run build
 ```
 
-### 2. **build.sh** (Bash)
+### 2. **build.sh** (Bash) - Build Alternativo
 
-```bash
-# Cria diretório dist/
-# Copia arquivos de src/ para dist/
-```
+Script shell simplificado (cópia básica de arquivos).
 
 **Uso**:
 ```bash
@@ -295,15 +470,55 @@ chmod +x build.sh
 ./build.sh
 ```
 
+**Nota**: Recomendado usar `npm run build` para obter todas as otimizações.
+
 ### Scripts NPM Disponíveis
 
 ```json
 {
-  "build": "node build.js",      // Gera pasta dist
-  "clean": "rm -rf dist",        // Remove pasta dist
-  "preview": "npm run build && open dist/index.html"  // Build e abre no navegador (macOS)
+  "build": "node build.js",                    // Build completo otimizado
+  "clean": "rm -rf dist",                      // Remove pasta dist
+  "rebuild": "npm run clean && npm run build", // Limpa e reconstrói
+  "preview": "npm run rebuild && open dist/index.html", // Build e abre (macOS)
+  "serve": "npm run build && python3 -m http.server 8000 --directory dist", // Build e servidor local
+  "dev": "npm run build && python3 -m http.server 8000 --directory dist"    // Alias para serve
 }
 ```
+
+### Processo de Build Detalhado
+
+1. **Processamento de CSS**:
+   - Copia arquivos CSS para `dist/css/`
+   - Consolida `main.css` (resolve `@import`)
+   - Minifica com CleanCSS
+   - Gera `main.{hash}.min.css` com hash SHA-256
+
+2. **Processamento de JavaScript**:
+   - Minifica todos os arquivos JS com Terser
+   - Gera versões com hash: `*.{hash}.min.js`
+   - Cria bundle não essencial com scripts:
+     - `code-highlighter.js`
+     - `code-copy.js`
+     - `preview-toggle.js`
+     - `explorer-*.js`
+     - `terminal-*.js`
+     - `output.js`
+   - Bundle carrega após FCP usando `requestIdleCallback`
+
+3. **Montagem de HTML**:
+   - Carrega dados JSON de `src/data/`
+   - Processa templates com injeção de dados
+   - Injeta CSS crítico inline no `<head>`
+   - Substitui referências por versões com hash
+   - Remove scripts não essenciais (serão carregados via bundle)
+   - Minifica HTML final
+
+4. **Otimizações de Performance**:
+   - CSS crítico inline (melhora FCP)
+   - Scripts essenciais com `defer`
+   - Bundle não essencial carrega após FCP
+   - Versionamento com hash (cache busting)
+   - Preload de CSS principal
 
 ---
 
@@ -318,22 +533,31 @@ chmod +x build.sh
 
 ### Opção 1: Visualizar Portfólio (Frontend)
 
-#### Método A: Usar arquivos diretamente
+#### Método A: Build e Servidor Local (Recomendado)
 ```bash
-# Abrir diretamente no navegador
-open src/index.html
-```
+# Instalar dependências (primeira vez)
+npm install
 
-#### Método B: Usar build
-```bash
-# Gerar build
+# Build e servidor local
+npm run serve
+
+# Ou apenas build
 npm run build
-
-# Abrir no navegador
-open dist/index.html
+cd dist && python3 -m http.server 8000
 ```
 
-#### Método C: Servidor local (recomendado)
+Acesse: `http://localhost:8000`
+
+**Nota**: O build é necessário porque o HTML é montado a partir de templates e os dados são injetados dos arquivos JSON.
+
+#### Método B: Build e Preview (macOS)
+```bash
+npm run preview
+```
+
+Abre automaticamente no navegador após o build.
+
+#### Método C: Servidor Local Alternativo
 ```bash
 # Python 3
 cd dist && python3 -m http.server 8000
@@ -345,7 +569,7 @@ npx http-server dist -p 8000
 cd dist && php -S localhost:8000
 ```
 
-Acesse: `http://localhost:8000`
+**⚠️ Importante**: Não abra `src/index.html` diretamente no navegador. O arquivo contém placeholders de templates que precisam ser processados pelo build. Use sempre os arquivos em `dist/` após executar `npm run build`.
 
 ### Opção 2: Executar Spring Boot (Backend)
 
@@ -513,22 +737,47 @@ Edite as variáveis CSS em `src/style.css`:
 
 ### Modificar Conteúdo do Portfólio
 
-Edite as seções dentro de `<div contenteditable class="editor">` em `src/index.html`:
+O conteúdo do portfólio é gerenciado através de **dados JSON** e **templates**:
 
-- `#_index_`: Apresentação
-- `#_experience_`: Experiências
-- `#_skills_`: Habilidades
-- `#_contact_`: Contatos
-- `#_readme_`: README
+#### Editar Dados (Recomendado)
+
+Edite os arquivos JSON em `src/data/`:
+
+- **`profile.json`**: Nome, biografia, imagem de perfil
+- **`experience.json`**: Experiências profissionais
+- **`skills.json`**: Habilidades técnicas por categoria
+- **`contact.json`**: Links de contato e redes sociais
+- **`meta.json`**: Meta tags para SEO
+- **`pages.json`**: Habilitar/desabilitar seções
+
+Após editar, execute `npm run build` para aplicar as mudanças.
+
+#### Editar Templates HTML
+
+Se precisar modificar a estrutura HTML, edite os templates em `src/templates/`:
+
+- **`sections/*.html`**: Estrutura HTML das seções
+- **`navigation.html`**: Barra lateral
+- **`terminal/*.html`**: Terminal e abas
+- **`footer.html`**: Rodapé
+
+**Sintaxe de Templates**:
+- `{{variavel}}`: Placeholder simples
+- `{{#each array}}...{{/each}}`: Loops
+- `{{#if condicao}}...{{/if}}`: Condicionais
+- Acesso aninhado: `{{profile.name}}`, `{{contact.linkedin.url}}`
+
+Consulte `src/data/README.md` para documentação completa dos dados.
 
 ---
 
 ## 🐛 Problemas Conhecidos
 
-1. **Navegadores antigos**: Podem não suportar o seletor `:has()`
-2. **Edição limitada**: O conteúdo é editável, mas não persiste (apenas visual)
+1. **Navegadores antigos**: Podem não suportar o seletor `:has()` (requer Chrome 105+, Firefox 121+, Safari 15.4+)
+2. **Build necessário**: Não é possível abrir `src/index.html` diretamente (contém placeholders de templates)
 3. **Backend não implementado**: A aplicação Spring Boot está básica, sem funcionalidades
-4. **Arquivos estáticos**: Os HTMLs em `static/` são básicos e não são usados pelo portfólio principal
+4. **Arquivos estáticos Spring**: Os HTMLs em `src/main/resources/static/` são básicos e não são usados pelo portfólio principal
+5. **Dependências NPM**: Algumas otimizações requerem `npm install` (minificação, tree-shaking)
 
 ---
 

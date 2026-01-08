@@ -56,7 +56,9 @@
   font-family: var(--font-family-mono);
   font-size: 0.875rem; /* Fonte reduzida para melhor legibilidade */
   line-height: 1.2;
-  white-space: pre;
+  white-space: pre-wrap; /* Permite quebra de linha automática mantendo formatação */
+  word-wrap: break-word; /* Quebra palavras longas se necessário */
+  overflow-wrap: break-word; /* Garante quebra de palavras */
   padding: var(--spacing-md) var(--spacing-xl);
   padding-bottom: 2.5rem !important; /* Espaço extra no final para última linha ser totalmente visível */
   overflow-y: auto !important;
@@ -66,6 +68,7 @@
   background-color: var(--color-bg-accent);
   order: 2;
   width: 100% !important;
+  max-width: 100% !important; /* Garante que não ultrapasse a largura */
   box-sizing: border-box;
   /* Força scroll a funcionar */
   height: 0;
@@ -75,6 +78,8 @@
   /* Garante que o conteúdo final seja visível */
   scroll-padding-bottom: calc(var(--spacing-xl) * 2);
   scroll-margin-bottom: calc(var(--spacing-xl) * 1.5);
+  /* Previne perda de conteúdo */
+  min-width: 0 !important; /* Permite que o flexbox encolha corretamente */
 }
 
 .terminal .terminal-output-line {
@@ -107,4 +112,59 @@ body:has(#theme:checked) .terminal .terminal-output-scrollable::-webkit-scrollba
 
 body:has(#theme:checked) .terminal .terminal-output-scrollable::-webkit-scrollbar-thumb:hover {
   background: #909090;
+}
+
+/* Placeholder para prevenir CLS durante carregamento */
+.terminal .output-placeholder {
+  display: block;
+  min-height: 60px;
+  padding: var(--spacing-md) 0;
+}
+
+.terminal .output-placeholder-line {
+  display: block;
+  height: 12px;
+  background-color: var(--color-bg-secondary);
+  border-radius: 2px;
+  margin-bottom: var(--spacing-sm);
+  width: 100%;
+  max-width: 100%;
+  opacity: 0.3;
+}
+
+.terminal .output-placeholder-line:nth-child(1) {
+  width: 85%;
+}
+
+.terminal .output-placeholder-line:nth-child(2) {
+  width: 70%;
+}
+
+.terminal .output-placeholder-line:nth-child(3) {
+  width: 90%;
+}
+
+/* Esconde placeholder quando conteúdo é carregado */
+.terminal #outputContent:not(:empty) .output-placeholder {
+  display: none;
+}
+
+/* Garante que o conteúdo do output não seja cortado ou perdido */
+.terminal #outputContent {
+  /* Previne perda de conteúdo */
+  contain: layout style paint;
+  /* Garante que o texto seja sempre visível */
+  text-overflow: ellipsis;
+  /* Mantém o conteúdo dentro dos limites */
+  min-width: 0;
+  /* Garante que o scroll funcione corretamente */
+  will-change: scroll-position;
+}
+
+/* Garante que linhas longas sejam quebradas corretamente */
+.terminal #outputContent::before,
+.terminal #outputContent::after {
+  content: '';
+  display: table;
+  clear: both;
 }

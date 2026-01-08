@@ -223,6 +223,135 @@
     });
   }
 
+  /**
+   * Obtém todas as páginas habilitadas na ordem correta
+   */
+  function getEnabledPages() {
+    const pageOrder = ['readme', 'index', 'experience', 'skills', 'contact'];
+    const enabledPages = [];
+    
+    pageOrder.forEach(pageId => {
+      const radio = document.getElementById(pageId);
+      if (radio && radio.closest('.editor-tab')) {
+        // Verifica se a página está habilitada (existe no DOM)
+        enabledPages.push(pageId);
+      }
+    });
+    
+    return enabledPages;
+  }
+
+  /**
+   * Obtém a página atualmente ativa
+   */
+  function getCurrentPage() {
+    const radios = document.querySelectorAll('input[type="radio"][name="openedFile"]:checked');
+    if (radios.length > 0) {
+      return radios[0].id;
+    }
+    return null;
+  }
+
+  /**
+   * Navega para uma página específica
+   */
+  function navigateToPage(pageId) {
+    const radio = document.getElementById(pageId);
+    if (radio) {
+      radio.checked = true;
+      // Dispara o evento change para que outros listeners sejam notificados
+      radio.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  }
+
+  /**
+   * Atualiza o estado dos botões de navegação (disabled/enabled)
+   */
+  function updateNavigationButtons() {
+    const prevBtn = document.getElementById('prev-page-btn');
+    const nextBtn = document.getElementById('next-page-btn');
+    
+    if (!prevBtn || !nextBtn) return;
+    
+    const enabledPages = getEnabledPages();
+    const currentPage = getCurrentPage();
+    
+    if (!currentPage || enabledPages.length === 0) {
+      prevBtn.disabled = true;
+      nextBtn.disabled = true;
+      return;
+    }
+    
+    const currentIndex = enabledPages.indexOf(currentPage);
+    
+    // Desabilita botão anterior se estiver na primeira página
+    prevBtn.disabled = currentIndex <= 0;
+    
+    // Desabilita botão próximo se estiver na última página
+    nextBtn.disabled = currentIndex >= enabledPages.length - 1;
+  }
+
+  /**
+   * Inicializa a navegação de páginas
+   */
+  function initPageNavigation() {
+    const prevBtn = document.getElementById('prev-page-btn');
+    const nextBtn = document.getElementById('next-page-btn');
+    
+    if (!prevBtn || !nextBtn) return;
+    
+    // Navegação para página anterior
+    prevBtn.addEventListener('click', () => {
+      const enabledPages = getEnabledPages();
+      const currentPage = getCurrentPage();
+      
+      if (!currentPage) return;
+      
+      const currentIndex = enabledPages.indexOf(currentPage);
+      if (currentIndex > 0) {
+        const prevPageId = enabledPages[currentIndex - 1];
+        navigateToPage(prevPageId);
+      }
+    });
+    
+    // Navegação para próxima página
+    nextBtn.addEventListener('click', () => {
+      const enabledPages = getEnabledPages();
+      const currentPage = getCurrentPage();
+      
+      if (!currentPage) return;
+      
+      const currentIndex = enabledPages.indexOf(currentPage);
+      if (currentIndex < enabledPages.length - 1) {
+        const nextPageId = enabledPages[currentIndex + 1];
+        navigateToPage(nextPageId);
+      }
+    });
+    
+    // Observa mudanças nas páginas para atualizar o estado dos botões
+    const fileRadios = document.querySelectorAll('input[type="radio"][name="openedFile"]');
+    fileRadios.forEach(radio => {
+      radio.addEventListener('change', () => {
+        // Pequeno delay para garantir que o DOM foi atualizado
+        setTimeout(updateNavigationButtons, 50);
+      });
+    });
+    
+    // Atualiza o estado inicial dos botões após um pequeno delay
+    // para garantir que todos os elementos estejam prontos
+    setTimeout(updateNavigationButtons, 100);
+    
+    // Também observa mudanças no DOM caso as páginas sejam carregadas dinamicamente
+    const observer = new MutationObserver(() => {
+      updateNavigationButtons();
+    });
+    
+    const headerElement = document.getElementById('header');
+    if (headerElement) {
+      observer.observe(headerElement, { childList: true, subtree: true });
+    }
+  }
+
   function init() {
     getElements();
     initDesktopMenuToggle();
@@ -231,6 +360,7 @@
     initCloseMenusOnClickOutside();
     initMobileMenuState();
     initMobileMenuClose();
+    initPageNavigation();
   }
 
   if (document.readyState === 'loading') {

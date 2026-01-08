@@ -1,0 +1,266 @@
+/* ============================================
+   SISTEMA ISOLADO DE ÍCONES
+   Apenas elementos com .icon são afetados
+   Nenhum SVG herda font-size global
+   ============================================ */
+
+/* 
+ * REGRA FUNDAMENTAL: Apenas elementos com .icon são afetados
+ * SVGs fora de .icon não são afetados por estas regras
+ */
+
+/* Classe base para ícones - tamanho padrão (16px) */
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  min-height: 16px;
+  max-width: 16px;
+  max-height: 16px;
+  vertical-align: middle;
+  line-height: 1;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  /* CRÍTICO: Não herdar font-size do pai */
+  font-size: 16px;
+}
+
+/* SVG dentro de .icon - tamanho fixo */
+.icon svg {
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  min-height: 16px !important;
+  max-width: 16px !important;
+  max-height: 16px !important;
+  display: block;
+  fill: currentColor;
+  stroke: currentColor;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  /* CRÍTICO: Não herdar font-size */
+  font-size: 16px !important;
+}
+
+/* SVG diretamente com classe .icon */
+svg.icon {
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  min-height: 16px !important;
+  max-width: 16px !important;
+  max-height: 16px !important;
+  display: inline-flex;
+  vertical-align: middle;
+  fill: currentColor;
+  stroke: currentColor;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  font-size: 16px !important;
+}
+
+/* Tamanho pequeno - 16px (padrão, mas explícito) */
+.icon--sm {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  min-height: 16px;
+  max-width: 16px;
+  max-height: 16px;
+  font-size: 16px;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.icon--sm svg {
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  min-height: 16px !important;
+  max-width: 16px !important;
+  max-height: 16px !important;
+  font-size: 16px !important;
+}
+
+svg.icon--sm {
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  min-height: 16px !important;
+  max-width: 16px !important;
+  max-height: 16px !important;
+  font-size: 16px !important;
+}
+
+/* Tamanho médio - 20px (para botões, menu lateral) */
+.icon--md {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
+  max-width: 20px;
+  max-height: 20px;
+  font-size: 20px;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.icon--md svg {
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
+  max-width: 20px !important;
+  max-height: 20px !important;
+  font-size: 20px !important;
+}
+
+svg.icon--md {
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
+  max-width: 20px !important;
+  max-height: 20px !important;
+  font-size: 20px !important;
+}
+
+/* Tamanho grande - 24px (para headers, ícones de contato) */
+.icon--lg {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  max-width: 24px;
+  max-height: 24px;
+  font-size: 24px;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.icon--lg svg {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
+  max-width: 24px !important;
+  max-height: 24px !important;
+  font-size: 24px !important;
+}
+
+svg.icon--lg {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
+  max-width: 24px !important;
+  max-height: 24px !important;
+  font-size: 24px !important;
+}
+
+/* Alinhamento vertical consistente */
+.icon,
+.icon--sm,
+.icon--md,
+.icon--lg {
+  vertical-align: middle;
+  line-height: 1;
+}
+
+/* Garantir que ícones em flex containers se comportem corretamente */
+.icon,
+.icon--sm,
+.icon--md,
+.icon--lg {
+  align-self: center;
+}
+
+/* Compatibilidade mobile - garantir que tamanhos sejam respeitados */
+@media (max-width: 768px) {
+  .icon {
+    width: 16px !important;
+    height: 16px !important;
+    min-width: 16px !important;
+    min-height: 16px !important;
+    max-width: 16px !important;
+    max-height: 16px !important;
+    font-size: 16px !important;
+  }
+  
+  .icon svg,
+  svg.icon {
+    width: 16px !important;
+    height: 16px !important;
+    min-width: 16px !important;
+    min-height: 16px !important;
+    max-width: 16px !important;
+    max-height: 16px !important;
+    font-size: 16px !important;
+  }
+  
+  .icon--sm {
+    width: 16px !important;
+    height: 16px !important;
+    min-width: 16px !important;
+    min-height: 16px !important;
+    max-width: 16px !important;
+    max-height: 16px !important;
+    font-size: 16px !important;
+  }
+  
+  .icon--sm svg,
+  svg.icon--sm {
+    width: 16px !important;
+    height: 16px !important;
+    min-width: 16px !important;
+    min-height: 16px !important;
+    max-width: 16px !important;
+    max-height: 16px !important;
+    font-size: 16px !important;
+  }
+  
+  .icon--md {
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
+    max-width: 20px !important;
+    max-height: 20px !important;
+    font-size: 20px !important;
+  }
+  
+  .icon--md svg,
+  svg.icon--md {
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
+    max-width: 20px !important;
+    max-height: 20px !important;
+    font-size: 20px !important;
+  }
+  
+  .icon--lg {
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+    min-height: 24px !important;
+    max-width: 24px !important;
+    max-height: 24px !important;
+    font-size: 24px !important;
+  }
+  
+  .icon--lg svg,
+  svg.icon--lg {
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+    min-height: 24px !important;
+    max-width: 24px !important;
+    max-height: 24px !important;
+    font-size: 24px !important;
+  }
+}

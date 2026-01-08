@@ -9,30 +9,68 @@
   max-width: var(--width-navigation);
   border: 1px solid var(--color-border-primary);
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: auto; /* Scroll próprio da sidebar - estilo VS Code */
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start; /* Mudado de space-between para flex-start */
   margin-left: calc(-1 * var(--width-navigation));
   opacity: 0;
   pointer-events: none;
   position: relative;
   z-index: 1;
   transition: margin var(--transition-normal), opacity var(--transition-normal);
-  height: calc(100dvh - var(--height-footer));
-  min-height: calc(100dvh - var(--height-footer));
-  max-height: calc(100dvh - var(--height-footer));
+  height: 100%; /* Usa altura do container pai (#navigation) ao invés de viewport fixa */
+  min-height: 0; /* Permite que flex funcione corretamente */
+  max-height: 100%;
   /* Permitir resize dinâmico */
   resize: none; /* Desabilita resize padrão do navegador */
+  /* Scroll suave apenas na sidebar */
+  scroll-behavior: smooth;
 }
 
 .extensions > div:first-child {
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: visible; /* Removido auto - scroll fica no .extensions */
   flex: 1;
   min-width: 0;
   min-height: 0;
-  height: auto;
+  height: auto; /* Permite que conteúdo cresça verticalmente */
+  /* Scroll suave apenas na sidebar */
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar do extensions - mesmo estilo do explorer */
+.extensions::-webkit-scrollbar,
+.extensions > div:first-child::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.extensions::-webkit-scrollbar-track,
+.extensions > div:first-child::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+
+.extensions::-webkit-scrollbar-thumb,
+.extensions > div:first-child::-webkit-scrollbar-thumb {
+  background: var(--color-border-primary);
+  border-radius: 4px;
+}
+
+.extensions::-webkit-scrollbar-thumb:hover,
+.extensions > div:first-child::-webkit-scrollbar-thumb:hover {
+  background: #4a4a4a;
+}
+
+/* Scrollbar para tema light */
+body:has(#theme:checked) .extensions::-webkit-scrollbar-thumb,
+body:has(#theme:checked) .extensions > div:first-child::-webkit-scrollbar-thumb {
+  background: #b0b0b0;
+}
+
+body:has(#theme:checked) .extensions::-webkit-scrollbar-thumb:hover,
+body:has(#theme:checked) .extensions > div:first-child::-webkit-scrollbar-thumb:hover {
+  background: #909090;
 }
 
 .extensions .title {
@@ -63,25 +101,15 @@
   background-color: var(--color-bg-primary);
 }
 
+/* Extension icon usa sistema padronizado .icon */
 .extensions .extension-item .extension-icon {
-  font-size: 16px;
   color: var(--color-icon-file);
-  width: 20px;
-  min-width: 20px;
-  text-align: center;
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   margin-top: 2px;
 }
 
 .extensions .extension-item .extension-icon svg {
-  width: 18px;
-  height: 18px;
   color: var(--color-icon-file);
   stroke: var(--color-icon-file);
-  flex-shrink: 0;
 }
 
 .extensions .extension-item:hover .extension-icon svg {

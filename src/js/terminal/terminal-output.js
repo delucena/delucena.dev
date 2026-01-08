@@ -151,17 +151,76 @@ Compilation successful.`,
       throw new Error('Elemento inválido para observer');
     }
     
+    let scrollTimeout;
+    
     return new MutationObserver((mutations) => {
       try {
-        if (mutations.some(m => m.addedNodes.length > 0)) {
-          requestAnimationFrame(() => {
-            element.scrollTop = element.scrollHeight;
-          });
+        // Detecta qualquer mudança no conteúdo (nós adicionados, texto alterado, etc)
+        const hasChanges = mutations.some(m => 
+          m.addedNodes.length > 0 || 
+          m.removedNodes.length > 0 || 
+          (m.type === 'characterData' && m.target.textContent.trim())
+        );
+        
+        if (hasChanges) {
+          // Usa debounce para evitar múltiplos scrolls
+          clearTimeout(scrollTimeout);
+          scrollTimeout = setTimeout(() => {
+            requestAnimationFrame(() => {
+              if (element && element.isConnected) {
+                element.scrollTop = element.scrollHeight;
+              }
+            });
+          }, 10);
         }
       } catch (error) {
         console.error('Erro no scroll observer:', error);
       }
     });
+  }
+
+  /**
+   * Mantém o scroll no final do output
+   * @param {HTMLElement} outputContent - Elemento de output
+   */
+  function maintainScrollAtBottom(outputContent) {
+    if (!outputContent) return;
+    
+    // Função para garantir scroll no final
+    const scrollToBottom = () => {
+      if (outputContent) {
+        requestAnimationFrame(() => {
+          if (outputContent) {
+            outputContent.scrollTop = outputContent.scrollHeight;
+          }
+        });
+      }
+    };
+    
+    // Listener para resize - mantém scroll no final quando terminal é redimensionado
+    let resizeTimeout;
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        scrollToBottom();
+      }, 100);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    
+    // Observer para mudanças no conteúdo - mantém scroll no final
+    const scrollObserver = createScrollObserver(outputContent);
+    scrollObserver.observe(outputContent, {
+      childList: true,
+      subtree: true,
+      characterData: true
+    });
+    
+    // Retorna função de limpeza
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      scrollObserver.disconnect();
+    };
   }
 
   /**
@@ -171,19 +230,25 @@ Compilation successful.`,
    */
   function printOutputGradually(text, outputContent) {
     if (!outputContent) {
-      console.warn('Elemento outputContent não encontrado');
       return;
+    }
+    
+    // Remover placeholder se existir
+    const placeholder = outputContent.querySelector('.output-placeholder');
+    if (placeholder) {
+      placeholder.remove();
     }
     
     // Limpar conteúdo anterior
     outputContent.innerHTML = '';
     
-    // Criar observer para scroll automático
-    const scrollObserver = createScrollObserver(outputContent);
-    scrollObserver.observe(outputContent, {
-      childList: true,
-      subtree: true
-    });
+    // Iniciar manutenção de scroll (mantém ativo mesmo após impressão)
+    const cleanupScroll = maintainScrollAtBottom(outputContent);
+    
+    // Armazenar cleanup para uso futuro se necessário
+    if (!outputContent._scrollCleanup) {
+      outputContent._scrollCleanup = cleanupScroll;
+    }
     
     // Dividir o texto em linhas
     const lines = text.split('\n');
@@ -208,7 +273,7 @@ Compilation successful.`,
         currentLine++;
         
         // Scroll automático - garante que chegue até o final
-        setTimeout(() => {
+        requestAnimationFrame(() => {
           if (outputContent) {
             outputContent.scrollTop = outputContent.scrollHeight;
             // Força scroll até o final para garantir que todo conteúdo seja visível
@@ -218,11 +283,18 @@ Compilation successful.`,
               }
             });
           }
-        }, 0);
+        });
         
         // Velocidade variável: algumas linhas mais rápidas, outras mais lentas
         const delay = Math.random() * 50 + 20; // Entre 20ms e 70ms
         setTimeout(printNextLine, delay);
+      } else {
+        // Após terminar a impressão, garante scroll final
+        requestAnimationFrame(() => {
+          if (outputContent) {
+            outputContent.scrollTop = outputContent.scrollHeight;
+          }
+        });
       }
     }
     
@@ -258,7 +330,6 @@ Compilation successful.`,
       const outputSelector = document.querySelector(SELECTORS.outputSelector);
       
       if (!outputRadio) {
-        console.warn('Elemento outputRadio não encontrado');
         return;
       }
 

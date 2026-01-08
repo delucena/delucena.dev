@@ -1,33 +1,114 @@
-<div id="header">
-    <!-- ADD FILE -->
+<div id="header" class="editor-tabs">
   {{#if pages.sections.readme.enabled}}
-  <div>
-    <input type="radio" name="openedFile" id="readme">
-    <label for="readme">README.md(preview)</label>
+  <div class="editor-tab" data-file-id="readme" data-file-name="README.md" data-path="README.md">
+    <input type="radio" name="openedFile" id="readme" class="editor-tab__radio">
+    <label for="readme" class="editor-tab__label">
+      <span class="editor-tab__icon">
+        <svg class="icon icon--sm" width="16" height="16" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true">
+          <use href="#icon-file-markdown"></use>
+        </svg>
+      </span>
+      <span class="editor-tab__name">README.md</span>
+      <button type="button" class="editor-tab__close" aria-label="Fechar README.md" title="Fechar">
+        <svg class="icon icon--sm" width="16" height="16" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true">
+          <use href="#icon-xmark"></use>
+        </svg>
+      </button>
+    </label>
   </div>
   {{/if}}
-    {{#if pages.sections.index.enabled}}
-    <div>
-        <input type="radio" name="openedFile" id="index">
-        <label for="index">index.html(preview)</label>
-    </div>
-    {{/if}}
-    {{#if pages.sections.experience.enabled}}
-    <div>
-        <input type="radio" name="openedFile" id="experience">
-        <label for="experience">experience.html(preview)</label>
-    </div>
-    {{/if}}
-    {{#if pages.sections.skills.enabled}}
-    <div>
-        <input type="radio" name="openedFile" id="skills">
-        <label for="skills">skills.html(preview)</label>
-    </div>
-    {{/if}}
-    {{#if pages.sections.contact.enabled}}
-    <div>
-        <input type="radio" name="openedFile" id="contact">
-        <label for="contact">contact.html(preview)</label>
-    </div>
-    {{/if}}
+  {{#if pages.sections.index.enabled}}
+  <div class="editor-tab" data-file-id="index" data-file-name="index.html" data-path="src/main/resources/index.html">
+    <input type="radio" name="openedFile" id="index" class="editor-tab__radio">
+    <label for="index" class="editor-tab__label">
+      <span class="editor-tab__icon">
+        <svg class="icon icon--sm" width="16" height="16" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true">
+          <use href="#icon-file-html"></use>
+        </svg>
+      </span>
+      <span class="editor-tab__name">index.html</span>
+      <button type="button" class="editor-tab__close" aria-label="Fechar index.html" title="Fechar">
+        <svg class="icon icon--sm" width="16" height="16" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true">
+          <use href="#icon-xmark"></use>
+        </svg>
+      </button>
+    </label>
+  </div>
+  {{/if}}
+  {{#if pages.sections.experience.enabled}}
+  <div class="editor-tab" data-file-id="experience" data-file-name="experience.html" data-path="src/main/resources/experience.html">
+    <input type="radio" name="openedFile" id="experience" class="editor-tab__radio">
+    <label for="experience" class="editor-tab__label">
+      <span class="editor-tab__icon">
+        <svg class="icon icon--sm" width="16" height="16" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true">
+          <use href="#icon-file-html"></use>
+        </svg>
+      </span>
+      <span class="editor-tab__name">experience.html</span>
+      <button type="button" class="editor-tab__close" aria-label="Fechar experience.html" title="Fechar">
+        <svg class="icon icon--sm" width="16" height="16" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true">
+          <use href="#icon-xmark"></use>
+        </svg>
+      </button>
+    </label>
+  </div>
+  {{/if}}
+  {{#if pages.sections.skills.enabled}}
+  <div class="editor-tab" data-file-id="skills" data-file-name="skills.html" data-path="src/main/resources/skills.html">
+    <input type="radio" name="openedFile" id="skills" class="editor-tab__radio">
+    <label for="skills" class="editor-tab__label">
+      <span class="editor-tab__icon">
+        <svg class="icon icon--sm" width="16" height="16" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true">
+          <use href="#icon-file-html"></use>
+        </svg>
+      </span>
+      <span class="editor-tab__name">skills.html</span>
+      <button type="button" class="editor-tab__close" aria-label="Fechar skills.html" title="Fechar">
+        <svg class="icon icon--sm" width="16" height="16" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true">
+          <use href="#icon-xmark"></use>
+        </svg>
+      </button>
+    </label>
+  </div>
+  {{/if}}
+  {{#if pages.sections.contact.enabled}}
+  <div class="editor-tab" data-file-id="contact" data-file-name="contact.html" data-path="src/main/resources/contact.html">
+    <input type="radio" name="openedFile" id="contact" class="editor-tab__radio">
+    <label for="contact" class="editor-tab__label">
+      <span class="editor-tab__icon">
+        <svg class="icon icon--sm" width="16" height="16" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true">
+          <use href="#icon-file-html"></use>
+        </svg>
+      </span>
+      <span class="editor-tab__name">contact.html</span>
+      <button type="button" class="editor-tab__close" aria-label="Fechar contact.html" title="Fechar">
+        <svg class="icon icon--sm" width="16" height="16" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true">
+          <use href="#icon-xmark"></use>
+        </svg>
+      </button>
+    </label>
+  </div>
+  {{/if}}
+</div>
+<!-- Breadcrumb -->
+<div id="editor-breadcrumb" class="editor-breadcrumb" aria-label="Caminho do arquivo">
+  <nav class="editor-breadcrumb__nav">
+    <ol class="editor-breadcrumb__list">
+      <li class="editor-breadcrumb__item">
+        <button type="button" class="editor-breadcrumb__link" data-path="src">src</button>
+      </li>
+      <li class="editor-breadcrumb__separator" aria-hidden="true">›</li>
+      <li class="editor-breadcrumb__item">
+        <button type="button" class="editor-breadcrumb__link" data-path="src/main">main</button>
+      </li>
+      <li class="editor-breadcrumb__separator" aria-hidden="true">›</li>
+      <li class="editor-breadcrumb__item">
+        <button type="button" class="editor-breadcrumb__link" data-path="src/main/resources">resources</button>
+      </li>
+      <li class="editor-breadcrumb__separator" aria-hidden="true">›</li>
+      <li class="editor-breadcrumb__item editor-breadcrumb__item--active">
+        <span class="editor-breadcrumb__current">index.html</span>
+      </li>
+    </ol>
+  </nav>
 </div>

@@ -1,0 +1,600 @@
+/* ============================================
+   CSS CRÍTICO - Above the Fold
+   Reset mínimo, layout principal, header, hero e tipografia inicial
+   ============================================ */
+
+/* Reset Mínimo */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+}
+
+body {
+  font-family: var(--font-family-base);
+  line-height: var(--line-height-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Previne layout shift durante carregamento de fontes */
+  text-rendering: optimizeLegibility;
+}
+
+section,
+div,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+li {
+  padding: 0;
+  margin: 0;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  display: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-border-accent);
+  outline-offset: 2px;
+}
+
+/* Variáveis CSS Essenciais */
+:root {
+  --color-bg-primary: rgb(30, 30, 30);
+  --color-bg-secondary: rgb(37, 37, 38);
+  --color-bg-accent: rgb(30, 30, 30);
+  --color-text-primary: rgb(212, 212, 212);
+  --color-text-secondary: rgb(133, 133, 133);
+  --color-border-primary: rgb(60, 60, 60);
+  --color-border-accent: rgb(0, 122, 204);
+  /* Tipografia: font-family com fallback robusto para evitar layout shift */
+  --font-family-base: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-family-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  /* Line-height base consistente para evitar layout shift */
+  --line-height-base: 1.4;
+  --line-height-tight: 1.2;
+  --line-height-relaxed: 1.6;
+  --font-size-base: 12px;
+  --font-size-small: 10px;
+  --font-size-large: 14px;
+  --font-size-title: 16px;
+  --spacing-xs: 0.2em;
+  --spacing-sm: 0.3em;
+  --spacing-md: 0.5em;
+  --spacing-lg: 0.8em;
+  --spacing-xl: 1rem;
+  --spacing-2xl: 1.5rem;
+  --width-navigation: 340px;
+  --width-menu: 60px;
+  --height-header: 30px;
+  --height-top-header: 35px;
+  --height-footer: 20px;
+  --z-index-menu: 1;
+  --z-index-navigation: 10;
+  --z-index-editor: 1;
+  --transition-fast: 0.2s ease;
+  --transition-normal: 250ms ease-in-out;
+}
+
+/* Preparação para fontes customizadas (quando necessário) */
+/* Exemplo de estrutura para @font-face com font-display: swap */
+/*
+@font-face {
+  font-family: 'CustomFont';
+  src: url('./fonts/custom-font.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+*/
+
+body:has(#theme:checked) {
+  --color-bg-primary: rgb(250, 250, 250);
+  --color-bg-secondary: rgb(235, 235, 235);
+  --color-bg-accent: rgb(202, 204, 207);
+  --color-text-primary: rgb(44, 44, 44);
+  --color-text-secondary: rgb(111, 111, 111);
+  --color-border-primary: rgb(222, 222, 222);
+  --color-border-accent: rgb(140, 0, 255);
+}
+
+/* Layout Principal - escopo restringido ao conteúdo do site */
+/* Container raiz da UI: .page-root */
+.page-root {
+  background-color: var(--color-bg-primary);
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* APENAS container raiz tem overflow hidden */
+  margin: 0;
+  padding: 0;
+}
+
+.page-root main {
+  border-right: 1px solid var(--color-bg-secondary);
+  display: flex;
+  justify-content: space-between;
+  overflow: visible; /* Removido hidden - permite que explorer tenha scroll próprio */
+  height: 100%;
+  flex: 1;
+  min-height: 0;
+}
+
+main * {
+  height: auto;
+  outline: none;
+}
+
+.page-root #editor {
+  width: 100%;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: var(--z-index-editor);
+}
+
+/* Navigation - Menu Lateral */
+#navigation {
+  display: flex;
+  overflow: visible; /* Permite que explorer tenha scroll próprio */
+  min-width: 0;
+  gap: 0;
+  flex-shrink: 0;
+  position: relative;
+  z-index: var(--z-index-navigation);
+  height: 100%; /* Usa altura do container pai (main) ao invés de viewport fixa */
+  max-height: 100%;
+  min-height: 0; /* Permite que flex funcione corretamente */
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: var(--spacing-md);
+  background-color: var(--color-bg-accent);
+  width: var(--width-menu);
+  min-width: var(--width-menu);
+  z-index: 1000;
+  position: relative;
+  overflow: visible;
+}
+
+.menu i {
+  color: var(--color-text-secondary);
+  display: block;
+  font-size: 22px;
+  cursor: pointer;
+  padding-block: var(--spacing-md);
+  line-height: 1;
+}
+
+.menu label[for="menu"] {
+  color: var(--color-text-secondary) !important;
+  display: block;
+  font-size: 22px;
+  cursor: pointer;
+  padding-block: var(--spacing-md);
+  width: 100%;
+  text-align: center;
+}
+
+.menu label[for="menu"]:hover {
+  color: var(--color-text-primary) !important;
+}
+
+.menu label[for="explorerView"] {
+  display: block;
+  padding-block: var(--spacing-md);
+  text-align: center;
+}
+
+.menu label[for="explorerView"] i {
+  color: var(--color-text-secondary);
+}
+
+.menu label[for="explorerView"]:hover i {
+  color: var(--color-text-primary);
+}
+
+.menu a {
+  color: var(--color-text-secondary);
+  display: block;
+  font-size: 22px;
+  cursor: pointer;
+  padding-block: var(--spacing-md);
+  text-decoration: none;
+  width: 100%;
+  text-align: center;
+}
+
+.menu a:hover {
+  color: var(--color-text-primary);
+}
+
+/* Header com Abas - Estilos movidos para editor.css */
+
+/* Editor Container */
+.editorContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  order: 1;
+}
+
+.editorContainer .editor {
+  display: flex;
+  flex-flow: column;
+  flex: 1;
+  min-height: 0;
+  order: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+#editor .editor {
+  cursor: text;
+}
+
+#editor .editor section {
+  display: none;
+  color: var(--color-text-secondary);
+  padding: 1.5rem 4rem var(--spacing-md) var(--spacing-xl);
+  font-size: var(--font-size-large);
+  overflow-x: hidden;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+#header:has(div #index:checked) ~ .editor .index {
+  display: block !important;
+}
+
+/* Tipografia Inicial - Hero/Index Section */
+#editor .editor .index h1 {
+  color: var(--color-text-primary);
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+#editor .editor .index h2 {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-large);
+  font-weight: 400;
+  margin-bottom: var(--spacing-md);
+}
+
+#editor .editor .index p,
+#editor .editor .index {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-large);
+  line-height: var(--line-height-relaxed);
+}
+
+/* Proteção adicional para ícones em todo o documento */
+/* Evita que ícones herdem line-height problemático que causa layout shift */
+i:not([class]),
+svg.icon,
+.icon,
+[class*="icon"] {
+  line-height: 1;
+  vertical-align: middle;
+}
+
+/* SVG inline usado como ícone não deve herdar line-height */
+svg.icon,
+.icon svg {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+/* Skip Link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  padding: 8px;
+  text-decoration: none;
+  z-index: 100;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ============================================
+   TOP HEADER - Barra Superior Estilo VS Code
+   ============================================ */
+.top-header {
+  height: var(--height-top-header);
+  background-color: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--spacing-md);
+  z-index: 1000;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.top-header__left {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.top-header__center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.top-header__search {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.top-header__search .top-header__nav-btn {
+  flex-shrink: 0;
+}
+
+.top-header__search-icon {
+  position: absolute;
+  left: calc(56px + var(--spacing-md) + 8px);
+  color: var(--color-text-secondary);
+  pointer-events: none;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.top-header__search-input {
+  flex: 1;
+  min-width: 0;
+  height: 24px;
+  padding: 0 var(--spacing-md) 0 calc(var(--spacing-md) + 26px);
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 2px;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-base);
+  font-family: var(--font-family-base);
+  outline: none;
+  cursor: text;
+  text-align: center;
+}
+
+.top-header__search-input:focus,
+.top-header__search-input:not(:placeholder-shown) {
+  text-align: left;
+}
+
+.top-header__search-input:focus {
+  border-color: var(--color-border-accent);
+  outline: 1px solid var(--color-border-accent);
+  outline-offset: -1px;
+}
+
+.top-header__search-input:focus::placeholder {
+  opacity: 0;
+}
+
+.top-header__search-input::placeholder {
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.top-header__search-input--active {
+  cursor: text;
+}
+
+/* Command Palette - Dropdown estilo VS Code */
+.top-header__command-palette {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-height: 360px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 2px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1001;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity 0.15s ease-out, visibility 0.15s ease-out, transform 0.15s ease-out;
+  pointer-events: none;
+}
+
+.top-header__command-palette--visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Item do Command Palette */
+.top-header__command-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  color: var(--color-text-primary);
+  font-size: 13px;
+  font-family: var(--font-family-base);
+  line-height: 22px;
+  cursor: pointer;
+  transition: background-color 0.1s ease-out;
+  border-bottom: 1px solid transparent;
+  min-height: 22px;
+}
+
+.top-header__command-item:last-child {
+  border-bottom: none;
+}
+
+/* Hover azul sutil estilo VS Code */
+.top-header__command-item:hover,
+.top-header__command-item--selected {
+  background-color: rgba(0, 122, 204, 0.2);
+  color: var(--color-text-primary);
+}
+
+/* Texto do comando */
+.top-header__command-label {
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Container dos atalhos (keycaps) */
+.top-header__command-shortcut {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 16px;
+  flex-shrink: 0;
+}
+
+/* Keycap individual - estilo VS Code */
+.top-header__keycap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 18px;
+  padding: 0 4px;
+  background-color: rgba(128, 128, 128, 0.17);
+  border: 1px solid rgba(128, 128, 128, 0.3);
+  border-radius: 3px;
+  color: var(--color-text-primary);
+  font-size: 11px;
+  font-family: var(--font-family-mono);
+  font-weight: 500;
+  line-height: 1;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Separador entre teclas (ex: ⌘ + P) */
+.top-header__keycap-separator {
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  margin: 0 2px;
+  line-height: 1;
+}
+
+/* Sugestões antigas (mantidas para compatibilidade, mas não usadas) */
+.top-header__suggestions {
+  display: none;
+}
+
+.top-header__right {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+}
+
+.top-header__nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 24px;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  outline: none;
+}
+
+.top-header__nav-btn:hover {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+}
+
+.top-header__nav-btn:focus-visible {
+  outline: 1px solid var(--color-border-accent);
+  outline-offset: -1px;
+}
+
+.top-header__nav-btn:active {
+  background-color: var(--color-bg-accent);
+}
+
+.top-header__nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.top-header__nav-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+/* Ajuste do layout principal - header faz parte do fluxo do layout flex */
