@@ -445,7 +445,19 @@
   /**
    * Inicializa quando o DOM estiver pronto
    */
+  /**
+   * Verifica se é mobile
+   */
+  function isMobile() {
+    return window.innerWidth <= 768;
+  }
+
   function init() {
+    // Não inicializa no mobile
+    if (isMobile()) {
+      return;
+    }
+    
     try {
       setTimeout(() => {
         const terminalsRadio = document.querySelector(SELECTORS.terminalsRadio);

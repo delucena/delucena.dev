@@ -46,11 +46,29 @@
   function openMenuIfNeeded() {
     if (elements.menu && (elements.explorerView?.checked || elements.extensionsView?.checked)) {
       elements.menu.checked = true;
+      updateSidebarState();
+    }
+  }
+
+  function updateSidebarState() {
+    // Atualiza classe no body baseado no estado do menu
+    if (elements.menu) {
+      if (elements.menu.checked) {
+        document.body.classList.add('sidebar-open');
+      } else {
+        document.body.classList.remove('sidebar-open');
+      }
     }
   }
 
   function initDesktopMenuToggle() {
     if (!elements.explorerView || !elements.extensionsView || !elements.menu) return;
+
+    // Atualiza estado inicial
+    updateSidebarState();
+
+    // Observa mudanças no checkbox do menu
+    elements.menu.addEventListener('change', updateSidebarState);
 
     elements.explorerView.addEventListener('change', openMenuIfNeeded);
     elements.extensionsView.addEventListener('change', openMenuIfNeeded);
@@ -170,6 +188,7 @@
       if (!elements.menu.checked && (elements.explorerView?.checked || elements.extensionsView?.checked)) {
         elements.menu.checked = true;
       }
+      updateSidebarState();
     }
   }
 

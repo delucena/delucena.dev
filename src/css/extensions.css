@@ -388,37 +388,59 @@ body:has(#theme:checked) .extensions > div:first-child::-webkit-scrollbar-thumb:
   }
   
   /* Ajustar folder.subTitle para manter título e contador na mesma linha */
+  /* MOBILE: Alinhar contador à direita com espaçamento adequado */
+  /* IMPORTANTE: Sobrescrever regra do navigation.css que define display: block */
+  #extensionsView:checked ~ .extensions .folder.subTitle,
   .extensions .folder.subTitle {
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
-    justify-content: flex-start !important;
+    justify-content: space-between !important;
     width: 100% !important;
     padding: var(--spacing-sm) var(--spacing-md) !important;
     padding-left: var(--spacing-lg) !important;
     white-space: nowrap !important;
-    overflow: hidden !important;
+    overflow: visible !important;
     gap: var(--spacing-sm) !important;
     line-height: 1.2 !important;
     flex-wrap: nowrap !important;
+    position: relative !important;
   }
   
-  /* Ajustar section-title para ficar na mesma linha que a bolinha */
+  /* MOBILE: Garantir que o ícone (::after) fique na mesma linha, alinhado verticalmente */
+  .extensions .folder.subTitle::after {
+    position: absolute !important;
+    left: 0.2em !important;
+    top: 0 !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    line-height: 1 !important;
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  /* Ajustar section-title para ficar alinhado à esquerda, respeitando espaço do ícone */
   .extensions .section-title {
-    display: inline-block !important;
+    flex: 1 !important;
     margin-left: 1.2em !important;
     margin-right: var(--spacing-sm) !important;
     text-align: left !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
     white-space: nowrap !important;
-    min-width: 0 !important;
+    min-width: auto !important;
+    width: auto !important;
     line-height: 1.2 !important;
-    flex-shrink: 0 !important;
-    vertical-align: middle !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: inherit !important;
   }
   
-  /* Ajustar bolinha (section-count) para ficar na mesma linha */
+  /* Ajustar bolinha (section-count) para ficar alinhada à direita */
   .extensions .section-count {
     background-color: var(--color-text-secondary) !important;
     color: var(--color-bg-secondary) !important;
@@ -426,7 +448,7 @@ body:has(#theme:checked) .extensions > div:first-child::-webkit-scrollbar-thumb:
     min-width: 14px !important;
     width: 14px !important;
     height: 14px !important;
-    display: inline-flex !important;
+    display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     font-size: 8px !important;
@@ -436,11 +458,11 @@ body:has(#theme:checked) .extensions > div:first-child::-webkit-scrollbar-thumb:
     flex-grow: 0 !important;
     line-height: 1 !important;
     margin: 0 !important;
-    margin-left: var(--spacing-sm) !important;
+    margin-left: auto !important;
+    margin-right: 0 !important;
     visibility: visible !important;
     opacity: 1 !important;
     box-sizing: border-box !important;
-    vertical-align: middle !important;
   }
   
   /* Garantir que extension-item também fique bem formatado */

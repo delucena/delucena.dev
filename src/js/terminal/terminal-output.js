@@ -324,7 +324,19 @@ Compilation successful.`,
   /**
    * Inicializa o módulo de output
    */
+  /**
+   * Verifica se é mobile
+   */
+  function isMobile() {
+    return window.innerWidth <= 768;
+  }
+
   function init() {
+    // Não inicializa no mobile
+    if (isMobile()) {
+      return;
+    }
+    
     try {
       const outputRadio = document.querySelector(SELECTORS.outputRadio);
       const outputSelector = document.querySelector(SELECTORS.outputSelector);

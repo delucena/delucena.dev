@@ -675,30 +675,31 @@ main:has(#editor .editorContainer #header div #readme:checked) #navigation .expl
 }
 
 /* Alternância entre explorer e extensions */
-.menu:has(div #menu:checked) ~ #explorerView:checked ~ .explorer {
+/* Usa classe .sidebar-open no body para controlar visibilidade */
+body.sidebar-open #explorerView:checked ~ .explorer {
   margin-left: 0;
   opacity: 1;
   pointer-events: auto;
 }
 
-.menu:has(div #menu:checked) ~ #explorerView:checked ~ .extensions {
+body.sidebar-open #explorerView:checked ~ .extensions {
   margin-left: calc(-1 * var(--width-navigation));
   opacity: 0;
 }
 
-.menu:has(div #menu:checked) ~ #extensionsView:checked ~ .explorer {
+body.sidebar-open #extensionsView:checked ~ .explorer {
   margin-left: calc(-1 * var(--width-navigation));
   opacity: 0;
 }
 
-.menu:has(div #menu:checked) ~ #extensionsView:checked ~ .extensions {
+body.sidebar-open #extensionsView:checked ~ .extensions {
   margin-left: 0;
   opacity: 1;
   pointer-events: auto;
 }
 
-.menu:has(div #menu:not(:checked)) ~ .explorer,
-.menu:has(div #menu:not(:checked)) ~ .extensions {
+body:not(.sidebar-open) .explorer,
+body:not(.sidebar-open) .extensions {
   margin-left: calc(-1 * var(--width-navigation));
   opacity: 0;
 }
@@ -761,7 +762,7 @@ main:has(#editor .editorContainer #header div #readme:checked) #navigation .expl
     opacity: 1;
   }
 
-  .menu:has(div #menu:checked) ~ .explorer {
+  body.sidebar-open .explorer {
     margin-left: calc(-1 * var(--width-navigation));
     opacity: 0;
   }
@@ -862,6 +863,19 @@ main:has(#editor .editorContainer #header div #readme:checked) #navigation .expl
     color: var(--color-icon-html) !important;
   }
   
+  /* MOBILE: Esconder o span explorer-icon - usar apenas o ::before */
+  .explorer .mobile-explorer-list li label .explorer-icon {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+  }
+  
   /* Título do explorer em mobile */
   .explorer .title {
     padding: var(--spacing-md) var(--spacing-lg) !important;
@@ -895,18 +909,8 @@ main:has(#editor .editorContainer #header div #readme:checked) #navigation .expl
     font-size: var(--font-size-base);
   }
   
-  /* Garantir que o menu mobile funcione corretamente */
-  .menu:has(div #menu:checked) ~ #explorerView:checked ~ .explorer {
-    margin-left: 0;
-    opacity: 1;
-    pointer-events: auto;
-  }
-  
-  .menu:has(div #menu:not(:checked)) ~ .explorer {
-    margin-left: calc(-100%);
-    opacity: 0;
-    pointer-events: none;
-  }
+  /* Em mobile, explorer/extensions são controlados diretamente pelos radio buttons */
+  /* Não dependem do estado do menu toggle */
 }
 
 /* ============================================
@@ -931,12 +935,13 @@ main:has(#editor .editorContainer #header div #readme:checked) #navigation .expl
 }
 
 /* Só mostra a barra quando explorer ou extensions estão visíveis */
-.menu:has(div #menu:checked) ~ #explorerView:checked ~ .explorer-resize-handle,
-.menu:has(div #menu:checked) ~ #extensionsView:checked ~ .explorer-resize-handle {
+/* Usa classe .sidebar-open no body */
+body.sidebar-open #explorerView:checked ~ .explorer-resize-handle,
+body.sidebar-open #extensionsView:checked ~ .explorer-resize-handle {
   display: block;
 }
 
-.menu:has(div #menu:not(:checked)) ~ .explorer-resize-handle {
+body:not(.sidebar-open) .explorer-resize-handle {
   display: none;
 }
 
