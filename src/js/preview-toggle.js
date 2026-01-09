@@ -178,23 +178,6 @@
   // ============================================
 
   /**
-   * Renderiza a visualização (página ou código)
-   * @param {string} pageId - ID da página
-   * @param {string} mode - 'page' | 'code'
-   */
-  function renderView(pageId, mode) {
-    if (mode === 'code') {
-      // SEMPRE renderiza da aba ativa (DOM), não do pageId passado
-      renderCodeView();
-    } else {
-      if (!pageId) {
-        return;
-      }
-      renderPageView(pageId);
-    }
-  }
-
-  /**
    * Renderiza o modo página (preview)
    * @param {string} pageId - ID da página
    */
