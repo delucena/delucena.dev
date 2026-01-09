@@ -37,7 +37,6 @@
     }
 
     const path = tab.getAttribute('data-path');
-    const fileName = tab.getAttribute('data-file-name');
     
     if (!path) {
       return;
