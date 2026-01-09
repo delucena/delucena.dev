@@ -699,16 +699,13 @@ async function buildIndexHtml() {
     console.warn('⚠ Arquivo critical.css não encontrado, pulando injeção inline');
   }
   
-  // Substituir CSS por versão com hash
+  // Substituir CSS por versão com hash e aplicar carregamento assíncrono
   const mainCssOriginal = 'main.min.css';
   const mainCssHashed = assetMap.css[mainCssOriginal] || mainCssOriginal;
   if (mainCssHashed !== mainCssOriginal) {
     const cssPath = `./css/${mainCssHashed}`;
+    // Atualizar preload e noscript com caminho com hash
     html = html.replace(/href=["']\.\/css\/main\.css["']/g, `href="${cssPath}"`);
-    
-    // Adicionar preload do CSS principal
-    const preloadLink = `<link rel="preload" href="${cssPath}" as="style">`;
-    html = html.replace(/(<link rel="preconnect"[^>]*>)/, `$1\n    ${preloadLink}`);
     console.log(`✓ CSS atualizado para versão com hash: ${mainCssHashed}`);
   }
   
