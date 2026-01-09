@@ -1,6 +1,9 @@
 # delucena.dev - Portfolio
 
-![Lighthouse](https://github.com/delucena/delucena/actions/workflows/lighthouse.yml/badge.svg)
+![Lighthouse CI](https://github.com/delucena/delucena.dev/actions/workflows/lighthouse.yml/badge.svg)
+![License](https://img.shields.io/github/license/delucena/delucena.dev)
+![Version](https://img.shields.io/github/v/release/delucena/delucena.dev)
+
 
 <div align="center">
 
