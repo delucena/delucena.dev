@@ -119,6 +119,7 @@
 
   /**
    * Handler para mouse chaos
+   * Usa transform ao invés de left/top para animação composta (melhor performance)
    */
   function handleMouseMove(e) {
     if (!mouseChaosElement || !isPreviewMode()) return;
@@ -131,8 +132,8 @@
     // Só mostra dentro do preview
     if (e.clientX >= rect.left && e.clientX <= rect.right &&
         e.clientY >= rect.top && e.clientY <= rect.bottom) {
-      mouseChaosElement.style.left = e.clientX + 'px';
-      mouseChaosElement.style.top = e.clientY + 'px';
+      // Usar transform ao invés de left/top para animação composta
+      mouseChaosElement.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%) translateZ(0)`;
       mouseChaosElement.style.display = 'block';
     } else {
       mouseChaosElement.style.display = 'none';

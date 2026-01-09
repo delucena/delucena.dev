@@ -548,9 +548,15 @@ body:has(#theme:checked) .editor-breadcrumb__link:hover {
   max-height: 80px;
   width: auto;
   height: auto;
-  display: inline-block;
-  margin: var(--spacing-sm) 0;
+  display: block;
+  margin: var(--spacing-sm) auto;
   /* aspect-ratio será definido individualmente para cada imagem */
+}
+
+#editor .editor .readme .readme-content p a {
+  display: block;
+  text-align: center;
+  margin: 0 auto;
 }
 
 /* Dimensões específicas para badges para prevenir CLS */
@@ -563,6 +569,7 @@ body:has(#theme:checked) .editor-breadcrumb__link:hover {
   max-width: 200px;
   max-height: 28px;
   box-sizing: border-box;
+  margin: 0 auto;
 }
 
 #editor .editor .readme .readme-content p img[src*="skillicons.dev"] {
@@ -573,6 +580,7 @@ body:has(#theme:checked) .editor-breadcrumb__link:hover {
   min-height: 20px;
   max-width: 100%;
   box-sizing: border-box;
+  margin: 0 auto;
 }
 
 #editor .editor .readme br {

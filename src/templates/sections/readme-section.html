@@ -1,6 +1,7 @@
 <section contenteditable="false" class="readme" id="_readme_">
     <div class="readme-container">
-        <div class="readme-photo-wrapper">
+        <div class="readme-photo-wrapper" style="width: 200px; height: 200px; min-width: 200px; min-height: 200px; aspect-ratio: 1 / 1;">
+
             <picture>
                 <!-- AVIF com srcset responsivo -->
                 <source 
@@ -27,7 +28,9 @@
                     class="readme-photo" 
                     width="{{profile.profileImage.width}}" 
                     height="{{profile.profileImage.height}}"
+                    style="aspect-ratio: {{profile.profileImage.width}}/{{profile.profileImage.height}}; width: 100%; height: auto;"
                     loading="eager"
+                    fetchpriority="high"
                     decoding="async"
                     onerror="this.onerror=null; this.src='{{profile.profileImage.png}}';">
             </picture>
@@ -36,21 +39,23 @@
             <h1 data-i18n="readme.greeting">{{profile.readme.greeting}}</h1>
             <p data-i18n="readme.tagline">{{profile.readme.tagline}}</p>
             <p data-i18n="readme.description">{{profile.readme.description}}</p>
-            <p>
-                <a target="_blank" href="{{profile.readme.credlyUrl}}">
+            <p style="min-height: 28px;">
+                <a target="_blank" href="{{profile.readme.credlyUrl}}" aria-label="Oracle Java Certified - Ver certificação no Credly" data-i18n-attr="aria-label" data-i18n="readme.certifiedLink">
                     <img src="https://img.shields.io/badge/Oracle-Java%20Certified-red?style=for-the-badge&logo=oracle"
                          alt="Oracle Java Certified" data-i18n-attr="alt" data-i18n="readme.certifiedAlt"
                          width="200"
                          height="28"
+                         style="aspect-ratio: 200 / 28; width: 200px; height: 28px; min-width: 200px; min-height: 28px; max-width: 200px; max-height: 28px; display: block;"
                          loading="lazy"
                          decoding="async">
                 </a>
             </p>
-            <p>
+            <p style="min-height: 48px;">
                 <img src="https://skillicons.dev/icons?i={{profile.readme.skillsIcons}}&perline=12"
                      alt="My Skills" data-i18n-attr="alt" data-i18n="readme.skillsAlt"
                      width="480"
                      height="48"
+                     style="aspect-ratio: 480 / 48; width: 100%; max-width: 480px; height: auto; min-height: 48px; display: block;"
                      loading="lazy"
                      decoding="async">
             </p>

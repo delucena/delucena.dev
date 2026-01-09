@@ -133,6 +133,9 @@ coverage/
 docs/_build/
 site/
 
+# Relatórios Lighthouse
+lighthouse-reports/
+
 # Outros
 *.pid
 *.seed

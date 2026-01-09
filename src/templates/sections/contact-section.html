@@ -7,46 +7,46 @@
 
     <div class="contact-container">
         <!-- LinkedIn Card -->
-        <a href="{{contact.linkedin.url}}" target="_blank" class="contact-card">
+        <a href="{{contact.linkedin.url}}" target="_blank" class="contact-card" aria-label="LinkedIn - {{contact.linkedin.display}} (abre em nova aba)">
             <div class="contact-icon linkedin">
-                <svg width="40" height="40" viewBox="0 0 448 512" fill="currentColor"><use href="#icon-linkedin"></use></svg>
+                <svg width="40" height="40" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><use href="#icon-linkedin"></use></svg>
             </div>
             <div class="contact-content">
                 <h3 data-i18n="contact.linkedin.cardTitle">LinkedIn</h3>
                 <p data-i18n="contact.linkedin.label">{{contact.linkedin.label}}</p>
                 <span class="contact-link">
                     {{contact.linkedin.display}}
-                    <svg class="icon icon--sm" width="16" height="16" viewBox="0 0 512 512" fill="currentColor"><use href="#icon-external-link"></use></svg>
+                    <svg class="icon icon--sm" width="16" height="16" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><use href="#icon-external-link"></use></svg>
                 </span>
             </div>
         </a>
 
         <!-- GitHub Card -->
-        <a href="{{contact.github.url}}" target="_blank" class="contact-card">
+        <a href="{{contact.github.url}}" target="_blank" class="contact-card" aria-label="GitHub - {{contact.github.display}} (abre em nova aba)">
             <div class="contact-icon github">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-github"></use></svg>
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><use href="#icon-github"></use></svg>
             </div>
             <div class="contact-content">
                 <h3 data-i18n="contact.github.cardTitle">GitHub</h3>
                 <p data-i18n="contact.github.label">{{contact.github.label}}</p>
                 <span class="contact-link">
                     {{contact.github.display}}
-                    <svg class="icon icon--sm" width="16" height="16" viewBox="0 0 512 512" fill="currentColor"><use href="#icon-external-link"></use></svg>
+                    <svg class="icon icon--sm" width="16" height="16" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><use href="#icon-external-link"></use></svg>
                 </span>
             </div>
         </a>
 
         <!-- Email Card -->
-        <a href="{{contact.email.url}}" target="_blank" class="contact-card">
+        <a href="{{contact.email.url}}" target="_blank" class="contact-card" aria-label="Email - {{contact.email.address}} (abre em nova aba)">
             <div class="contact-icon email">
-                <svg width="40" height="40" viewBox="0 0 512 512" fill="currentColor"><use href="#icon-envelope"></use></svg>
+                <svg width="40" height="40" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><use href="#icon-envelope"></use></svg>
             </div>
             <div class="contact-content">
                 <h3 data-i18n="contact.email.cardTitle">Email</h3>
                 <p data-i18n="contact.email.label">{{contact.email.label}}</p>
                 <span class="contact-link">
                     {{contact.email.address}}
-                    <svg class="icon icon--sm" width="16" height="16" viewBox="0 0 512 512" fill="currentColor"><use href="#icon-external-link"></use></svg>
+                    <svg class="icon icon--sm" width="16" height="16" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><use href="#icon-external-link"></use></svg>
                 </span>
             </div>
         </a>

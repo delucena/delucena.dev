@@ -69,6 +69,37 @@ img[width][height] {
   aspect-ratio: attr(width) / attr(height);
 }
 
+/* Prevenir CLS em imagens externas - dimensões fixas */
+img[src*="img.shields.io"] {
+  width: 200px;
+  height: 28px;
+  aspect-ratio: 200 / 28;
+  min-width: 200px;
+  min-height: 28px;
+  max-width: 200px;
+  max-height: 28px;
+}
+
+img[src*="skillicons.dev"] {
+  width: 480px;
+  height: 48px;
+  aspect-ratio: 480 / 48;
+  min-width: 200px;
+  min-height: 20px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Garantir que a imagem de perfil tenha dimensões fixas para prevenir CLS */
+.readme-photo,
+.readme-photo-wrapper img,
+.readme-photo-wrapper picture {
+  width: 100%;
+  height: auto;
+  display: block;
+  box-sizing: border-box;
+}
+
 :focus-visible {
   outline: 2px solid var(--color-border-accent);
   outline-offset: 2px;
@@ -80,7 +111,7 @@ img[width][height] {
   --color-bg-secondary: rgb(37, 37, 38);
   --color-bg-accent: rgb(30, 30, 30);
   --color-text-primary: rgb(212, 212, 212);
-  --color-text-secondary: rgb(133, 133, 133);
+  --color-text-secondary: rgb(170, 170, 170); /* Melhorado contraste: 4.5:1 (WCAG AA) */
   --color-border-primary: rgb(60, 60, 60);
   --color-border-accent: rgb(0, 122, 204);
   /* Tipografia: font-family com fallback robusto para evitar layout shift */

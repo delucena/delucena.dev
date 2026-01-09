@@ -9,10 +9,17 @@
     <link rel="canonical" href="{{meta.canonicalUrl}}">
     <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
     <link rel="alternate icon" type="image/svg+xml" href="./assets/favicon.svg">
-    <link rel="preload" as="image" href="{{profile.profileImage.responsive.480w.avif}}" type="image/avif" fetchpriority="high">
-    <link rel="preload" as="image" href="{{profile.profileImage.responsive.480w.webp}}" type="image/webp" fetchpriority="high">
+    <link rel="preload" as="image" href="{{profile.profileImage.responsive.480w.avif}}" type="image/avif" fetchpriority="high" imagesrcset="{{profile.profileImage.responsive.480w.avif}} 480w, {{profile.profileImage.responsive.768w.avif}} 768w, {{profile.profileImage.responsive.1200w.avif}} 1200w" imagesizes="(max-width: 480px) 480px, (max-width: 768px) 768px, 1200px">
     <link rel="preload" href="./css/main.css" as="style">
     <link rel="stylesheet" href="./css/main.css">
+    
+    <!-- Preconnect para recursos de terceiros (melhora cache e performance) -->
+    <link rel="preconnect" href="https://skillicons.dev" crossorigin>
+    <link rel="dns-prefetch" href="https://skillicons.dev">
+    <link rel="preconnect" href="https://img.shields.io" crossorigin>
+    <link rel="dns-prefetch" href="https://img.shields.io">
+    <link rel="preconnect" href="https://static.cloudflareinsights.com" crossorigin>
+    <link rel="dns-prefetch" href="https://static.cloudflareinsights.com">
     <meta property="og:type" content="{{meta.og.type}}">
     <meta property="og:url" content="{{meta.og.url}}">
     <meta property="og:title" content="{{meta.og.title}}">

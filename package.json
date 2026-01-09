@@ -10,7 +10,9 @@
     "preview": "npm run rebuild && open dist/index.html",
     "serve": "node scripts/serve.js",
     "dev": "node scripts/serve.js",
-    "favicon": "node src/assets/generate-favicon.js"
+    "favicon": "node src/assets/generate-favicon.js",
+    "lighthouse": "node scripts/lighthouse-audit.js",
+    "audit": "node scripts/lighthouse-audit.js"
   },
   "keywords": [
     "portfolio",
