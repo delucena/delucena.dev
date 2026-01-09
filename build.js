@@ -37,14 +37,6 @@ function generateHash(content) {
   return crypto.createHash('sha256').update(content).digest('hex').substring(0, 16);
 }
 
-// Gerar nome de arquivo com hash
-function getHashedFilename(originalName, content) {
-  const ext = path.extname(originalName);
-  const name = path.basename(originalName, ext);
-  const hash = generateHash(content);
-  return `${name}.${hash}${ext}`;
-}
-
 function consolidateCSS(cssContent, cssDir, processedFiles = new Set()) {
   return cssContent.replace(/@import\s+url\(['"]?([^'"]+)['"]?\)\s*;?/g, (match, importPath) => {
     const normalizedPath = importPath.replace(/^\.\//, '');
