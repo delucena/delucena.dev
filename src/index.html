@@ -9,6 +9,22 @@
     <link rel="canonical" href="{{meta.canonicalUrl}}">
     <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
     <link rel="alternate icon" type="image/svg+xml" href="./assets/favicon.svg">
+    <!-- Evita CLS no Desktop ao aplicar largura salva do Explorer antes do primeiro paint -->
+    <script>
+      (function () {
+        try {
+          var key = 'explorer-width';
+          var raw = localStorage.getItem(key);
+          if (!raw) return;
+          var width = parseInt(raw, 10);
+          if (!Number.isFinite(width)) return;
+          if (width < 200 || width > 600) return;
+          document.documentElement.style.setProperty('--width-navigation', width + 'px');
+        } catch (e) {
+          // ignore
+        }
+      })();
+    </script>
     <link rel="preload" as="image" href="{{profile.profileImage.responsive.480w.avif}}" type="image/avif" fetchpriority="high" imagesrcset="{{profile.profileImage.responsive.480w.avif}} 480w, {{profile.profileImage.responsive.768w.avif}} 768w, {{profile.profileImage.responsive.1200w.avif}} 1200w" imagesizes="(max-width: 480px) 480px, (max-width: 768px) 768px, 1200px">
     <link rel="preload" href="./css/main.css" as="style">
     <link rel="stylesheet" href="./css/main.css">

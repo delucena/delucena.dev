@@ -131,7 +131,9 @@ img[src*="skillicons.dev"] {
   --spacing-lg: 0.8em;
   --spacing-xl: 1rem;
   --spacing-2xl: 1.5rem;
-  --width-navigation: 340px;
+  /* Desktop: precisa bater com src/css/variables.css e com o default do explorer-resize (380px)
+     para evitar shift horizontal (editor) no load. */
+  --width-navigation: 380px;
   --width-menu: 60px;
   --height-header: 30px;
   --height-top-header: 35px;
