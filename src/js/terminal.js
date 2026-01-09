@@ -381,9 +381,21 @@
   }
 
   /**
+   * Verifica se é mobile
+   */
+  function isMobile() {
+    return window.innerWidth <= 768;
+  }
+
+  /**
    * Inicializa quando o DOM estiver pronto
    */
   function init() {
+    // Não inicializa no mobile
+    if (isMobile()) {
+      return;
+    }
+    
     try {
       setTimeout(() => {
         const terminalsRadio = document.querySelector(SELECTORS.terminalsRadio);

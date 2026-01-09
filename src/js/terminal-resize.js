@@ -24,9 +24,21 @@
   }
 
   /**
+   * Verifica se é mobile
+   */
+  function isMobile() {
+    return window.innerWidth <= 768;
+  }
+
+  /**
    * Configura a barra de resize
    */
   function setupResize() {
+    // Não inicializa no mobile
+    if (isMobile()) {
+      return;
+    }
+    
     const terminal = document.querySelector('.terminal');
     if (!terminal) return;
 
@@ -236,6 +248,11 @@
    * Define a altura do terminal
    */
   function setTerminalHeight(height) {
+    // Não aplica estilos no mobile
+    if (isMobile()) {
+      return;
+    }
+    
     const terminal = document.querySelector('.terminal');
     
     if (!terminal) return;

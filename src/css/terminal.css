@@ -702,8 +702,18 @@ body:has(#theme:checked) .terminal-resize-handle::before {
   background-color: var(--color-border-accent);
 }
 
-/* Mobile - esconder barra de resize */
+/* Mobile - esconder terminal completamente */
 @media (max-width: 768px) {
+  .terminal {
+    display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+  
   .terminal-resize-handle {
     display: none !important;
   }

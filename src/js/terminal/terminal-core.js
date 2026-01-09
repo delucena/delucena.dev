@@ -218,9 +218,21 @@
   }
 
   /**
+   * Verifica se é mobile
+   */
+  function isMobile() {
+    return window.innerWidth <= 768;
+  }
+
+  /**
    * Inicializa o módulo
    */
   function init() {
+    // Não inicializa no mobile
+    if (isMobile()) {
+      return;
+    }
+    
     try {
       initTabs();
       initToggle();

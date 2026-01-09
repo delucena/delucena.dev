@@ -30,100 +30,106 @@
   overflow: visible; /* Garantir que menus dropdown não sejam cortados */
 }
 
-.menu i {
-  color: var(--color-text-secondary);
-  display: block;
-  font-size: 22px;
-  cursor: pointer;
-  padding-block: var(--spacing-md);
+/* Container dos ícones do menu - garante espaçamento consistente */
+.menu > div:first-child {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 0;
 }
 
-.menu i.disabled {
-  opacity: 0.5;
-  cursor: default;
-}
-
-.menu i:first-child {
-  padding-top: 0.1em;
-}
+/* Regras antigas para elementos <i> removidas - agora usamos SVG com classes .icon */
 
 .menu label[for="menu"] {
   color: var(--color-text-secondary) !important;
-  display: block;
-  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   padding-block: var(--spacing-md);
   width: 100%;
-  text-align: center;
+}
+
+/* Checkbox #menu sempre escondido (desktop e mobile) - apenas funcional */
+#menu,
+#menu.desktop-only {
+  position: absolute !important;
+  left: -9999px !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  display: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+}
+
+/* Desktop: garantir que menu hamburger seja visível */
+@media (min-width: 769px) {
+  .menu label[for="menu"].desktop-only {
+    display: flex !important;
+  }
 }
 
 .menu label[for="menu"]:hover {
   color: var(--color-text-primary) !important;
 }
 
-.menu label[for="menu"] i {
+.menu label[for="menu"] svg {
+  width: 20px;
+  height: 20px;
   color: inherit !important;
   transition: opacity var(--transition-fast), transform var(--transition-fast);
 }
 
 /* Ícones do menu - hamburger e close */
-/* Usa sistema padronizado .icon, apenas controla visibilidade */
+/* Controla visibilidade baseado na classe .sidebar-open no body */
+/* Sidebar FECHADA: mostra hamburger, esconde close */
 .menu label[for="menu"] .hamburger-icon {
   display: inline-block;
-  opacity: 1;
 }
 
 .menu label[for="menu"] .close-icon {
   display: none;
-  opacity: 0;
 }
 
-/* Quando menu está checked (aberto), mostra close icon */
-#menu:checked + label[for="menu"] .hamburger-icon {
+/* Sidebar ABERTA: esconde hamburger, mostra close */
+body.sidebar-open .menu label[for="menu"] .hamburger-icon {
   display: none;
-  opacity: 0;
 }
 
-#menu:checked + label[for="menu"] .close-icon {
+body.sidebar-open .menu label[for="menu"] .close-icon {
   display: inline-block;
-  opacity: 1;
 }
 
-/* Quando menu não está checked (fechado), mostra hamburger icon */
-#menu:not(:checked) + label[for="menu"] .hamburger-icon {
-  display: inline-block;
-  opacity: 1;
-}
-
-#menu:not(:checked) + label[for="menu"] .close-icon {
-  display: none;
-  opacity: 0;
-}
-
-.menu label,
-.menu label i {
-  color: var(--color-text-primary) !important;
-  width: 100%;
-  opacity: 1;
-  cursor: pointer;
-  padding-top: var(--spacing-md);
-}
+/* Regras genéricas para labels do menu - removidas, agora cada label tem suas próprias regras específicas */
 
 .menu label[for="explorerView"] {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding-block: var(--spacing-md);
-  text-align: center;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  width: 100%;
 }
 
-.menu label[for="explorerView"] i {
+.menu label[for="explorerView"] svg {
+  width: 20px;
+  height: 20px;
   color: var(--color-text-secondary);
 }
 
-.menu label[for="explorerView"]:hover i {
+.menu label[for="explorerView"]:hover svg {
   color: var(--color-text-primary);
 }
 
-#navigation:has(#explorerView:checked) .menu label[for="explorerView"] i {
+#navigation:has(#explorerView:checked) .menu label[for="explorerView"] svg {
   color: var(--color-text-primary);
 }
 
@@ -133,21 +139,17 @@
 
 .menu a {
   color: var(--color-text-secondary);
-  display: block;
-  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   padding-block: var(--spacing-md);
   text-decoration: none;
   width: 100%;
-  text-align: center;
 }
 
 .menu a:hover {
   color: var(--color-text-primary);
-}
-
-.menu a i {
-  color: inherit;
 }
 
 .menu a.git-icon {
@@ -158,8 +160,8 @@
 }
 
 .menu a.git-icon svg {
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   color: var(--color-text-secondary);
 }
 
@@ -182,9 +184,21 @@
 }
 
 .menu label.extensions-icon svg {
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   color: inherit;
+}
+
+/* Ícone de busca desabilitado */
+.menu svg.icon.disabled {
+  display: block;
+  margin: 0 auto;
+  padding-block: var(--spacing-md);
+  width: 20px;
+  height: 20px;
+  opacity: 0.5;
+  cursor: default;
+  color: var(--color-text-secondary);
 }
 
 /* Menu de configurações */
@@ -442,7 +456,49 @@
     display: none !important;
   }
   
+  /* MOBILE: Garantir que apenas um ícone de navegação seja exibido */
+  /* Esconder completamente qualquer ícone duplicado de menu/hamburger */
+  .menu label[for="menu"],
+  .menu label[for="menu"] svg,
+  .menu label[for="menu"] .hamburger-icon,
+  .menu label[for="menu"] .close-icon {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+  }
+  
+  /* Garantir que não haja espaço reservado para o ícone de menu */
+  .menu > div:first-child > input[type="checkbox"]#menu {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+  }
+  
+  /* Esconder ícone de busca desabilitado no mobile */
+  .menu svg.icon.disabled,
+  .menu svg.icon.disabled.desktop-only {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
   /* Ícones do menu em mobile - sempre visíveis */
+  /* Apenas explorer, extensions e git devem aparecer */
   .menu label[for="explorerView"],
   .menu label.extensions-icon,
   .menu a.git-icon {
@@ -456,19 +512,40 @@
     border-bottom: 1px solid var(--color-border-primary);
   }
   
+  /* Garantir que não haja gap ou espaço vazio onde o ícone removido estava */
+  .menu > div:first-child {
+    gap: 0 !important;
+  }
+  
+  /* MOBILE: Garantir que apenas os ícones corretos apareçam - esconder qualquer outro elemento */
+  /* Esconder input checkbox, label de menu, e ícone de busca */
+  .menu > div:first-child > input[type="checkbox"],
+  .menu > div:first-child > label[for="menu"],
+  .menu > div:first-child > svg.icon.disabled {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+  }
+  
   .menu label[for="explorerView"]:hover,
   .menu label.extensions-icon:hover,
   .menu a.git-icon:hover {
     background-color: var(--color-bg-primary);
   }
   
-  .menu label[for="explorerView"] i,
+  .menu label[for="explorerView"] svg,
   .menu label.extensions-icon svg,
   .menu a.git-icon svg {
-    width: 22px;
-    height: 22px;
-    min-width: 22px;
-    min-height: 22px;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    min-height: 20px;
   }
   
   /* Destaque quando ativo - será tratado via JavaScript se necessário */
