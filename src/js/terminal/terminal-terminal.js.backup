@@ -1,0 +1,846 @@
+/**
+ * Terminal Interativo
+ * Simula um terminal zsh com comandos comuns do macOS
+ * 
+ * @module terminal-terminal
+ * @description Simula um terminal interativo com comandos do macOS/zsh
+ */
+
+(function() {
+  'use strict';
+
+  const SELECTORS = {
+    terminalOutput: '#terminalOutput',
+    terminalInput: '#terminalInput',
+    terminalsRadio: '#terminals'
+  };
+
+  let terminalOutput;
+  let terminalInput;
+  let commandHistory = [];
+  let historyIndex = -1;
+  let currentDirectory = '~';
+
+  // Mapeamento de comandos lang para idiomas
+  const LANGUAGE_MAP = {
+    'pt': 'pt-BR',
+    'en': 'en',
+    'es': 'es'
+  };
+
+  /**
+   * Obtém tradução do terminal
+   * @param {string} key - Chave de tradução
+   * @param {Object} params - Parâmetros para substituição (ex: {date: '...', command: '...'})
+   * @returns {string} - Texto traduzido
+   */
+  function getTerminalTranslation(key, params = {}) {
+    if (!window.i18n || !window.i18n.getTranslation) {
+      return key;
+    }
+    
+    let translation = window.i18n.getTranslation(`terminal.${key}`);
+    
+    // Substitui parâmetros no formato {param}
+    if (params && typeof translation === 'string') {
+      Object.keys(params).forEach(param => {
+        translation = translation.replace(`{${param}}`, params[param]);
+      });
+    }
+    
+    return translation || key;
+  }
+
+  /**
+   * Atualiza textos do terminal quando o idioma muda
+   */
+  function updateTerminalLanguage() {
+    // DEBUG TEMPORÁRIO
+    const currentLanguage = window.i18n ? window.i18n.getLocale() : 'pt-BR';
+    console.log("[terminal-i18n] language:", currentLanguage);
+    
+    // Atualiza placeholder do input
+    if (terminalInput) {
+      terminalInput.placeholder = getTerminalTranslation('placeholder');
+    }
+  }
+
+  /**
+   * Navega para uma página específica
+   * @param {string} pageId - ID da página
+   */
+  function navigateToPage(pageId) {
+    const radio = document.getElementById(pageId);
+    if (radio) {
+      radio.checked = true;
+      radio.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  }
+
+  /**
+   * Define o tema do site
+   * @param {string} theme - 'dark', 'light' ou 'auto'
+   */
+  function setTheme(theme) {
+    const themeCheckbox = document.querySelector('#theme');
+    const themeLabel = document.querySelector('#themeLabel');
+    
+    if (!themeCheckbox) {
+      return {
+        success: false,
+        message: getTerminalTranslation('error.themeNotAvailable')
+      };
+    }
+
+    if (theme === 'dark') {
+      themeCheckbox.checked = false;
+      if (themeLabel) themeLabel.textContent = getTerminalTranslation('theme.dark');
+      return {
+        success: true,
+        message: getTerminalTranslation('theme.setDark')
+      };
+    } else if (theme === 'light') {
+      themeCheckbox.checked = true;
+      if (themeLabel) themeLabel.textContent = getTerminalTranslation('theme.light');
+      return {
+        success: true,
+        message: getTerminalTranslation('theme.setLight')
+      };
+    } else if (theme === 'auto') {
+      // Auto detecta preferência do sistema
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      themeCheckbox.checked = !prefersDark;
+      if (themeLabel) themeLabel.textContent = getTerminalTranslation('theme.auto');
+      return {
+        success: true,
+        message: getTerminalTranslation('theme.setAuto')
+      };
+    }
+    
+    return {
+      success: false,
+      message: getTerminalTranslation('error.invalidTheme')
+    };
+  }
+
+  /**
+   * Foca em um elemento específico da UI
+   * @param {string} target - 'editor', 'terminal' ou 'explorer'
+   */
+  function focusElement(target) {
+    if (target === 'editor') {
+      const editorTab = document.querySelector('.editor-tab.is-active');
+      if (editorTab) {
+        editorTab.focus();
+        return {
+          success: true,
+          message: getTerminalTranslation('focus.editor')
+        };
+      }
+    } else if (target === 'terminal') {
+      const terminalInput = document.querySelector('#terminalInput');
+      if (terminalInput) {
+        terminalInput.focus();
+        return {
+          success: true,
+          message: getTerminalTranslation('focus.terminal')
+        };
+      }
+    } else if (target === 'explorer') {
+      const explorerView = document.querySelector('#explorerView');
+      if (explorerView) {
+        explorerView.checked = true;
+        const menu = document.querySelector('#menu');
+        if (menu) menu.checked = true;
+        return {
+          success: true,
+          message: getTerminalTranslation('focus.explorer')
+        };
+      }
+    }
+    
+    return {
+      success: false,
+      message: getTerminalTranslation('error.invalidFocusTarget')
+    };
+  }
+
+  /**
+   * Define o layout do site
+   * @param {string} layout - 'compact' ou 'comfy'
+   */
+  function setLayout(layout) {
+    const body = document.body;
+    
+    if (layout === 'compact') {
+      body.classList.add('layout-compact');
+      body.classList.remove('layout-comfy');
+      return {
+        success: true,
+        message: getTerminalTranslation('layout.setCompact')
+      };
+    } else if (layout === 'comfy') {
+      body.classList.add('layout-comfy');
+      body.classList.remove('layout-compact');
+      return {
+        success: true,
+        message: getTerminalTranslation('layout.setComfy')
+      };
+    }
+    
+    return {
+      success: false,
+      message: getTerminalTranslation('error.invalidLayout')
+    };
+  }
+
+  // Variável para controlar o ciclo de autocomplete
+  let autocompleteIndex = -1;
+  let autocompleteOptions = [];
+
+  /**
+   * Estrutura centralizada de comandos - ÚNICA FONTE DE VERDADE
+   * Cada comando tem: description, group, args (array de argumentos válidos), execute (função)
+   */
+  const COMMANDS = {
+    'ls': () => [
+      'Applications',
+      'Desktop',
+      'Documents',
+      'Downloads',
+      'Library',
+      'Movies',
+      'Music',
+      'Pictures',
+      'Public',
+      'src'
+    ],
+    'ls -lah': () => [
+      'total 64',
+      'drwxr-xr-x+ 15 delucena  staff   480 Jan 15 10:30 .',
+      'drwxr-xr-x   5 root      admin   160 Dec 20 09:15 ..',
+      '-rw-r--r--   1 delucena  staff   220 Jan 10 14:22 .bash_profile',
+      '-rw-r--r--   1 delucena  staff   180 Jan 12 09:30 .gitconfig',
+      'drwx------+  3 delucena  staff    96 Jan 14 16:45 .ssh',
+      'drwx------+  5 delucena  staff   160 Jan 15 08:20 Applications',
+      'drwx------+  8 delucena  staff   256 Jan 15 09:45 Desktop',
+      'drwx------+ 12 delucena  staff   384 Jan 15 10:15 Documents',
+      'drwx------+  6 delucena  staff   192 Jan 15 09:30 Downloads',
+      'drwx------+  4 delucena  staff   128 Jan 15 08:00 Library',
+      'drwx------+  3 delucena  staff    96 Jan 14 20:15 Movies',
+      'drwx------+  4 delucena  staff   128 Jan 15 07:30 Music',
+      'drwx------+  5 delucena  staff   160 Jan 15 09:00 Pictures',
+      'drwxr-xr-x+  2 delucena  staff    64 Jan 10 12:00 Public',
+      'drwxr-xr-x+  8 delucena  staff   256 Jan 15 10:30 src'
+    ],
+    'ls -la': () => COMMANDS['ls -lah'](),
+    'pwd': () => [`/Users/delucena`],
+    'whoami': () => [`delucena`],
+    'date': () => {
+      const currentLanguage = window.i18n ? window.i18n.getLocale() : 'pt-BR';
+      return [new Date().toLocaleString(currentLanguage, { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      })];
+    },
+    'uptime': () => [`10:30  up 2 days,  4:15, 1 user, load averages: 1.25 1.18 1.05`],
+    'ps aux': () => [
+      'USER       PID  %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND',
+      'delucena   1234   2.5  1.2 1234567 89012 ?      Ss   08:00   0:15 /Applications/iTerm.app',
+      'delucena   2345   1.8  0.8  987654 45678 ?      S    09:15   0:08 /Applications/Google Chrome.app',
+      'delucena   3456   0.5  0.3  456789 12345 ?      S    10:00   0:02 /usr/bin/zsh',
+      'delucena   4567   0.2  0.1  234567  8901 ?      S    10:15   0:00 node server.js',
+      'root       5678   0.1  0.0   12345  1234 ?      Ss   08:00   0:00 /usr/sbin/syslogd'
+    ],
+    'df -h': () => [
+      'Filesystem      Size   Used  Avail Capacity iused      ifree %iused  Mounted on',
+      '/dev/disk3s1s1  500Gi   45Gi  450Gi    10%  1234567  47185920    3%   /',
+      'devfs           189Ki  189Ki    0Bi   100%     654         0  100%   /dev',
+      '/dev/disk3s4   500Gi  250Mi  450Gi     1%       2  47185920    0%   /System/Volumes/VM',
+      '/dev/disk3s5   500Gi  1.0Gi  450Gi     1%      12  47185920    0%   /System/Volumes/Preboot',
+      '/dev/disk3s6   500Gi  500Mi  450Gi     1%       5  47185920    0%   /System/Volumes/Update'
+    ],
+    'du -sh *': () => [
+      '1.2G\tApplications',
+      '450M\tDesktop',
+      '2.3G\tDocuments',
+      '890M\tDownloads',
+      '120M\tLibrary',
+      '5.4G\tMovies',
+      '2.1G\tMusic',
+      '3.2G\tPictures',
+      '45K\tPublic',
+      '890M\tsrc'
+    ],
+    'echo hello': () => [`hello`],
+    'echo $HOME': () => [`/Users/delucena`],
+    'cat README.md': () => [
+      '# delucena.dev',
+      '',
+      'Portfolio pessoal desenvolvido com tecnologias modernas.',
+      '',
+      '## Tecnologias',
+      '- HTML5',
+      '- CSS3',
+      '- JavaScript',
+      '- Spring Boot',
+      '',
+      '## Autor',
+      'José Paulo de Lucena'
+    ],
+    'cd ~': () => {
+      currentDirectory = '~';
+      return [];
+    },
+    'cd ..': () => {
+      if (currentDirectory !== '~') {
+        currentDirectory = '~';
+      }
+      return [];
+    },
+    'cd src': () => {
+      currentDirectory = '~/src';
+      return [];
+    },
+    'cd': () => {
+      currentDirectory = '~';
+      return [];
+    },
+    'mkdir test': () => [],
+    'touch file.txt': () => [],
+    'rm file.txt': () => [],
+    'clear': () => {
+      if (terminalOutput) {
+        terminalOutput.innerHTML = '';
+      }
+      return [];
+    },
+    'history': () => commandHistory.length > 0 
+      ? commandHistory.map((cmd, idx) => `${idx + 1}  ${cmd}`)
+      : [getTerminalTranslation('history.empty')],
+    'git status': () => [
+      'On branch main',
+      'Your branch is up to date with \'origin/main\'.',
+      '',
+      'nothing to commit, working tree clean'
+    ],
+    'git log --oneline -5': () => [
+      'a1b2c3d feat: add terminal simulation',
+      'd4e5f6g fix: improve CSS visibility',
+      'g7h8i9j refactor: simplify terminal structure',
+      'j0k1l2m feat: add dark mode toggle',
+      'm3n4o5p initial commit'
+    ],
+    'brew list': () => [
+      'git',
+      'node',
+      'python@3.11',
+      'zsh',
+      'vim',
+      'wget',
+      'curl'
+    ],
+    'brew --version': () => [`Homebrew 4.1.2`],
+    'node --version': () => [`v20.10.0`],
+    'python3 --version': () => [`Python 3.11.6`],
+    'git --version': () => [`git version 2.42.0`],
+    'which git': () => [`/usr/local/bin/git`],
+    'which node': () => [`/usr/local/bin/node`],
+    'uname -a': () => [`Darwin MacBook-Pro.local 23.1.0 Darwin Kernel Version 23.1.0: Mon Oct  9 21:27:27 PDT 2023; root:xnu-10002.41.9~2/RELEASE_ARM64_T6000 arm64`],
+    'help': () => {
+      const title = getTerminalTranslation('help.title');
+      const commands = getTerminalTranslation('help.commands');
+      const commandList = Array.isArray(commands) ? commands : [];
+      return [title, ...commandList];
+    },
+    'whoami': () => {
+      // Tenta obter dados do DOM ou usa valores padrão
+      const nameEl = document.querySelector('[data-profile-name]');
+      const titleEl = document.querySelector('[data-profile-title]');
+      const name = nameEl ? nameEl.textContent.trim() : 'delucena';
+      const title = titleEl ? titleEl.textContent.trim() : getTerminalTranslation('about.defaultTitle');
+      return [name, title];
+    },
+    'skills': () => {
+      const output = [];
+      output.push(getTerminalTranslation('skills.title'));
+      output.push('');
+      
+      // Tenta obter skills do DOM ou mostra mensagem
+      const skillsSection = document.querySelector('#skills');
+      if (skillsSection) {
+        const skillCategories = skillsSection.querySelectorAll('[data-skill-category]');
+        if (skillCategories.length > 0) {
+          skillCategories.forEach(category => {
+            const title = category.querySelector('h3, h2')?.textContent || '';
+            if (title) output.push(title);
+            const items = category.querySelectorAll('li, .skill-item');
+            items.forEach(item => {
+              output.push(`  • ${item.textContent.trim()}`);
+            });
+            output.push('');
+          });
+        } else {
+          output.push(getTerminalTranslation('skills.notFound'));
+        }
+      } else {
+        output.push(getTerminalTranslation('skills.notFound'));
+      }
+      
+      return output;
+    },
+    'about': () => {
+      const output = [];
+      output.push(getTerminalTranslation('about.title'));
+      output.push('');
+      
+      // Tenta obter dados do DOM
+      const heroName = document.querySelector('.hero__name')?.textContent || 'José Paulo de Lucena';
+      const heroTitle = document.querySelector('.hero__title')?.textContent || getTerminalTranslation('about.defaultTitle');
+      const domain = 'delucena.dev';
+      
+      output.push(`${getTerminalTranslation('about.name')}: ${heroName}`);
+      output.push(`${getTerminalTranslation('about.titleLabel')}: ${heroTitle}`);
+      output.push(`${getTerminalTranslation('about.domain')}: ${domain}`);
+      
+      // Tenta obter empresa atual
+      const companyEl = document.querySelector('[data-current-company]');
+      if (companyEl) {
+        output.push(`${getTerminalTranslation('about.company')}: ${companyEl.textContent.trim()}`);
+      }
+      
+      output.push('');
+      const bioEls = document.querySelectorAll('.hero__bio p, [data-bio]');
+      if (bioEls.length > 0) {
+        bioEls.forEach(el => output.push(el.textContent.trim()));
+      } else {
+        output.push(getTerminalTranslation('about.defaultBio'));
+      }
+      
+      return output;
+    },
+    'cv': () => {
+      return [
+        getTerminalTranslation('cv.message'),
+        getTerminalTranslation('cv.linkedin'),
+        getTerminalTranslation('cv.github')
+      ];
+    },
+    'java': () => {
+      return [
+        'openjdk version "17.0.8" 2023-07-18',
+        'OpenJDK Runtime Environment (build 17.0.8+7-Ubuntu-0ubuntu120.04)',
+        'OpenJDK 64-Bit Server VM (build 17.0.8+7-Ubuntu-0ubuntu120.04, mixed mode, sharing)',
+        '',
+        getTerminalTranslation('java.easterEgg')
+      ];
+    },
+    'go': () => {
+      return [
+        'go version go1.21.0 darwin/arm64',
+        '',
+        getTerminalTranslation('go.easterEgg')
+      ];
+    },
+    'kubectl': () => {
+      return [
+        'Client Version: version.Info{Major:"1", Minor:"28", GitVersion:"v1.28.0", GitCommit:"...", GitTreeState:"clean", BuildDate:"2023-07-19T12:20:54Z", GoVersion:"go1.20.6", Compiler:"gc", Platform:"darwin/arm64"}',
+        'Server Version: version.Info{Major:"1", Minor:"27", GitVersion:"v1.27.3", GitCommit:"...", GitTreeState:"clean", BuildDate:"2023-06-14T09:47:40Z", GoVersion:"go1.20.5", Compiler:"gc", Platform:"linux/amd64"}',
+        '',
+        getTerminalTranslation('kubectl.easterEgg')
+      ];
+    },
+    'panic': () => {
+      return [
+        'panic: runtime error: index out of range [0] with length 0',
+        '',
+        'goroutine 1 [running]:',
+        'main.main()',
+        '    /tmp/main.go:5 +0x45',
+        '',
+        getTerminalTranslation('panic.easterEgg')
+      ];
+    },
+    'sudo hire-me': () => {
+      return [
+        getTerminalTranslation('sudo.easterEgg'),
+        '',
+        getTerminalTranslation('sudo.message')
+      ];
+    }
+  };
+
+  /**
+   * Inicializa os elementos do DOM
+   * @returns {boolean} - true se os elementos foram encontrados
+   */
+  function initElements() {
+    try {
+      terminalOutput = document.querySelector(SELECTORS.terminalOutput);
+      // Input será criado dinamicamente dentro do scrollable
+      return !!terminalOutput;
+    } catch (error) {
+      console.error('Erro ao inicializar elementos do terminal:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Configura os event listeners do input
+   */
+  function setupInputListeners(input) {
+    if (!input) return;
+    
+    input.addEventListener('keydown', (e) => {
+      try {
+        if (e.key === 'Enter') {
+          const command = input.value;
+          input.value = '';
+          executeCommand(command);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (commandHistory.length > 0) {
+            historyIndex = Math.max(0, historyIndex - 1);
+            input.value = commandHistory[historyIndex] || '';
+          }
+        } else if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          if (historyIndex < commandHistory.length - 1) {
+            historyIndex = Math.min(commandHistory.length - 1, historyIndex + 1);
+            input.value = commandHistory[historyIndex + 1] || '';
+          } else {
+            historyIndex = commandHistory.length;
+            input.value = '';
+          }
+        } else if (e.key === 'Tab') {
+          e.preventDefault();
+          // Auto-complete básico
+          const inputValue = input.value.trim();
+          const parts = inputValue.split(/\s+/);
+          const cmd = parts[0].toLowerCase();
+          const arg = parts[1] || '';
+          
+          // Comandos com argumentos
+          if (cmd === 'lang' && inputValue.startsWith('lang ')) {
+            const langCommands = ['lang pt', 'lang en', 'lang es'];
+            const langMatches = langCommands.filter(c => 
+              c.startsWith(inputValue) && c !== inputValue
+            );
+            if (langMatches.length === 1) {
+              input.value = langMatches[0];
+            }
+          } else if (cmd === 'open' && inputValue.startsWith('open ')) {
+            const openCommands = ['open home', 'open readme', 'open skills', 'open contact'];
+            const openMatches = openCommands.filter(c => 
+              c.startsWith(inputValue) && c !== inputValue
+            );
+            if (openMatches.length === 1) {
+              input.value = openMatches[0];
+            }
+          } else if (cmd === 'theme' && inputValue.startsWith('theme ')) {
+            const themeCommands = ['theme dark', 'theme light', 'theme auto'];
+            const themeMatches = themeCommands.filter(c => 
+              c.startsWith(inputValue) && c !== inputValue
+            );
+            if (themeMatches.length === 1) {
+              input.value = themeMatches[0];
+            }
+          } else if (cmd === 'focus' && inputValue.startsWith('focus ')) {
+            const focusCommands = ['focus editor', 'focus terminal', 'focus explorer'];
+            const focusMatches = focusCommands.filter(c => 
+              c.startsWith(inputValue) && c !== inputValue
+            );
+            if (focusMatches.length === 1) {
+              input.value = focusMatches[0];
+            }
+          } else if (cmd === 'layout' && inputValue.startsWith('layout ')) {
+            const layoutCommands = ['layout compact', 'layout comfy'];
+            const layoutMatches = layoutCommands.filter(c => 
+              c.startsWith(inputValue) && c !== inputValue
+            );
+            if (layoutMatches.length === 1) {
+              input.value = layoutMatches[0];
+            }
+          } else {
+            // Auto-complete para outros comandos
+            const matches = Object.keys(COMMANDS).filter(c => 
+              c.startsWith(inputValue) && c !== inputValue
+            );
+            if (matches.length === 1) {
+              input.value = matches[0];
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Erro ao processar tecla no terminal:', error);
+      }
+    });
+  }
+
+  /**
+   * Processa um comando e retorna a resposta
+   * @param {string} command - Comando a ser processado
+   * @returns {string[]} - Array de linhas de resposta
+   */
+  function processCommand(command) {
+    try {
+      const trimmed = command.trim();
+      if (!trimmed) return [];
+
+      // Adiciona ao histórico
+      if (trimmed !== 'history' && commandHistory[commandHistory.length - 1] !== trimmed) {
+        commandHistory.push(trimmed);
+        historyIndex = commandHistory.length;
+      }
+
+      // Tenta processar comandos especiais (como lang)
+      const specialCommand = handleTerminalCommand(trimmed);
+      if (specialCommand !== null) {
+        // É um comando especial, retorna a mensagem
+        return [specialCommand.message];
+      }
+
+      // Verifica se o comando existe
+      if (COMMANDS[trimmed]) {
+        const result = COMMANDS[trimmed]();
+        return Array.isArray(result) ? result : [];
+      }
+
+      // Comando não encontrado
+      const commandName = trimmed.split(' ')[0];
+      return [getTerminalTranslation('error.commandNotFound', { command: commandName })];
+    } catch (error) {
+      console.error('Erro ao processar comando:', error);
+      return [getTerminalTranslation('error.processingError', { error: error.message })];
+    }
+  }
+
+  /**
+   * Adiciona uma linha ao terminal
+   */
+  function addLine(text, className = '') {
+    if (!terminalOutput) return;
+    
+    const line = document.createElement('div');
+    if (className) {
+      line.className = className;
+    }
+    line.textContent = text;
+    terminalOutput.appendChild(line);
+    scrollToBottom();
+  }
+
+  /**
+   * Adiciona múltiplas linhas
+   */
+  function addLines(lines, className = '') {
+    lines.forEach(line => addLine(line, className));
+  }
+
+  /**
+   * Cria ou atualiza o input container dentro do scrollable
+   */
+  function createInputContainer() {
+    if (!terminalOutput) return null;
+    
+    // Remove input container existente se houver
+    const existingInput = terminalOutput.querySelector('.terminal-terminal-input-container');
+    if (existingInput) {
+      existingInput.remove();
+    }
+    
+    // Cria novo input container
+    const inputContainer = document.createElement('div');
+    inputContainer.className = 'terminal-terminal-input-container';
+    
+    const prompt = document.createElement('span');
+    prompt.className = 'terminal-terminal-prompt-input';
+    prompt.textContent = `user@delucena.dev %`;
+    
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'terminal-terminal-input';
+    input.id = 'terminalInput';
+    input.autocomplete = 'off';
+    input.spellcheck = false;
+    input.placeholder = getTerminalTranslation('placeholder');
+    
+    inputContainer.appendChild(prompt);
+    inputContainer.appendChild(input);
+    terminalOutput.appendChild(inputContainer);
+    
+    // Atualiza referência do input
+    terminalInput = input;
+    
+    // Adiciona event listeners ao novo input
+    setupInputListeners(input);
+    
+    scrollToBottom();
+    return input;
+  }
+
+  /**
+   * Adiciona o prompt (sem input, apenas prompt visual)
+   */
+  function addPrompt() {
+    if (!terminalOutput) return;
+    
+    const promptLine = document.createElement('div');
+    promptLine.className = 'terminal-terminal-line';
+    
+    const prompt = document.createElement('span');
+    prompt.className = 'terminal-terminal-prompt';
+    prompt.textContent = `user@delucena.dev %`;
+    
+    promptLine.appendChild(prompt);
+    terminalOutput.appendChild(promptLine);
+    scrollToBottom();
+  }
+
+  /**
+   * Scroll automático para o final
+   */
+  function scrollToBottom() {
+    if (terminalOutput) {
+      requestAnimationFrame(() => {
+        terminalOutput.scrollTop = terminalOutput.scrollHeight;
+      });
+    }
+  }
+
+  /**
+   * Exibe o resultado de um comando
+   */
+  function executeCommand(command) {
+    if (!terminalOutput || !command.trim()) return;
+
+    // Remove o input container atual
+    const currentInput = terminalOutput.querySelector('.terminal-terminal-input-container');
+    if (currentInput) {
+      currentInput.remove();
+    }
+
+    // Adiciona o comando digitado
+    addPrompt();
+    addLine(command, 'terminal-terminal-command');
+
+    // Processa o comando
+    const result = processCommand(command);
+    
+    // Adiciona delay para simular processamento
+    setTimeout(() => {
+      if (result.length > 0) {
+        addLines(result);
+      }
+      
+      // Cria novo input container no final
+      const newInput = createInputContainer();
+      if (newInput) {
+        newInput.focus();
+      }
+    }, 100);
+  }
+
+  /**
+   * Inicializa o terminal
+   */
+  function initTerminal() {
+    if (!initElements()) {
+      return;
+    }
+
+    // Remover placeholder se existir
+    const placeholder = terminalOutput.querySelector('.terminal-placeholder');
+    if (placeholder) {
+      placeholder.remove();
+    }
+
+    // Limpa o terminal
+    terminalOutput.innerHTML = '';
+
+    // Mensagem de boas-vindas
+    const currentLanguage = window.i18n ? window.i18n.getLocale() : 'pt-BR';
+    const dateStr = new Date().toLocaleString(currentLanguage);
+    const welcomeMsg = getTerminalTranslation('welcome', { date: dateStr });
+    addLine(welcomeMsg, 'terminal-terminal-info');
+    addLine('');
+
+    // Cria o input container inicial
+    const initialInput = createInputContainer();
+    if (initialInput) {
+      initialInput.focus();
+    }
+    
+    // Atualiza placeholder do input
+    updateTerminalLanguage();
+
+    // Foca no input quando clicar no terminal
+    terminalOutput.addEventListener('click', () => {
+      const currentInput = terminalOutput.querySelector('.terminal-terminal-input');
+      if (currentInput) {
+        currentInput.focus();
+      }
+    });
+  }
+
+  /**
+   * Inicializa quando o DOM estiver pronto
+   */
+  /**
+   * Verifica se é mobile
+   */
+  function isMobile() {
+    return window.innerWidth <= 768;
+  }
+
+  function init() {
+    // Não inicializa no mobile
+    if (isMobile()) {
+      return;
+    }
+    
+    try {
+      // Escuta mudanças de idioma
+      document.addEventListener('i18n:changed', () => {
+        updateTerminalLanguage();
+      });
+      
+      setTimeout(() => {
+        const terminalsRadio = document.querySelector(SELECTORS.terminalsRadio);
+        
+        // Inicializa quando a aba terminal estiver selecionada
+        if (terminalsRadio && terminalsRadio.checked) {
+          setTimeout(initTerminal, 100);
+        }
+        
+        // Observa mudanças nas abas
+        const allTerminalRadios = document.querySelectorAll('.terminal > input[type="radio"]');
+        allTerminalRadios.forEach(radio => {
+          radio.addEventListener('change', function() {
+            try {
+              if (this.id === 'terminals' && this.checked) {
+                setTimeout(initTerminal, 100);
+              }
+            } catch (error) {
+              console.error('Erro ao processar mudança de aba do terminal:', error);
+            }
+          });
+        });
+      }, 50);
+    } catch (error) {
+      console.error('Erro ao inicializar terminal:', error);
+    }
+  }
+
+  // Iniciar quando DOM estiver pronto
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();

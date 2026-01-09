@@ -1,7 +1,7 @@
 <section class="index" id="_index_">
-    <h1>{{profile.name}}</h1>
-    <h2>{{profile.titleEmoji}} {{profile.title}}</h2>
+    <h1 data-i18n="hero.name">{{profile.name}}</h1>
+    <h2 data-i18n="hero.title">{{profile.titleEmoji}} {{profile.title}}</h2>
     {{#each profile.bio}}
-    <p style="margin-bottom: 1rem;">{{this}}</p>
+    <p style="margin-bottom: 1rem;" data-i18n="hero.bio.{{@index}}">{{this}}</p>
     {{/each}}
 </section>

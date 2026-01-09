@@ -1,0 +1,380 @@
+/* ============================================
+   VISUAL EFFECTS - Efeitos Visuais Temporários
+   ============================================ */
+
+/* 
+ * IMPORTANTE: 
+ * - Efeitos só aplicam no preview (não no editor, explorer ou terminal)
+ * - Usar apenas transform, opacity e filter para performance
+ * - Nada que cause CLS (Cumulative Layout Shift)
+ */
+
+/* ============================================
+   PIRATE MODE - Idioma Fake Pirata
+   ============================================ */
+
+.mode-pirate #editor .editor:not(.code-mode),
+.mode-pirate #editor .editor:not(.code-mode) section {
+  font-family: 'Comic Sans MS', cursive, sans-serif !important;
+}
+
+.mode-pirate #editor .editor:not(.code-mode) *,
+.mode-pirate #editor .editor:not(.code-mode) section * {
+  font-family: inherit !important;
+}
+
+/* Pirate mode - aplicar em seções visíveis */
+.mode-pirate #header:has(div #index:checked) ~ .editor .index,
+.mode-pirate #header:has(div #experience:checked) ~ .editor .experience,
+.mode-pirate #header:has(div #skills:checked) ~ .editor .skills,
+.mode-pirate #header:has(div #contact:checked) ~ .editor .contact,
+.mode-pirate #header:has(div #readme:checked) ~ .editor .readme {
+  font-family: 'Comic Sans MS', cursive, sans-serif !important;
+}
+
+.mode-pirate #header:has(div #index:checked) ~ .editor .index *,
+.mode-pirate #header:has(div #experience:checked) ~ .editor .experience *,
+.mode-pirate #header:has(div #skills:checked) ~ .editor .skills *,
+.mode-pirate #header:has(div #contact:checked) ~ .editor .contact *,
+.mode-pirate #header:has(div #readme:checked) ~ .editor .readme * {
+  font-family: inherit !important;
+}
+
+.mode-pirate #header:has(div #index:checked) ~ .editor .index h1::before,
+.mode-pirate #header:has(div #experience:checked) ~ .editor .experience h1::before,
+.mode-pirate #header:has(div #skills:checked) ~ .editor .skills h1::before,
+.mode-pirate #header:has(div #contact:checked) ~ .editor .contact h1::before,
+.mode-pirate #header:has(div #readme:checked) ~ .editor .readme h1::before,
+.mode-pirate #header:has(div #index:checked) ~ .editor .index h2::before,
+.mode-pirate #header:has(div #experience:checked) ~ .editor .experience h2::before,
+.mode-pirate #header:has(div #skills:checked) ~ .editor .skills h2::before,
+.mode-pirate #header:has(div #contact:checked) ~ .editor .contact h2::before,
+.mode-pirate #header:has(div #readme:checked) ~ .editor .readme h2::before,
+.mode-pirate #header:has(div #index:checked) ~ .editor .index h3::before,
+.mode-pirate #header:has(div #experience:checked) ~ .editor .experience h3::before,
+.mode-pirate #header:has(div #skills:checked) ~ .editor .skills h3::before,
+.mode-pirate #header:has(div #contact:checked) ~ .editor .contact h3::before,
+.mode-pirate #header:has(div #readme:checked) ~ .editor .readme h3::before {
+  content: '🏴‍☠️ ';
+  margin-right: 0.2em;
+}
+
+.mode-pirate #header:has(div #index:checked) ~ .editor .index p::after,
+.mode-pirate #header:has(div #experience:checked) ~ .editor .experience p::after,
+.mode-pirate #header:has(div #skills:checked) ~ .editor .skills p::after,
+.mode-pirate #header:has(div #contact:checked) ~ .editor .contact p::after,
+.mode-pirate #header:has(div #readme:checked) ~ .editor .readme p::after {
+  content: ' arrr!';
+  font-style: italic;
+  color: rgba(139, 69, 19, 0.8);
+}
+
+/* ============================================
+   DANCE MODE - Animações Leves
+   ============================================ */
+
+/* Dance mode - aplicar em seções visíveis usando o mesmo padrão do editor.css */
+.mode-dance #header:has(div #index:checked) ~ .editor .index,
+.mode-dance #header:has(div #experience:checked) ~ .editor .experience,
+.mode-dance #header:has(div #skills:checked) ~ .editor .skills,
+.mode-dance #header:has(div #contact:checked) ~ .editor .contact,
+.mode-dance #header:has(div #readme:checked) ~ .editor .readme {
+  animation: dance-shake 0.5s ease-in-out infinite !important;
+}
+
+.mode-dance #header:has(div #index:checked) ~ .editor .index h1,
+.mode-dance #header:has(div #experience:checked) ~ .editor .experience h1,
+.mode-dance #header:has(div #skills:checked) ~ .editor .skills h1,
+.mode-dance #header:has(div #contact:checked) ~ .editor .contact h1,
+.mode-dance #header:has(div #readme:checked) ~ .editor .readme h1,
+.mode-dance #header:has(div #index:checked) ~ .editor .index h2,
+.mode-dance #header:has(div #experience:checked) ~ .editor .experience h2,
+.mode-dance #header:has(div #skills:checked) ~ .editor .skills h2,
+.mode-dance #header:has(div #contact:checked) ~ .editor .contact h2,
+.mode-dance #header:has(div #readme:checked) ~ .editor .readme h2,
+.mode-dance #header:has(div #index:checked) ~ .editor .index h3,
+.mode-dance #header:has(div #experience:checked) ~ .editor .experience h3,
+.mode-dance #header:has(div #skills:checked) ~ .editor .skills h3,
+.mode-dance #header:has(div #contact:checked) ~ .editor .contact h3,
+.mode-dance #header:has(div #readme:checked) ~ .editor .readme h3 {
+  animation: dance-rotate 0.8s ease-in-out infinite !important;
+  transform-origin: center center;
+}
+
+.mode-dance #header:has(div #index:checked) ~ .editor .index img,
+.mode-dance #header:has(div #experience:checked) ~ .editor .experience img,
+.mode-dance #header:has(div #skills:checked) ~ .editor .skills img,
+.mode-dance #header:has(div #contact:checked) ~ .editor .contact img,
+.mode-dance #header:has(div #readme:checked) ~ .editor .readme img,
+.mode-dance #header:has(div #index:checked) ~ .editor .index picture,
+.mode-dance #header:has(div #experience:checked) ~ .editor .experience picture,
+.mode-dance #header:has(div #skills:checked) ~ .editor .skills picture,
+.mode-dance #header:has(div #contact:checked) ~ .editor .contact picture,
+.mode-dance #header:has(div #readme:checked) ~ .editor .readme picture {
+  animation: dance-bounce 1s ease-in-out infinite !important;
+}
+
+@keyframes dance-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px) rotate(-1deg); }
+  75% { transform: translateX(2px) rotate(1deg); }
+}
+
+@keyframes dance-rotate {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-3deg); }
+  75% { transform: rotate(3deg); }
+}
+
+@keyframes dance-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* ============================================
+   MOUSE CHAOS - Elemento que Segue o Cursor
+   ============================================ */
+
+.mouse-chaos-trail {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 0, 150, 0.8) 0%, rgba(255, 0, 150, 0) 70%);
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  display: none;
+  transition: opacity 0.3s ease;
+}
+
+.mouse-chaos-trail::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(255, 0, 150, 0.3);
+  animation: mouse-chaos-pulse 1s ease-in-out infinite;
+}
+
+@keyframes mouse-chaos-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.3; }
+  50% { transform: scale(1.5); opacity: 0.1; }
+}
+
+/* ============================================
+   DEBUG MODE - Modo Visual de Debug
+   ============================================ */
+
+.mode-debug #header:has(div #index:checked) ~ .editor .index,
+.mode-debug #header:has(div #experience:checked) ~ .editor .experience,
+.mode-debug #header:has(div #skills:checked) ~ .editor .skills,
+.mode-debug #header:has(div #contact:checked) ~ .editor .contact,
+.mode-debug #header:has(div #readme:checked) ~ .editor .readme {
+  outline: 1px dashed rgba(0, 255, 0, 0.4) !important;
+  outline-offset: 2px;
+}
+
+.mode-debug #header:has(div #index:checked) ~ .editor .index div,
+.mode-debug #header:has(div #experience:checked) ~ .editor .experience div,
+.mode-debug #header:has(div #skills:checked) ~ .editor .skills div,
+.mode-debug #header:has(div #contact:checked) ~ .editor .contact div,
+.mode-debug #header:has(div #readme:checked) ~ .editor .readme div,
+.mode-debug #header:has(div #index:checked) ~ .editor .index article,
+.mode-debug #header:has(div #experience:checked) ~ .editor .experience article,
+.mode-debug #header:has(div #skills:checked) ~ .editor .skills article,
+.mode-debug #header:has(div #contact:checked) ~ .editor .contact article,
+.mode-debug #header:has(div #readme:checked) ~ .editor .readme article {
+  outline: 1px dashed rgba(255, 0, 0, 0.3) !important;
+  outline-offset: 2px;
+}
+
+.mode-debug #header:has(div #index:checked) ~ .editor .index [class*="flex"],
+.mode-debug #header:has(div #experience:checked) ~ .editor .experience [class*="flex"],
+.mode-debug #header:has(div #skills:checked) ~ .editor .skills [class*="flex"],
+.mode-debug #header:has(div #contact:checked) ~ .editor .contact [class*="flex"],
+.mode-debug #header:has(div #readme:checked) ~ .editor .readme [class*="flex"],
+.mode-debug #header:has(div #index:checked) ~ .editor .index [style*="display: flex"],
+.mode-debug #header:has(div #experience:checked) ~ .editor .experience [style*="display: flex"],
+.mode-debug #header:has(div #skills:checked) ~ .editor .skills [style*="display: flex"],
+.mode-debug #header:has(div #contact:checked) ~ .editor .contact [style*="display: flex"],
+.mode-debug #header:has(div #readme:checked) ~ .editor .readme [style*="display: flex"] {
+  outline-color: rgba(0, 0, 255, 0.4) !important;
+}
+
+.mode-debug #header:has(div #index:checked) ~ .editor .index [class*="grid"],
+.mode-debug #header:has(div #experience:checked) ~ .editor .experience [class*="grid"],
+.mode-debug #header:has(div #skills:checked) ~ .editor .skills [class*="grid"],
+.mode-debug #header:has(div #contact:checked) ~ .editor .contact [class*="grid"],
+.mode-debug #header:has(div #readme:checked) ~ .editor .readme [class*="grid"],
+.mode-debug #header:has(div #index:checked) ~ .editor .index [style*="display: grid"],
+.mode-debug #header:has(div #experience:checked) ~ .editor .experience [style*="display: grid"],
+.mode-debug #header:has(div #skills:checked) ~ .editor .skills [style*="display: grid"],
+.mode-debug #header:has(div #contact:checked) ~ .editor .contact [style*="display: grid"],
+.mode-debug #header:has(div #readme:checked) ~ .editor .readme [style*="display: grid"] {
+  outline-color: rgba(255, 255, 0, 0.4) !important;
+}
+
+/* ============================================
+   HACK MODE - Modo Hacker
+   ============================================ */
+
+.mode-hack #header:has(div #index:checked) ~ .editor .index,
+.mode-hack #header:has(div #experience:checked) ~ .editor .experience,
+.mode-hack #header:has(div #skills:checked) ~ .editor .skills,
+.mode-hack #header:has(div #contact:checked) ~ .editor .contact,
+.mode-hack #header:has(div #readme:checked) ~ .editor .readme {
+  font-family: 'Courier New', 'Monaco', 'Menlo', monospace !important;
+  filter: hue-rotate(90deg) saturate(1.2);
+  position: relative;
+}
+
+.mode-hack #header:has(div #index:checked) ~ .editor .index::before,
+.mode-hack #header:has(div #experience:checked) ~ .editor .experience::before,
+.mode-hack #header:has(div #skills:checked) ~ .editor .skills::before,
+.mode-hack #header:has(div #contact:checked) ~ .editor .contact::before,
+.mode-hack #header:has(div #readme:checked) ~ .editor .readme::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    transparent 0%,
+    rgba(0, 255, 0, 0.03) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+  animation: hack-scan 3s linear infinite;
+}
+
+.mode-hack #header:has(div #index:checked) ~ .editor .index *,
+.mode-hack #header:has(div #experience:checked) ~ .editor .experience *,
+.mode-hack #header:has(div #skills:checked) ~ .editor .skills *,
+.mode-hack #header:has(div #contact:checked) ~ .editor .contact *,
+.mode-hack #header:has(div #readme:checked) ~ .editor .readme * {
+  position: relative;
+  z-index: 2;
+}
+
+.mode-hack #header:has(div #index:checked) ~ .editor .index::after,
+.mode-hack #header:has(div #experience:checked) ~ .editor .experience::after,
+.mode-hack #header:has(div #skills:checked) ~ .editor .skills::after,
+.mode-hack #header:has(div #contact:checked) ~ .editor .contact::after,
+.mode-hack #header:has(div #readme:checked) ~ .editor .readme::after {
+  content: '_';
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: rgba(0, 255, 0, 0.8);
+  font-size: 1.2em;
+  animation: hack-blink 1s step-end infinite;
+  z-index: 3;
+  pointer-events: none;
+}
+
+@keyframes hack-scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes hack-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* ============================================
+   GRAVITY OFF - Efeito de Flutuação
+   ============================================ */
+
+/* Gravity off - aplicar em seções visíveis */
+.mode-gravity #header:has(div #index:checked) ~ .editor .index,
+.mode-gravity #header:has(div #experience:checked) ~ .editor .experience,
+.mode-gravity #header:has(div #skills:checked) ~ .editor .skills,
+.mode-gravity #header:has(div #contact:checked) ~ .editor .contact,
+.mode-gravity #header:has(div #readme:checked) ~ .editor .readme {
+  animation: gravity-float 3s ease-in-out infinite !important;
+  transform-origin: center center;
+}
+
+.mode-gravity #editor .editor:not(.code-mode) section:nth-child(odd) {
+  animation-delay: 0s;
+}
+
+.mode-gravity #editor .editor:not(.code-mode) section:nth-child(even) {
+  animation-delay: 1.5s;
+}
+
+.mode-gravity #header:has(div #index:checked) ~ .editor .index img,
+.mode-gravity #header:has(div #experience:checked) ~ .editor .experience img,
+.mode-gravity #header:has(div #skills:checked) ~ .editor .skills img,
+.mode-gravity #header:has(div #contact:checked) ~ .editor .contact img,
+.mode-gravity #header:has(div #readme:checked) ~ .editor .readme img,
+.mode-gravity #header:has(div #index:checked) ~ .editor .index picture,
+.mode-gravity #header:has(div #experience:checked) ~ .editor .experience picture,
+.mode-gravity #header:has(div #skills:checked) ~ .editor .skills picture,
+.mode-gravity #header:has(div #contact:checked) ~ .editor .contact picture,
+.mode-gravity #header:has(div #readme:checked) ~ .editor .readme picture {
+  animation: gravity-float-slow 4s ease-in-out infinite !important;
+}
+
+@keyframes gravity-float {
+  0%, 100% { 
+    transform: translateY(0) rotate(0deg); 
+  }
+  50% { 
+    transform: translateY(-8px) rotate(1deg); 
+  }
+}
+
+@keyframes gravity-float-slow {
+  0%, 100% { 
+    transform: translateY(0) rotate(0deg); 
+  }
+  50% { 
+    transform: translateY(-12px) rotate(-1deg); 
+  }
+}
+
+/* ============================================
+   GARANTIAS - Não Afetar Editor, Explorer ou Terminal
+   ============================================ */
+
+/* Garantir que efeitos NUNCA afetem o editor em modo código */
+#editor .editor.code-mode,
+#editor .code-view-container,
+#explorer,
+.terminal,
+#header {
+  /* Resetar todos os efeitos */
+  animation: none !important;
+  transform: none !important;
+  filter: none !important;
+  outline: none !important;
+}
+
+/* Garantir que efeitos só funcionem no preview */
+.mode-pirate #editor .editor.code-mode *,
+.mode-dance #editor .editor.code-mode *,
+.mode-debug #editor .editor.code-mode *,
+.mode-hack #editor .editor.code-mode *,
+.mode-gravity #editor .editor.code-mode * {
+  animation: none !important;
+  transform: none !important;
+  filter: none !important;
+  outline: none !important;
+}
+
+/* Performance: usar will-change apenas quando necessário */
+.mode-dance #editor .editor:not(.code-mode) section,
+.mode-gravity #editor .editor:not(.code-mode) section {
+  will-change: transform;
+}
+
+/* Limpar will-change quando não estiver ativo */
+#editor .editor:not(.code-mode) section {
+  will-change: auto;
+}

@@ -8,8 +8,8 @@
     "clean": "rm -rf dist",
     "rebuild": "npm run clean && npm run build",
     "preview": "npm run rebuild && open dist/index.html",
-    "serve": "npm run build && python3 -m http.server 8000 --directory dist",
-    "dev": "npm run build && python3 -m http.server 8000 --directory dist",
+    "serve": "node scripts/serve.js",
+    "dev": "node scripts/serve.js",
     "favicon": "node src/assets/generate-favicon.js"
   },
   "keywords": [

@@ -1,12 +1,80 @@
 <section class="skills" id="_skills_">
-    <h1>🛠️ Skills & Competências</h1>
+    <h1 data-i18n="skills.title">🛠️ Skills & Competências</h1>
 
-    {{#each skills}}
-    <h3 style="font-size: var(--font-size-base); font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem;">{{title}}</h3>
-    <ul style="margin-left:2rem; font-size: var(--font-size-base); margin-bottom: 0.5rem;">
-        {{#each items}}
+    <h3 style="font-size: var(--font-size-base); font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem;" data-i18n="skills.languages.title">💻 Linguagens e Frameworks</h3>
+    <ul style="margin-left:2rem; font-size: var(--font-size-base); margin-bottom: 0.5rem;" data-i18n-list="skills.languages.items">
+        {{#each skills.languages.items}}
         <li style="font-size: var(--font-size-base);">{{this}}</li>
         {{/each}}
     </ul>
-    {{/each}}
+
+    <h3 style="font-size: var(--font-size-base); font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem;" data-i18n="skills.architecture.title">🏗️ Arquitetura e Design</h3>
+    <ul style="margin-left:2rem; font-size: var(--font-size-base); margin-bottom: 0.5rem;" data-i18n-list="skills.architecture.items">
+        {{#each skills.architecture.items}}
+        <li style="font-size: var(--font-size-base);">{{this}}</li>
+        {{/each}}
+    </ul>
+
+    <h3 style="font-size: var(--font-size-base); font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem;" data-i18n="skills.integration.title">🔌 Integração e Comunicação</h3>
+    <ul style="margin-left:2rem; font-size: var(--font-size-base); margin-bottom: 0.5rem;" data-i18n-list="skills.integration.items">
+        {{#each skills.integration.items}}
+        <li style="font-size: var(--font-size-base);">{{this}}</li>
+        {{/each}}
+    </ul>
+
+    <h3 style="font-size: var(--font-size-base); font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem;" data-i18n="skills.databases.title">💾 Banco de Dados e Cache</h3>
+    <ul style="margin-left:2rem; font-size: var(--font-size-base); margin-bottom: 0.5rem;" data-i18n-list="skills.databases.items">
+        {{#each skills.databases.items}}
+        <li style="font-size: var(--font-size-base);">{{this}}</li>
+        {{/each}}
+    </ul>
+
+    <h3 style="font-size: var(--font-size-base); font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem;" data-i18n="skills.devops.title">☁️ DevOps e Infraestrutura</h3>
+    <ul style="margin-left:2rem; font-size: var(--font-size-base); margin-bottom: 0.5rem;" data-i18n-list="skills.devops.items">
+        {{#each skills.devops.items}}
+        <li style="font-size: var(--font-size-base);">{{this}}</li>
+        {{/each}}
+    </ul>
+
+    <h3 style="font-size: var(--font-size-base); font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem;" data-i18n="skills.observability.title">📊 Monitoramento e Observabilidade</h3>
+    <ul style="margin-left:2rem; font-size: var(--font-size-base); margin-bottom: 0.5rem;" data-i18n-list="skills.observability.items">
+        {{#each skills.observability.items}}
+        <li style="font-size: var(--font-size-base);">{{this}}</li>
+        {{/each}}
+    </ul>
+
+    <h3 style="font-size: var(--font-size-base); font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem;" data-i18n="skills.security.title">🔒 Segurança & Plataforma</h3>
+    <ul style="margin-left:2rem; font-size: var(--font-size-base); margin-bottom: 0.5rem;" data-i18n-list="skills.security.items">
+        {{#each skills.security.items}}
+        <li style="font-size: var(--font-size-base);">{{this}}</li>
+        {{/each}}
+    </ul>
+
+    <h3 style="font-size: var(--font-size-base); font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem;" data-i18n="skills.testing.title">✅ Qualidade e Testes Automatizados</h3>
+    <ul style="margin-left:2rem; font-size: var(--font-size-base); margin-bottom: 0.5rem;" data-i18n-list="skills.testing.items">
+        {{#each skills.testing.items}}
+        <li style="font-size: var(--font-size-base);">{{this}}</li>
+        {{/each}}
+    </ul>
+
+    <h3 style="font-size: var(--font-size-base); font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem;" data-i18n="skills.culture.title">👥 Cultura e Práticas</h3>
+    <ul style="margin-left:2rem; font-size: var(--font-size-base); margin-bottom: 0.5rem;" data-i18n-list="skills.culture.items">
+        {{#each skills.culture.items}}
+        <li style="font-size: var(--font-size-base);">{{this}}</li>
+        {{/each}}
+    </ul>
+
+    <h3 style="font-size: var(--font-size-base); font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem;" data-i18n="skills.spokenLanguages.title">🌐 Idiomas</h3>
+    <ul style="margin-left:2rem; font-size: var(--font-size-base); margin-bottom: 0.5rem;" data-i18n-list="skills.spokenLanguages.items">
+        {{#each skills.spokenLanguages.items}}
+        <li style="font-size: var(--font-size-base);">{{this}}</li>
+        {{/each}}
+    </ul>
+
+    <h3 style="font-size: var(--font-size-base); font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem;" data-i18n="skills.softSkills.title">💡 Soft Skills</h3>
+    <ul style="margin-left:2rem; font-size: var(--font-size-base); margin-bottom: 0.5rem;" data-i18n-list="skills.softSkills.items">
+        {{#each skills.softSkills.items}}
+        <li style="font-size: var(--font-size-base);">{{this}}</li>
+        {{/each}}
+    </ul>
 </section>

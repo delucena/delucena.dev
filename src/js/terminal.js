@@ -21,6 +21,184 @@
   let historyIndex = -1;
   let currentDirectory = '~';
 
+  // Mapeamento de comandos lang para idiomas
+  const LANGUAGE_MAP = {
+    'pt': 'pt-BR',
+    'en': 'en',
+    'es': 'es'
+  };
+
+  /**
+   * Obtém tradução do terminal
+   * @param {string} key - Chave de tradução
+   * @param {Object} params - Parâmetros para substituição (ex: {date: '...', command: '...'})
+   * @returns {string} - Texto traduzido
+   */
+  function getTerminalTranslation(key, params = {}) {
+    if (!window.i18n || !window.i18n.getTranslation) {
+      return key;
+    }
+    
+    let translation = window.i18n.getTranslation(`terminal.${key}`);
+    
+    // Substitui parâmetros no formato {param}
+    if (params && typeof translation === 'string') {
+      Object.keys(params).forEach(param => {
+        translation = translation.replace(`{${param}}`, params[param]);
+      });
+    }
+    
+    return translation || key;
+  }
+
+  /**
+   * Atualiza textos do terminal quando o idioma muda
+   */
+  function updateTerminalLanguage() {
+    // DEBUG TEMPORÁRIO
+    const currentLanguage = window.i18n ? window.i18n.getLocale() : 'pt-BR';
+    console.log("[terminal-i18n] language:", currentLanguage);
+    
+    // Atualiza placeholder do input
+    if (terminalInput) {
+      terminalInput.placeholder = getTerminalTranslation('placeholder');
+    }
+  }
+
+  /**
+   * Processa comandos do terminal (especialmente comandos lang e efeitos visuais)
+   * @param {string} command - Comando a ser processado
+   * @returns {Object|null} - { success: boolean, message: string } ou null se não for comando especial
+   */
+  function handleTerminalCommand(command) {
+    const trimmed = command.trim();
+    
+    // DEBUG TEMPORÁRIO
+    console.log("[terminal] command:", trimmed);
+    
+    // Verifica se é um comando lang
+    if (trimmed.startsWith('lang ')) {
+      const langCode = trimmed.substring(5).trim().toLowerCase();
+      
+      // Comando especial: lang pirate
+      if (langCode === 'pirate') {
+        if (window.VisualEffects && typeof window.VisualEffects.activatePirate === 'function') {
+          window.VisualEffects.activatePirate();
+          return {
+            success: true,
+            message: '✔ Pirate mode activated 🏴‍☠️'
+          };
+        }
+        return {
+          success: false,
+          message: 'Error: Visual effects module not available'
+        };
+      }
+      
+      // Verifica se o código de idioma é válido
+      if (LANGUAGE_MAP[langCode]) {
+        const locale = LANGUAGE_MAP[langCode];
+        
+        // DEBUG TEMPORÁRIO
+        console.log("[terminal] language changed to:", locale);
+        
+        // Chama setLanguage do sistema i18n
+        if (window.i18n && typeof window.i18n.setLanguage === 'function') {
+          window.i18n.setLanguage(locale);
+          
+          // Aguarda um pouco para o i18n atualizar antes de obter a tradução
+          setTimeout(() => {
+            updateTerminalLanguage();
+          }, 50);
+          
+          return {
+            success: true,
+            message: getTerminalTranslation(`lang.success.${langCode}`)
+          };
+        } else {
+          return {
+            success: false,
+            message: getTerminalTranslation('error.i18nNotAvailable')
+          };
+        }
+      } else {
+        // Idioma não suportado
+        return {
+          success: false,
+          message: getTerminalTranslation('error.unsupportedLanguage')
+        };
+      }
+    }
+    
+    // Comandos de efeitos visuais
+    if (window.VisualEffects) {
+      switch (trimmed) {
+        case 'dance':
+          if (typeof window.VisualEffects.activateDance === 'function') {
+            window.VisualEffects.activateDance();
+            return {
+              success: true,
+              message: '✔ Dance mode activated 🕺'
+            };
+          }
+          break;
+          
+        case 'mouse chaos':
+          if (typeof window.VisualEffects.activateMouseChaos === 'function') {
+            window.VisualEffects.activateMouseChaos();
+            return {
+              success: true,
+              message: '✔ Mouse chaos activated 🖱️'
+            };
+          }
+          break;
+          
+        case 'debug':
+          if (typeof window.VisualEffects.activateDebug === 'function') {
+            window.VisualEffects.activateDebug();
+            return {
+              success: true,
+              message: '✔ Debug mode on 🐞'
+            };
+          }
+          break;
+          
+        case 'hack':
+          if (typeof window.VisualEffects.activateHack === 'function') {
+            window.VisualEffects.activateHack();
+            return {
+              success: true,
+              message: '✔ Hack mode activated 💻'
+            };
+          }
+          break;
+          
+        case 'gravity off':
+          if (typeof window.VisualEffects.activateGravityOff === 'function') {
+            window.VisualEffects.activateGravityOff();
+            return {
+              success: true,
+              message: '✔ Gravity disabled 🌌'
+            };
+          }
+          break;
+          
+        case 'reset':
+          if (typeof window.VisualEffects.reset === 'function') {
+            window.VisualEffects.reset();
+            return {
+              success: true,
+              message: '✔ All systems back to normal'
+            };
+          }
+          break;
+      }
+    }
+    
+    // Não é um comando especial, retorna null para processamento normal
+    return null;
+  }
+
   // Comandos suportados e suas respostas simuladas
   const COMMANDS = {
     'ls': () => [
@@ -56,15 +234,18 @@
     'ls -la': () => COMMANDS['ls -lah'](),
     'pwd': () => [`/Users/delucena`],
     'whoami': () => [`delucena`],
-    'date': () => [new Date().toLocaleString('pt-BR', { 
+    'date': () => {
+      const currentLanguage = window.i18n ? window.i18n.getLocale() : 'pt-BR';
+      return [new Date().toLocaleString(currentLanguage, { 
       weekday: 'long', 
       year: 'numeric', 
       month: 'long', 
       day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    })],
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      })];
+    },
     'uptime': () => [`10:30  up 2 days,  4:15, 1 user, load averages: 1.25 1.18 1.05`],
     'ps aux': () => [
       'USER       PID  %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND',
@@ -139,7 +320,7 @@
     },
     'history': () => commandHistory.length > 0 
       ? commandHistory.map((cmd, idx) => `${idx + 1}  ${cmd}`)
-      : ['No history found'],
+      : [getTerminalTranslation('history.empty')],
     'git status': () => [
       'On branch main',
       'Your branch is up to date with \'origin/main\'.',
@@ -169,26 +350,12 @@
     'which git': () => [`/usr/local/bin/git`],
     'which node': () => [`/usr/local/bin/node`],
     'uname -a': () => [`Darwin MacBook-Pro.local 23.1.0 Darwin Kernel Version 23.1.0: Mon Oct  9 21:27:27 PDT 2023; root:xnu-10002.41.9~2/RELEASE_ARM64_T6000 arm64`],
-    'help': () => [
-      'Comandos disponíveis:',
-      '  ls, ls -lah, ls -la    - Lista arquivos',
-      '  pwd                     - Mostra diretório atual',
-      '  cd, cd ~, cd ..         - Navega entre diretórios',
-      '  whoami                  - Mostra usuário atual',
-      '  date                    - Mostra data e hora',
-      '  uptime                  - Tempo de atividade do sistema',
-      '  ps aux                  - Lista processos',
-      '  df -h                   - Espaço em disco',
-      '  du -sh *                - Tamanho de diretórios',
-      '  echo                    - Exibe texto',
-      '  cat                     - Mostra conteúdo de arquivo',
-      '  clear                   - Limpa o terminal',
-      '  history                 - Histórico de comandos',
-      '  git status, git log     - Comandos Git',
-      '  brew                    - Homebrew package manager',
-      '  which                   - Localiza executáveis',
-      '  uname -a                - Informações do sistema'
-    ]
+    'help': () => {
+      const title = getTerminalTranslation('help.title');
+      const commands = getTerminalTranslation('help.commands');
+      const commandList = Array.isArray(commands) ? commands : [];
+      return [title, ...commandList];
+    }
   };
 
   /**
@@ -222,6 +389,13 @@
         historyIndex = commandHistory.length;
       }
 
+      // Tenta processar comandos especiais (como lang)
+      const specialCommand = handleTerminalCommand(trimmed);
+      if (specialCommand !== null) {
+        // É um comando especial, retorna a mensagem
+        return [specialCommand.message];
+      }
+
       // Verifica se o comando existe
       if (COMMANDS[trimmed]) {
         const result = COMMANDS[trimmed]();
@@ -229,10 +403,11 @@
       }
 
       // Comando não encontrado
-      return [`zsh: command not found: ${trimmed.split(' ')[0]}`];
+      const commandName = trimmed.split(' ')[0];
+      return [getTerminalTranslation('error.commandNotFound', { command: commandName })];
     } catch (error) {
       console.error('Erro ao processar comando:', error);
-      return [`Erro ao processar comando: ${error.message}`];
+      return [getTerminalTranslation('error.processingError', { error: error.message })];
     }
   }
 
@@ -269,7 +444,7 @@
     
     const prompt = document.createElement('span');
     prompt.className = 'terminal-prompt';
-    prompt.textContent = `delucena@macbook ${currentDirectory} %`;
+    prompt.textContent = `user@delucena.dev %`;
     
     promptLine.appendChild(prompt);
     terminalOutput.appendChild(promptLine);
@@ -327,9 +502,15 @@
     terminalOutput.innerHTML = '';
 
     // Mensagem de boas-vindas
-    addLine('Last login: ' + new Date().toLocaleString('pt-BR') + ' on ttys000', 'terminal-info');
+    const currentLanguage = window.i18n ? window.i18n.getLocale() : 'pt-BR';
+    const dateStr = new Date().toLocaleString(currentLanguage);
+    const welcomeMsg = getTerminalTranslation('welcome', { date: dateStr });
+    addLine(welcomeMsg, 'terminal-info');
     addLine('');
     addPrompt();
+    
+    // Atualiza placeholder do input
+    updateTerminalLanguage();
 
     // Foca no input
     terminalInput.focus();
@@ -360,11 +541,26 @@
           e.preventDefault();
           // Auto-complete básico
           const input = terminalInput.value.trim();
-          const matches = Object.keys(COMMANDS).filter(cmd => 
-            cmd.startsWith(input) && cmd !== input
-          );
-          if (matches.length === 1) {
-            terminalInput.value = matches[0];
+          
+          // Comandos lang para auto-complete
+          const langCommands = ['lang pt', 'lang en', 'lang es'];
+          
+          // Verifica comandos lang primeiro
+          if (input.startsWith('lang ')) {
+            const langMatches = langCommands.filter(cmd => 
+              cmd.startsWith(input) && cmd !== input
+            );
+            if (langMatches.length === 1) {
+              terminalInput.value = langMatches[0];
+            }
+          } else {
+            // Auto-complete para outros comandos
+            const matches = Object.keys(COMMANDS).filter(cmd => 
+              cmd.startsWith(input) && cmd !== input
+            );
+            if (matches.length === 1) {
+              terminalInput.value = matches[0];
+            }
           }
         }
       } catch (error) {
@@ -397,6 +593,11 @@
     }
     
     try {
+      // Escuta mudanças de idioma
+      document.addEventListener('i18n:changed', () => {
+        updateTerminalLanguage();
+      });
+      
       setTimeout(() => {
         const terminalsRadio = document.querySelector(SELECTORS.terminalsRadio);
         

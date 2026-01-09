@@ -1,0 +1,400 @@
+{
+  "meta": {
+    "title": "delucena.dev - José Paulo de Lucena | Senior Software Engineer",
+    "description": "Senior Software Engineer specialized in Java, Go, microservices and distributed systems. Experience in high scalability and performance architecture.",
+    "skipLink": "Skip to main content"
+  },
+  "nav": {
+    "toggleMenu": "Toggle menu",
+    "explorerView": "Explorer view",
+    "extensionsView": "Extensions view",
+    "sendEmail": "Send Email",
+    "theme": "Theme:",
+    "explorer": "EXPLORER",
+    "outline": "OUTLINE",
+    "timeline": "TIMELINE",
+    "extensions": "EXTENSIONS",
+    "installed": "INSTALLED",
+    "recommended": "RECOMMENDED"
+  },
+  "header": {
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "commandPalette": "Command palette",
+    "commandList": "Command list"
+  },
+  "editor": {
+    "codeEditor": "Code editor",
+    "portfolioContent": "Portfolio content",
+    "editorControls": "Editor controls",
+    "togglePreview": "Toggle preview and code",
+    "togglePreviewLabel": "Toggle between preview and code",
+    "codeView": "Code view",
+    "formattedCode": "Formatted HTML code",
+    "filePath": "File path",
+    "close": "Close"
+  },
+  "hero": {
+    "name": "José Paulo de Lucena",
+    "title": "🚀 Senior Software Engineer",
+    "bio": [
+      "Senior Software Engineer with solid experience in backend development, microservices architecture and high scalability and performance distributed systems.",
+      "I worked on strategic digital transformation projects in financial institutions and complex corporate environments, leading modernization initiatives, critical systems integration and performance optimization.",
+      "Expert in Java, Go (Golang), microservices architecture, distributed systems and DevOps practices. Experience with Kubernetes, AWS, observability (Datadog, New Relic, Grafana) and quality culture with automated tests and code review.",
+      "Always open to collaborations, continuous learning and challenges!"
+    ]
+  },
+  "readme": {
+    "greeting": "👋 Hey, my name is Zé, but you can call me Zé 😄",
+    "tagline": "I think, therefore I code.",
+    "description": "Backend, cloud, microservices and distributed systems."
+  },
+  "skills": {
+    "title": "🛠️ Skills & Competencies",
+    "languages": {
+      "title": "💻 Languages and Frameworks",
+      "items": [
+        "Java 8+ (Spring Boot, Spring Framework, Spring Security, Spring Cloud)",
+        "Go (Golang)",
+        "JavaEE (JSF, EJB, JPA/Hibernate)",
+        "Python (automation and E2E testing)"
+      ]
+    },
+    "architecture": {
+      "title": "🏗️ Architecture and Design",
+      "items": [
+        "Microservices and Distributed Systems",
+        "SOLID, DDD (Domain-Driven Design)",
+        "CQRS (Command Query Responsibility Segregation)",
+        "Event Sourcing and SAGA Pattern",
+        "Clean Code and Design Patterns"
+      ]
+    },
+    "integration": {
+      "title": "🔌 Integration and Communication",
+      "items": [
+        "REST and SOAP APIs",
+        "OpenAPI/Swagger",
+        "Apache Kafka",
+        "AWS SQS",
+        "GraphQL"
+      ]
+    },
+    "databases": {
+      "title": "💾 Databases and Cache",
+      "items": [
+        "MySQL, PostgreSQL, DB2",
+        "Redis (Key-Value Store)",
+        "MongoDB",
+        "Apache Solr (full-text search)"
+      ]
+    },
+    "devops": {
+      "title": "☁️ DevOps and Infrastructure",
+      "items": [
+        "Docker and Containerization",
+        "Kubernetes (EKS) - probes, services, deploys, kubectl",
+        "GitHub Actions (tags/releases)",
+        "AWS (VPC, RDS, IAM, Route53, Lambda, SQS)",
+        "WildFly/JBoss EAP (JBoss CLI, middleware configurations)",
+        "IBM WebSphere Application Server 9.0 (WAS 9)",
+        "Jenkins and GitLab CI (CI/CD pipelines)"
+      ]
+    },
+    "observability": {
+      "title": "📊 Monitoring and Observability",
+      "items": [
+        "Grafana and Prometheus",
+        "Datadog (APM, metrics, logs, dashboards, alerts)",
+        "New Relic (APM, metrics, logs, dashboards, alerts)",
+        "Graylog (log centralization)",
+        "OpenTelemetry",
+        "Kibana"
+      ]
+    },
+    "security": {
+      "title": "🔒 Security & Platform",
+      "items": [
+        "External Secrets",
+        "cert-manager",
+        "Ingress Controllers",
+        "Spring Security",
+        "IBM API Connect (API governance)"
+      ]
+    },
+    "testing": {
+      "title": "✅ Quality and Automated Testing",
+      "items": [
+        "JUnit 5",
+        "Mockito and PowerMock",
+        "Testcontainers",
+        "E2E Testing (Python scripts)",
+        "Code Review and Quality Gates"
+      ]
+    },
+    "culture": {
+      "title": "👥 Culture and Practices",
+      "items": [
+        "Agile squads",
+        "DevSecOps",
+        "Code Review",
+        "Quality Gates",
+        "Git/GitHub/GitLab (versioning)",
+        "Maven and build automation"
+      ]
+    },
+    "spokenLanguages": {
+      "title": "🌐 Languages",
+      "items": [
+        "Portuguese (Native)",
+        "English (Technical/Professional)"
+      ]
+    },
+    "softSkills": {
+      "title": "💡 Soft Skills",
+      "items": [
+        "Excellent communication",
+        "High discipline and organization",
+        "Creative and problem-solving mindset",
+        "Teamwork and collaboration",
+        "Technical leadership and mentoring"
+      ]
+    }
+  },
+  "contact": {
+    "title": "📬 Contact",
+    "description": "I'm always open to conversations, collaborations and challenges! Feel free to reach out through any of the channels below.",
+    "linkedin": {
+      "label": "Connect with me professionally"
+    },
+    "github": {
+      "label": "See my projects and contributions"
+    },
+    "email": {
+      "label": "Send a direct message"
+    }
+  },
+  "footer": {
+    "gitGraph": "Git Graph",
+    "linkedin": "Linkedin",
+    "port": "Port:5500"
+  },
+  "language": {
+    "select": "Select language",
+    "ptBR": "Português (BR)",
+    "en": "English",
+    "es": "Español"
+  },
+  "explorer": {
+    "title": "EXPLORER",
+    "createFile": "Create file",
+    "createFolder": "Create folder",
+    "expandAll": "Expand all",
+    "collapseAll": "Collapse all",
+    "outline": {
+      "title": "OUTLINE",
+      "noInfo": "The active editor cannot provide outline information."
+    },
+    "timeline": {
+      "title": "TIMELINE",
+      "noInfo": "The active editor cannot provide timeline information."
+    }
+  },
+  "extensions": {
+    "title": "EXTENSIONS",
+    "installed": "INSTALLED",
+    "recommended": "RECOMMENDED"
+  },
+  "experience": {
+    "title": "💼 Professional Experience",
+    "responsibilities": "Main responsibilities:",
+    "projects": "Projects:"
+  },
+  "contact": {
+    "title": "📬 Contact",
+    "description": "I'm always open to conversations, collaborations and challenges! Feel free to reach out through any of the channels below.",
+    "linkedin": {
+      "label": "Connect with me professionally",
+      "cardTitle": "LinkedIn"
+    },
+    "github": {
+      "label": "See my projects and contributions",
+      "cardTitle": "GitHub"
+    },
+    "email": {
+      "label": "Send a direct message",
+      "cardTitle": "Email"
+    }
+  },
+  "readme": {
+    "greeting": "👋 Hey, my name is Zé, but you can call me Zé 😄",
+    "tagline": "I think, therefore I code.",
+    "description": "Backend, cloud, microservices and distributed systems.",
+    "skillsAlt": "My Skills",
+    "certifiedAlt": "Oracle Java Certified"
+  },
+  "terminal": {
+    "problems": "PROBLEMS",
+    "output": "OUTPUT",
+    "terminal": "TERMINAL",
+    "debugConsole": "DEBUG CONSOLE",
+    "ports": "PORTS",
+    "outputSelector": "Select output type",
+    "outputOptions": {
+      "maven": "Maven",
+      "tasks": "Tasks",
+      "java": "Java",
+      "spring": "Spring Boot"
+    },
+    "debug": {
+      "noActiveSessions": "No active debug sessions",
+      "startDebugging": "To start debugging, set breakpoints in your code and press F5 or use the Run and Debug view.",
+      "breakpoints": "Breakpoints:",
+      "watch": "Watch:",
+      "callStack": "Call Stack:",
+      "empty": "Empty"
+    },
+    "ports": {
+      "forwardedPorts": "Forwarded Ports",
+      "ports": "ports",
+      "running": "Running",
+      "configureHint": "Right-click a port to configure forwarding"
+    },
+    "tab": {
+      "title": "TERMINAL"
+    },
+    "placeholder": "Type a command...",
+    "welcome": "Last login: {date} on ttys000",
+    "error": {
+      "commandNotFound": "✖ command not found: {command}",
+      "unsupportedLanguage": "✖ unsupported language. use: lang pt | lang en | lang es",
+      "i18nNotAvailable": "✖ i18n system not available",
+      "processingError": "Error processing command: {error}"
+    },
+    "lang": {
+      "success": {
+        "pt": "✔ Language set to pt-BR",
+        "en": "✔ Language set to English",
+        "es": "✔ Language set to Español"
+      }
+    },
+    "help": {
+      "title": "Available commands:",
+      "commands": [
+        "  ls, ls -lah, ls -la    - List files",
+        "  pwd                     - Show current directory",
+        "  cd, cd ~, cd ..         - Navigate directories",
+        "  whoami                  - Show current user",
+        "  date                    - Show date and time",
+        "  uptime                  - System uptime",
+        "  ps aux                  - List processes",
+        "  df -h                   - Disk space",
+        "  du -sh *                - Directory sizes",
+        "  echo                    - Display text",
+        "  cat                     - Show file content",
+        "  clear                   - Clear terminal",
+        "  history                 - Command history",
+        "  git status, git log     - Git commands",
+        "  brew                    - Homebrew package manager",
+        "  which                   - Locate executables",
+        "  uname -a                - System information",
+        "  lang pt|en|es           - Change site language",
+        "  open home|skills|contact|readme - Navigate to page",
+        "  theme dark|light|auto   - Change theme",
+        "  focus editor|terminal|explorer - Focus element",
+        "  layout compact|comfy   - Change layout",
+        "  skills                  - List skills",
+        "  about                   - About me",
+        "  cv                      - Contact information",
+        "  help                    - List available commands"
+      ],
+      "groupsTitle": "Available command groups:",
+      "groupCommandsTitle": "Commands in group \"{group}\":",
+      "groupNotFound": "Group \"{group}\" not found. Use \"help\" to see available groups.",
+      "availableGroups": "Available groups:",
+      "useHelpGroup": "Use \"help <group>\" to see commands in a specific group.",
+      "command": "command",
+      "commands": "command(s)"
+    },
+    "open": {
+      "success": "✔ Navigating to {page}..."
+    },
+    "theme": {
+      "setDark": "✔ Theme changed to Dark",
+      "setLight": "✔ Theme changed to Light",
+      "setAuto": "✔ Theme changed to Auto (detects system preference)",
+      "dark": "Theme: Dark",
+      "light": "Theme: Light",
+      "auto": "Theme: Auto"
+    },
+    "focus": {
+      "editor": "✔ Focused on editor",
+      "terminal": "✔ Focused on terminal",
+      "explorer": "✔ Focused on explorer"
+    },
+    "layout": {
+      "setCompact": "✔ Layout changed to Compact",
+      "setComfy": "✔ Layout changed to Comfy"
+    },
+    "skills": {
+      "title": "🛠️ My Skills & Competencies",
+      "notFound": "Skills section not found"
+    },
+    "about": {
+      "title": "ℹ️ About me",
+      "name": "Name",
+      "titleLabel": "Title",
+      "domain": "Domain",
+      "company": "Company",
+      "defaultTitle": "Senior Software Engineer",
+      "defaultBio": "Backend, cloud, microservices and distributed systems."
+    },
+    "cv": {
+      "message": "📄 For more information, visit:",
+      "linkedin": "  • LinkedIn: https://linkedin.com/in/delucena",
+      "github": "  • GitHub: https://github.com/delucena"
+    },
+    "java": {
+      "easterEgg": "☕ Java is my passion! Expert in Spring Boot and microservices."
+    },
+    "go": {
+      "easterEgg": "🐹 Go is amazing for distributed systems and high performance!"
+    },
+    "kubectl": {
+      "easterEgg": "☸️ Kubernetes is essential for container orchestration!"
+    },
+    "panic": {
+      "easterEgg": "😱 Don't panic! This is just an easter egg. Everything is working perfectly!"
+    },
+    "sudo": {
+      "easterEgg": "🔐 sudo: operation permitted",
+      "message": "💼 Interested in working with me? Contact me via LinkedIn or Email!"
+    },
+    "error": {
+      "commandNotFound": "✖ command not found: {command}",
+      "unsupportedLanguage": "✖ unsupported language. use: lang pt | lang en | lang es",
+      "i18nNotAvailable": "✖ i18n system not available",
+      "processingError": "Error processing command: {error}",
+      "themeNotAvailable": "✖ theme system not available",
+      "invalidTheme": "✖ invalid theme. use: theme dark | theme light | theme auto",
+      "invalidPage": "✖ invalid page. use: open home | open skills | open contact | open readme",
+      "invalidFocusTarget": "✖ invalid target. use: focus editor | focus terminal | focus explorer",
+      "invalidLayout": "✖ invalid layout. use: layout compact | layout comfy"
+    },
+    "history": {
+      "empty": "No history found"
+    }
+  },
+  "editor": {
+    "codeEditor": "Code editor",
+    "portfolioContent": "Portfolio content",
+    "editorControls": "Editor controls",
+    "togglePreview": "Toggle preview and code",
+    "togglePreviewLabel": "Toggle between preview and code",
+    "codeView": "Code view",
+    "formattedCode": "Formatted HTML code",
+    "filePath": "File path",
+    "close": "Close",
+    "closeFile": "Close {fileName}"
+  }
+}

@@ -2,13 +2,13 @@
     <div class="menu">
         <div>
             <input type="checkbox" name="" id="menu" checked class="desktop-only">
-            <label for="menu" aria-label="Toggle menu" class="desktop-only">
+            <label for="menu" aria-label="Toggle menu" class="desktop-only" data-i18n-attr="aria-label" data-i18n="nav.toggleMenu">
                 <svg class="icon icon--md hamburger-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><use href="#icon-bars"></use></svg>
                 <svg class="icon icon--md close-icon" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><use href="#icon-xmark"></use></svg>
             </label>
 
-            <label for="explorerView" aria-label="Explorer view"><svg class="icon icon--md" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><use href="#icon-folder"></use></svg></label>
-            <label for="extensionsView" class="extensions-icon" aria-label="Extensions view">
+            <label for="explorerView" aria-label="Explorer view" data-i18n-attr="aria-label" data-i18n="nav.explorerView"><svg class="icon icon--md" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><use href="#icon-folder"></use></svg></label>
+            <label for="extensionsView" class="extensions-icon" aria-label="Extensions view" data-i18n-attr="aria-label" data-i18n="nav.extensionsView">
                 <svg class="icon icon--md" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M23 7.21878C23 6.63842 22.7741 6.09232 22.3644 5.68323L18.3008 1.61583C17.4814 0.794722 16.0519 0.794722 15.2325 1.61583L12 4.85135V4.64974C12 3.4352 11.0134 2.44771 9.8 2.44771H3.2C1.98658 2.44771 1 3.4352 1 4.64974V20.798C1 22.0125 1.98658 23 3.2 23H19.3333C20.5468 23 21.5333 22.0125 21.5333 20.798V14.1919C21.5333 12.9773 20.5468 11.9898 19.3333 11.9898H19.1319L22.3644 8.75531C22.7741 8.34524 23 7.80012 23 7.21878ZM3.2 3.91573H9.8C10.2038 3.91573 10.5333 4.24457 10.5333 4.64974V11.9898H2.46667V4.64974C2.46667 4.24457 2.79618 3.91573 3.2 3.91573ZM2.46667 20.798V13.4579H10.5333V21.532H3.2C2.79618 21.532 2.46667 21.2022 2.46667 20.798ZM20.0667 14.1919V20.798C20.0667 21.2022 19.7372 21.532 19.3333 21.532H12V13.4579H19.3333C19.7372 13.4579 20.0667 13.7867 20.0667 14.1919ZM12 11.9898V9.58523L14.4024 11.9898H12ZM21.327 7.71595L17.2634 11.7833C16.9974 12.0495 16.5359 12.0495 16.269 11.7833L12.2053 7.71595C12.0724 7.58383 11.999 7.40669 11.999 7.21878C11.999 7.03087 12.0724 6.85471 12.2053 6.72161L16.269 2.65421C16.402 2.52111 16.578 2.44771 16.7657 2.44771C16.9534 2.44771 17.1294 2.52111 17.2624 2.65421L21.326 6.72161C21.459 6.85373 21.5324 7.03087 21.5324 7.21878C21.5324 7.40669 21.46 7.58285 21.327 7.71595Z"/></svg>
             </label>
             <a href="{{contact.github.url}}" target="_blank" class="git-icon">
@@ -17,6 +17,42 @@
                 </svg>
             </a>
             <svg class="icon icon--md disabled desktop-only" viewBox="0 0 512 512" fill="currentColor"><use href="#icon-magnifying-glass"></use></svg>
+        </div>
+        <!-- Seletor de idioma mobile -->
+        <div class="language-selector-group mobile-only" role="group" aria-label="Selecionar idioma" data-i18n-attr="aria-label" data-i18n="language.select">
+          <button 
+            type="button"
+            class="language-btn"
+            data-locale="pt-BR"
+            aria-label="Português (BR)"
+            title="Português (BR)"
+            data-i18n-attr="aria-label,title"
+            data-i18n="language.ptBR"
+          >
+            <span class="language-flag">🇧🇷</span>
+          </button>
+          <button 
+            type="button"
+            class="language-btn"
+            data-locale="en"
+            aria-label="English"
+            title="English"
+            data-i18n-attr="aria-label,title"
+            data-i18n="language.en"
+          >
+            <span class="language-flag">🇺🇸</span>
+          </button>
+          <button 
+            type="button"
+            class="language-btn"
+            data-locale="es"
+            aria-label="Español"
+            title="Español"
+            data-i18n-attr="aria-label,title"
+            data-i18n="language.es"
+          >
+            <span class="language-flag">🇪🇸</span>
+          </button>
         </div>
         <input type="radio" name="socialAccounts" id="close">
         <div>
@@ -28,7 +64,7 @@
                 <ul>
                     <li><a target="_blank" href="{{contact.linkedin.url}}">LinkedIn</a></li>
                     <hr>
-                    <li><a target="_blank" href="{{contact.email.url}}">Enviar Email</a></li>
+                    <li><a target="_blank" href="{{contact.email.url}}" data-i18n="nav.sendEmail">Enviar Email</a></li>
                     <hr>
                     <li><a target="_blank" href="{{contact.github.url}}">GitHub</a></li>
                 </ul>
@@ -40,8 +76,17 @@
                 <input type="radio" name="socialAccounts" id="folderToggleSettings">
                 <ul>
                     <li>
-                        <label for="theme" class="theme-label">Tema: <span id="themeLabel">Dark</span></label>
+                        <label for="theme" class="theme-label" data-i18n="nav.theme"><span id="themeLabel">Tema: Dark</span></label>
                         <input type="checkbox" name="theme" id="theme">
+                    </li>
+                    <hr>
+                    <li>
+                        <label for="language-selector" class="language-label" data-i18n="language.select">Selecionar idioma</label>
+                        <select id="language-selector" class="language-selector" aria-label="Selecionar idioma">
+                            <option value="pt-BR" data-i18n="language.ptBR">Português (BR)</option>
+                            <option value="en" data-i18n="language.en">English</option>
+                            <option value="es" data-i18n="language.es">Español</option>
+                        </select>
                     </li>
                 </ul>
             </div>
@@ -52,7 +97,7 @@
         <input type="radio" name="viewToggle" id="extensionsView">
     <div class="explorer">
         <div>
-            <div class="title">EXPLORER</div>
+            <div class="title" data-i18n="explorer.title">EXPLORER</div>
             <!-- Desktop: estrutura completa de pastas -->
             <div class="desktop-only">
                 <ul>
@@ -64,24 +109,24 @@
                                 <span class="explorer-label">delucena.dev (DELUCENA.DEV)</span>
                             </span>
                             <span class="project-root-actions">
-                                <button type="button" class="explorer-action-btn" aria-label="Criar arquivo" title="Criar arquivo">
+                                <button type="button" class="explorer-action-btn" aria-label="Criar arquivo" title="Criar arquivo" data-i18n-attr="aria-label,title" data-i18n="explorer.createFile">
                                     <svg class="action-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M4 7H3V4H0V3H3V0H4V3H7V4H4V7ZM10.5 1.09998L13.9 4.59998L14 5V13.5L13.5 14H3.5L3 13.5V8H4V13H13V6H9V2H5V1H10.2L10.5 1.09998ZM10 2V5H12.9L10 2Z" fill="currentColor"/>
                                     </svg>
                                 </button>
-                                <button type="button" class="explorer-action-btn" aria-label="Criar pasta" title="Criar pasta">
+                                <button type="button" class="explorer-action-btn" aria-label="Criar pasta" title="Criar pasta" data-i18n-attr="aria-label,title" data-i18n="explorer.createFolder">
                                     <svg class="action-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M7 3H4V0H3V3H0V4H3V7H4V4H7V3ZM5.5 7H5V6H5.3L6.1 5.1L6.5 5H14V4H8V3H14.5L15 3.5V13.5L14.5 14H1.5L1 13.5V6.5V6V5H2V6V6.5V13H14V7V6H6.7L5.9 6.9L5.5 7Z" fill="currentColor"/>
                                     </svg>
                                 </button>
-                                <button type="button" class="explorer-action-btn" id="expandAllBtn" aria-label="Expandir tudo" title="Expandir tudo">
+                                <button type="button" class="explorer-action-btn" id="expandAllBtn" aria-label="Expandir tudo" title="Expandir tudo" data-i18n-attr="aria-label,title" data-i18n="explorer.expandAll">
                                     <svg class="action-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M9 9H4V10H9V9Z" fill="currentColor"/>
                                         <path d="M7 12L7 7L6 7L6 12L7 12Z" fill="currentColor"/>
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M5 3L6 2H13L14 3V10L13 11H11V13L10 14H3L2 13V6L3 5H5V3ZM6 5H10L11 6V10H13V3H6V5ZM10 6H3V13H10V6Z" fill="currentColor"/>
                                     </svg>
                                 </button>
-                                <button type="button" class="explorer-action-btn" id="collapseAllBtn" aria-label="Colapsar tudo" title="Colapsar tudo">
+                                <button type="button" class="explorer-action-btn" id="collapseAllBtn" aria-label="Colapsar tudo" title="Colapsar tudo" data-i18n-attr="aria-label,title" data-i18n="explorer.collapseAll">
                                     <svg class="action-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M9 9H4V10H9V9Z" fill="currentColor"/>
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M5 3L6 2H13L14 3V10L13 11H11V13L10 14H3L2 13V6L3 5H5V3ZM6 5H10L11 6V10H13V3H6V5ZM10 6H3V13H10V6Z" fill="currentColor"/>
@@ -813,32 +858,32 @@
             <label class="folder subTitle outline-section" for="folderToggleOutline">
                 <span class="explorer-caret"></span>
                 <span class="explorer-icon"></span>
-                <span class="explorer-label">OUTLINE</span>
+                <span class="explorer-label" data-i18n="explorer.outline.title">OUTLINE</span>
             </label>
             <input type="checkbox" id="folderToggleOutline">
             <ul class="outline-content">
                 <li>
-                    <div class="explorer-empty-message">The active editor cannot provide outline information.</div>
+                    <div class="explorer-empty-message" data-i18n="explorer.outline.noInfo">The active editor cannot provide outline information.</div>
                 </li>
             </ul>
             <label class="folder subTitle timeline-section" for="folderToggleTimeline">
                 <span class="explorer-caret"></span>
                 <span class="explorer-icon"></span>
-                <span class="explorer-label">TIMELINE</span>
+                <span class="explorer-label" data-i18n="explorer.timeline.title">TIMELINE</span>
             </label>
             <input type="checkbox" id="folderToggleTimeline">
             <ul class="timeline-content">
                 <li>
-                    <div class="explorer-empty-message">The active editor cannot provide timeline information.</div>
+                    <div class="explorer-empty-message" data-i18n="explorer.timeline.noInfo">The active editor cannot provide timeline information.</div>
                 </li>
             </ul>
         </div>
     </div>
     <div class="extensions">
         <div>
-            <div class="title">EXTENSIONS</div>
+            <div class="title" data-i18n="extensions.title">EXTENSIONS</div>
             <label class="folder subTitle" for="folderToggleInstalled">
-                <span class="section-title">INSTALLED</span>
+                <span class="section-title" data-i18n="extensions.installed">INSTALLED</span>
                 <span class="section-count">8</span>
             </label>
             <input type="checkbox" id="folderToggleInstalled" checked>
@@ -918,7 +963,7 @@
             </ul>
             <hr class="section-divider">
             <label class="folder subTitle" for="folderToggleRecommended">
-                <span class="section-title">RECOMMENDED</span>
+                <span class="section-title" data-i18n="extensions.recommended">RECOMMENDED</span>
                 <span class="section-count">6</span>
             </label>
             <input type="checkbox" id="folderToggleRecommended" checked>

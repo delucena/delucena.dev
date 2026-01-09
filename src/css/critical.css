@@ -584,6 +584,7 @@ svg[viewBox]:not([width]):not([height]) {
   flex: 0 0 auto;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 2px;
   min-width: 0;
 }
@@ -630,6 +631,72 @@ svg[viewBox]:not([width]):not([height]) {
   pointer-events: none;
 }
 
+/* Seletor de Idioma */
+.language-selector-group {
+  display: none;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px;
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 4px;
+  padding: 2px;
+}
+
+.language-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px 8px;
+  min-width: 32px;
+  height: 24px;
+  background-color: transparent;
+  border: none;
+  border-radius: 2px;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  font-family: var(--font-family-base);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  outline: none;
+  position: relative;
+}
+
+.language-btn:hover {
+  background-color: var(--color-bg-accent);
+  color: var(--color-text-primary);
+}
+
+.language-btn:focus-visible {
+  outline: 2px solid var(--color-border-accent);
+  outline-offset: 2px;
+}
+
+.language-btn.active {
+  background-color: var(--color-border-accent);
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.language-btn.active:hover {
+  background-color: var(--color-border-accent);
+  opacity: 0.9;
+}
+
+.language-flag {
+  font-size: 14px;
+  line-height: 1;
+  display: inline-block;
+}
+
+.language-code {
+  font-size: var(--font-size-small);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
 /* Ajuste do layout principal - header faz parte do fluxo do layout flex */
 
 /* ============================================
@@ -653,5 +720,25 @@ svg[viewBox]:not([width]):not([height]) {
   .top-header__left,
   .top-header__right {
     display: none !important;
+  }
+  
+  /* Versão mobile do seletor de idioma - apenas bandeiras */
+  .top-header__right .language-selector-group {
+    gap: 1px;
+    padding: 1px;
+  }
+  
+  .top-header__right .language-btn {
+    padding: 4px;
+    min-width: 28px;
+    width: 28px;
+  }
+  
+  .top-header__right .language-code {
+    display: none;
+  }
+  
+  .top-header__right .language-flag {
+    font-size: 16px;
   }
 }

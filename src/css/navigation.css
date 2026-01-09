@@ -366,6 +366,59 @@ body.sidebar-open .menu label[for="menu"] .close-icon {
   font-size: var(--font-size-base);
 }
 
+/* Seletor de idioma */
+.language-label {
+  display: block;
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xs);
+  cursor: default;
+}
+
+.language-selector {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  padding-right: calc(var(--spacing-md) + 16px);
+  font-size: var(--font-size-base);
+  font-family: var(--font-family-base);
+  background-color: var(--color-bg-primary);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23808080' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--spacing-sm) center;
+  background-size: 12px;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 2px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.language-selector:hover {
+  border-color: var(--color-border-accent);
+  background-color: var(--color-bg-secondary);
+}
+
+.language-selector:focus {
+  border-color: var(--color-border-accent);
+  outline: 1px solid var(--color-border-accent);
+  outline-offset: -1px;
+  background-color: var(--color-bg-secondary);
+}
+
+/* Ajustar cor da seta para tema light */
+body:has(#theme:checked) .language-selector {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236F6F6F' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+}
+
+.folder.settings ~ ul li:has(.language-selector) {
+  display: block;
+  padding: var(--spacing-md);
+}
+
 .folder.settings ~ ul hr {
   margin: 0;
   padding: 0;
@@ -495,6 +548,35 @@ body.sidebar-open .menu label[for="menu"] .close-icon {
     height: 0 !important;
     padding: 0 !important;
     margin: 0 !important;
+  }
+  
+  /* Seletor de idioma mobile no menu lateral */
+  .menu .language-selector-group.mobile-only {
+    display: flex !important;
+    flex-direction: column;
+    width: calc(100% - var(--spacing-md) * 2);
+    margin: var(--spacing-sm) var(--spacing-md);
+    gap: 2px;
+    padding: var(--spacing-xs);
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border-primary);
+    border-radius: 4px;
+  }
+  
+  .menu .language-selector-group.mobile-only .language-btn {
+    width: 100%;
+    height: 40px;
+    padding: var(--spacing-xs);
+    justify-content: center;
+    border-bottom: 1px solid var(--color-border-primary);
+  }
+  
+  .menu .language-selector-group.mobile-only .language-btn:last-child {
+    border-bottom: none;
+  }
+  
+  .menu .language-selector-group.mobile-only .language-flag {
+    font-size: 18px;
   }
   
   /* Ícones do menu em mobile - sempre visíveis */
