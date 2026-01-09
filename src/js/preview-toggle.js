@@ -140,16 +140,6 @@
   // ============================================
 
   /**
-   * Define a página atual
-   * @param {string} pageId - ID da página (ex: 'index', 'skills')
-   * @deprecated Use syncEditorWithActiveTab() diretamente - esta função mantida para compatibilidade
-   */
-  function setCurrentPage(pageId) {
-    // Sempre sincroniza com a aba ativa do DOM (fonte da verdade)
-    syncEditorWithActiveTab();
-  }
-
-  /**
    * Define o modo de visualização
    * @param {string} mode - 'page' | 'code'
    */
