@@ -5,13 +5,12 @@ const path = require('path');
 const crypto = require('crypto');
 
 // Importar bibliotecas de minificação (com fallback se não instaladas)
-let htmlMinifier, terser, CleanCSS, PurgeCSS, glob;
+let htmlMinifier, terser, CleanCSS, PurgeCSS;
 try {
   htmlMinifier = require('html-minifier-terser');
   terser = require('terser');
   CleanCSS = require('clean-css');
   PurgeCSS = require('purgecss').PurgeCSS;
-  glob = require('glob');
 } catch (e) {
   console.warn('⚠ Bibliotecas de minificação não encontradas. Execute: npm install');
   console.warn('⚠ Continuando com minificação básica...');
