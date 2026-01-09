@@ -207,15 +207,20 @@ async function minifyHTML(html) {
  * Scripts não essenciais: terminal, syntax highlight, explorer features, etc.
  */
 function consolidateNonEssentialJS(jsSrcDir, jsDistDir) {
-  const nonEssentialFiles = [
+  // Scripts que precisam ser executados imediatamente (explorer features)
+  const immediateFiles = [
+    'explorer-highlight.js',
+    'explorer-actions.js',
+    'explorer-controls.js'
+  ];
+  
+  // Scripts que podem ser carregados de forma assíncrona
+  const asyncFiles = [
     'visual-effects.js',
     'code-highlighter.js',
     'code-copy.js',
     'preview-toggle.js',
     'explorer-resize.js',
-    'explorer-highlight.js',
-    'explorer-actions.js',
-    'explorer-controls.js',
     'terminal-resize.js',
     'terminal/terminal-core.js',
     'terminal/terminal-terminal.js',
@@ -231,13 +236,30 @@ function consolidateNonEssentialJS(jsSrcDir, jsDistDir) {
 (function() {
   'use strict';
   
-  // Adia a execução até que o navegador esteja ocioso
+  // Scripts do explorer são executados imediatamente (precisam estar prontos quando o DOM estiver pronto)
+`;
+
+  // Adiciona scripts imediatos primeiro (executam imediatamente)
+  immediateFiles.forEach(jsFile => {
+    const filePath = path.join(jsSrcDir, jsFile);
+    if (fs.existsSync(filePath)) {
+      const content = fs.readFileSync(filePath, 'utf8');
+      bundleContent += `\n  // === ${jsFile} ===\n`;
+      bundleContent += content;
+      bundleContent += '\n';
+    } else {
+      console.warn(`⚠ Arquivo não encontrado para bundle: ${jsFile}`);
+    }
+  });
+  
+  bundleContent += `
+  // Adia a execução dos scripts não críticos até que o navegador esteja ocioso
   // ou após um delay mínimo para garantir que o FCP já ocorreu
   function loadNonEssentialScripts() {
 `;
 
-  // Lê e adiciona cada arquivo ao bundle (mantém IIFEs intactos)
-  nonEssentialFiles.forEach(jsFile => {
+  // Adiciona scripts assíncronos dentro da função
+  asyncFiles.forEach(jsFile => {
     const filePath = path.join(jsSrcDir, jsFile);
     if (fs.existsSync(filePath)) {
       const content = fs.readFileSync(filePath, 'utf8');
@@ -251,7 +273,8 @@ function consolidateNonEssentialJS(jsSrcDir, jsDistDir) {
   
   bundleContent += `  }
   
-  // Usa requestIdleCallback se disponível, senão usa setTimeout
+  // Scripts do explorer já foram executados acima (imediato)
+  // Scripts assíncronos são carregados quando o navegador estiver ocioso
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
       if (window.requestIdleCallback) {
@@ -261,6 +284,7 @@ function consolidateNonEssentialJS(jsSrcDir, jsDistDir) {
       }
     });
   } else {
+    // DOM já está pronto, carrega scripts assíncronos
     if (window.requestIdleCallback) {
       requestIdleCallback(loadNonEssentialScripts, { timeout: 2000 });
     } else {

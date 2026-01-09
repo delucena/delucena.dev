@@ -25,7 +25,9 @@
       if (breadcrumb) {
         const list = breadcrumb.querySelector('.editor-breadcrumb__list');
         if (list) {
-          list.innerHTML = '';
+          while (list.firstChild) {
+            list.removeChild(list.firstChild);
+          }
         }
       }
       return;
@@ -54,7 +56,9 @@
     }
 
     // Limpa o breadcrumb completamente
-    list.innerHTML = '';
+    while (list.firstChild) {
+      list.removeChild(list.firstChild);
+    }
 
     // Divide o caminho em segmentos
     const pathSegments = path.split('/');
@@ -219,10 +223,10 @@
       const fileId = tabEl.getAttribute('data-file-id');
       if (fileId) {
         expandFoldersForFile(fileId);
-        // Aguarda um pouco para garantir que as pastas foram expandidas
+        // Aguarda um pouco mais para garantir que as pastas foram expandidas e renderizadas
         setTimeout(function() {
           scrollToFileInExplorer(fileId);
-        }, 100);
+        }, 250);
       }
     } finally {
       // Sempre libera a flag, mesmo se houver erro
@@ -322,7 +326,11 @@
    * @param {string} fileId - ID do arquivo (readme, index, skills, contact, etc)
    */
   function scrollToFileInExplorer(fileId) {
-    const fileLabel = document.querySelector(`.explorer label[for="${fileId}"]`);
+    // Tenta encontrar o label no desktop primeiro, depois no mobile
+    let fileLabel = document.querySelector(`.explorer .desktop-only label[for="${fileId}"]`);
+    if (!fileLabel) {
+      fileLabel = document.querySelector(`.explorer label[for="${fileId}"]`);
+    }
     if (!fileLabel) return;
 
     const explorer = document.querySelector('.explorer > div:first-child');
@@ -330,7 +338,14 @@
 
     // Aguarda um pouco para garantir que as pastas foram expandidas
     setTimeout(() => {
-      const labelRect = fileLabel.getBoundingClientRect();
+      // Re-verifica o label após a expansão (pode ter mudado de posição)
+      let currentLabel = document.querySelector(`.explorer .desktop-only label[for="${fileId}"]`);
+      if (!currentLabel) {
+        currentLabel = document.querySelector(`.explorer label[for="${fileId}"]`);
+      }
+      if (!currentLabel) return;
+
+      const labelRect = currentLabel.getBoundingClientRect();
       const explorerRect = explorer.getBoundingClientRect();
 
       // Verifica se o label está visível no viewport do explorer
@@ -342,14 +357,14 @@
       if (!isVisible) {
         // Calcula a posição para scroll
         let labelOffsetTop = 0;
-        let element = fileLabel;
+        let element = currentLabel;
         while (element && element !== explorer) {
           labelOffsetTop += element.offsetTop;
           element = element.offsetParent;
         }
 
         const explorerHeight = explorer.clientHeight;
-        const labelHeight = fileLabel.offsetHeight;
+        const labelHeight = currentLabel.offsetHeight;
 
         // Centraliza o arquivo na viewport do explorer
         const targetScroll = labelOffsetTop - (explorerHeight / 2) + (labelHeight / 2);
@@ -359,7 +374,7 @@
           behavior: 'smooth'
         });
       }
-    }, 150);
+    }, 200); // Aumentado para 200ms para dar mais tempo para as pastas expandirem
   }
 
   /**

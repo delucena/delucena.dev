@@ -96,4 +96,4 @@
 
 # Content Security Policy (otimizado para segurança e funcionalidade)
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; img-src 'self' data: https://skillicons.dev https://img.shields.io https:; font-src 'self' data: https://cdnjs.cloudflare.com; connect-src 'self' https://static.cloudflareinsights.com https:; frame-ancestors 'none'; require-trusted-types-for 'script';
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; img-src 'self' data: https://skillicons.dev https://img.shields.io https:; font-src 'self' data: https://cdnjs.cloudflare.com; connect-src 'self' https://static.cloudflareinsights.com https:; frame-ancestors 'none';

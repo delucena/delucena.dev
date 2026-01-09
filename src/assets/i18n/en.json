@@ -231,7 +231,8 @@
     "tagline": "I think, therefore I code.",
     "description": "Backend, cloud, microservices and distributed systems.",
     "skillsAlt": "My Skills",
-    "certifiedAlt": "Oracle Java Certified"
+    "certifiedAlt": "Oracle Java Certified",
+    "certifiedLink": "Oracle Java Certified - View certification on Credly"
   },
   "terminal": {
     "problems": "PROBLEMS",

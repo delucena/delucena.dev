@@ -8,6 +8,7 @@
     menu: '#menu',
     explorerView: '#explorerView',
     extensionsView: '#extensionsView',
+    closeView: '#closeView',
     closeRadio: '#close',
     explorerLabel: 'label[for="explorerView"]',
     extensionsLabel: 'label[for="extensionsView"]',
@@ -26,6 +27,7 @@
     elements.menu = document.querySelector(SELECTORS.menu);
     elements.explorerView = document.querySelector(SELECTORS.explorerView);
     elements.extensionsView = document.querySelector(SELECTORS.extensionsView);
+    elements.closeView = document.querySelector(SELECTORS.closeView);
     elements.closeRadio = document.querySelector(SELECTORS.closeRadio);
     elements.explorerLabel = document.querySelector(SELECTORS.explorerLabel);
     elements.extensionsLabel = document.querySelector(SELECTORS.extensionsLabel);
@@ -79,12 +81,19 @@
 
     if (elements.explorerView.checked) {
       event.preventDefault();
-      elements.explorerView.checked = false;
+      // Radio não pode ser desmarcado; volta para o estado "fechado"
+      if (elements.closeView) elements.closeView.checked = true;
       return false;
     }
 
     if (elements.extensionsView?.checked) {
-      elements.extensionsView.checked = false;
+      if (elements.closeView) {
+        elements.closeView.checked = true;
+      } else {
+        // Fallback (deve ser raro): força fechar pelo rádio "close"
+        const close = document.querySelector('#closeView');
+        if (close) close.checked = true;
+      }
     }
   }
 
@@ -93,12 +102,19 @@
 
     if (elements.extensionsView.checked) {
       event.preventDefault();
-      elements.extensionsView.checked = false;
+      // Radio não pode ser desmarcado; volta para o estado "fechado"
+      if (elements.closeView) elements.closeView.checked = true;
       return false;
     }
 
     if (elements.explorerView?.checked) {
-      elements.explorerView.checked = false;
+      if (elements.closeView) {
+        elements.closeView.checked = true;
+      } else {
+        // Fallback (deve ser raro): força fechar pelo rádio "close"
+        const close = document.querySelector('#closeView');
+        if (close) close.checked = true;
+      }
     }
   }
 
@@ -172,8 +188,14 @@
   }
 
   function closeMobileMenus() {
-    if (elements.explorerView) elements.explorerView.checked = false;
-    if (elements.extensionsView) elements.extensionsView.checked = false;
+    // Radio não pode ser desmarcado; seleciona explicitamente o estado "fechado"
+    if (elements.closeView) {
+      elements.closeView.checked = true;
+      return;
+    }
+    // Fallback para compatibilidade
+    const close = document.querySelector('#closeView');
+    if (close) close.checked = true;
   }
 
   function handleResize() {
@@ -215,7 +237,7 @@
     mobileExplorerItems.forEach((item) => {
       item.addEventListener('click', () => {
         closeMenuAfterDelay(() => {
-          if (elements.explorerView) elements.explorerView.checked = false;
+          closeMobileMenus();
         });
       });
     });
@@ -223,7 +245,7 @@
     extensionItems.forEach((item) => {
       item.addEventListener('click', () => {
         closeMenuAfterDelay(() => {
-          if (elements.extensionsView) elements.extensionsView.checked = false;
+          closeMobileMenus();
         });
       });
     });

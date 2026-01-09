@@ -55,7 +55,6 @@
     
     activeEffects.pirate = true;
     document.body.classList.add('mode-pirate');
-    console.log('[VisualEffects] Pirate mode activated, body classes:', document.body.className);
   }
 
   /**
@@ -76,7 +75,6 @@
     
     activeEffects.dance = true;
     document.body.classList.add('mode-dance');
-    console.log('[VisualEffects] Dance mode activated, body classes:', document.body.className);
     
     // Auto-reset após 4 segundos
     setTimeout(() => {
@@ -179,7 +177,6 @@
     
     activeEffects.debug = true;
     document.body.classList.add('mode-debug');
-    console.log('[VisualEffects] Debug mode activated, body classes:', document.body.className);
   }
 
   /**
@@ -200,7 +197,6 @@
     
     activeEffects.hack = true;
     document.body.classList.add('mode-hack');
-    console.log('[VisualEffects] Hack mode activated, body classes:', document.body.className);
   }
 
   /**
@@ -221,7 +217,6 @@
     
     activeEffects.gravity = true;
     document.body.classList.add('mode-gravity');
-    console.log('[VisualEffects] Gravity off activated, body classes:', document.body.className);
   }
 
   /**
@@ -261,8 +256,5 @@
   VisualEffects.deactivateGravityOff = deactivateGravityOff;
   VisualEffects.reset = resetAllEffects;
   VisualEffects.isActive = (effect) => activeEffects[effect] || false;
-
-  // Debug: confirmar que o módulo foi carregado
-  console.log('[VisualEffects] Module loaded and ready');
 
 })();

@@ -1,7 +1,8 @@
 <div id="header" class="editor-tabs">
   {{#if pages.sections.readme.enabled}}
   <div class="editor-tab" data-file-id="readme" data-file-name="README.md" data-path="README.md">
-    <input type="radio" name="openedFile" id="readme" class="editor-tab__radio">
+    <!-- Aba inicial: README (garante estabilidade visual no load) -->
+    <input type="radio" name="openedFile" id="readme" class="editor-tab__radio" checked>
     <label for="readme" class="editor-tab__label">
       <span class="editor-tab__icon">
         <svg class="icon icon--sm" width="16" height="16" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true">

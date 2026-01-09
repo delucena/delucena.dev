@@ -281,7 +281,9 @@
           
           if (!html) {
             // Limpa o código se não houver HTML
-            codeViewContent.innerHTML = '';
+            while (codeViewContent.firstChild) {
+              codeViewContent.removeChild(codeViewContent.firstChild);
+            }
             codeViewContent.textContent = '';
             return;
           }

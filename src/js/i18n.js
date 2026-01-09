@@ -146,7 +146,9 @@
     }
 
     // Limpa a lista
-    element.innerHTML = '';
+    while (element.firstChild) {
+      element.removeChild(element.firstChild);
+    }
     
     // Cria novos itens
     items.forEach(item => {
@@ -358,9 +360,6 @@
 
     currentLocale = locale;
     
-    // DEBUG TEMPORÁRIO
-    console.log("[i18n] language:", locale);
-    
     // Salva preferência
     localStorage.setItem(I18N_CONFIG.storageKey, locale);
 
@@ -409,9 +408,6 @@
     // Se existir idioma no localStorage → usar
     // Senão → pt-BR (padrão)
     currentLocale = getInitialLocale();
-    
-    // DEBUG TEMPORÁRIO
-    console.log("[i18n] language:", currentLocale);
 
     // Atualiza lang do HTML imediatamente (antes de carregar traduções)
     // Isso é crítico para SEO e acessibilidade

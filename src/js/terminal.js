@@ -55,9 +55,7 @@
    * Atualiza textos do terminal quando o idioma muda
    */
   function updateTerminalLanguage() {
-    // DEBUG TEMPORÁRIO
     const currentLanguage = window.i18n ? window.i18n.getLocale() : 'pt-BR';
-    console.log("[terminal-i18n] language:", currentLanguage);
     
     // Atualiza placeholder do input
     if (terminalInput) {
@@ -72,9 +70,6 @@
    */
   function handleTerminalCommand(command) {
     const trimmed = command.trim();
-    
-    // DEBUG TEMPORÁRIO
-    console.log("[terminal] command:", trimmed);
     
     // Verifica se é um comando lang
     if (trimmed.startsWith('lang ')) {
@@ -98,9 +93,6 @@
       // Verifica se o código de idioma é válido
       if (LANGUAGE_MAP[langCode]) {
         const locale = LANGUAGE_MAP[langCode];
-        
-        // DEBUG TEMPORÁRIO
-        console.log("[terminal] language changed to:", locale);
         
         // Chama setLanguage do sistema i18n
         if (window.i18n && typeof window.i18n.setLanguage === 'function') {

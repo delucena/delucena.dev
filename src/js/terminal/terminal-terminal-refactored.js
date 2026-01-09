@@ -58,7 +58,6 @@
    */
   function updateTerminalLanguage() {
     const currentLanguage = window.i18n ? window.i18n.getLocale() : 'pt-BR';
-    console.log("[terminal-i18n] language:", currentLanguage);
     
     if (terminalInput) {
       terminalInput.placeholder = getTerminalTranslation('placeholder');

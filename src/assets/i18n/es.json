@@ -231,7 +231,8 @@
     "tagline": "pienso, luego codifico.",
     "description": "Backend, cloud, microservicios y sistemas distribuidos.",
     "skillsAlt": "Mis Habilidades",
-    "certifiedAlt": "Oracle Java Certified"
+    "certifiedAlt": "Oracle Java Certified",
+    "certifiedLink": "Oracle Java Certified - Ver certificación en Credly"
   },
   "terminal": {
     "problems": "PROBLEMAS",

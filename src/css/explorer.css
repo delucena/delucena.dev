@@ -682,6 +682,25 @@ body.sidebar-open #explorerView:checked ~ .explorer {
   pointer-events: auto;
 }
 
+/*
+ * Estado inicial (desktop): quando o viewToggle está em "fechado" (#closeView),
+ * mantemos o Explorer visível por padrão para preservar o layout/UX estilo VS Code.
+ * No mobile, o Explorer continua fechado via regras específicas em navigation.css.
+ */
+@media (min-width: 769px) {
+  body.sidebar-open #closeView:checked ~ .explorer {
+    margin-left: 0;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  body.sidebar-open #closeView:checked ~ .extensions {
+    margin-left: calc(-1 * var(--width-navigation));
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
 body.sidebar-open #explorerView:checked ~ .extensions {
   margin-left: calc(-1 * var(--width-navigation));
   opacity: 0;

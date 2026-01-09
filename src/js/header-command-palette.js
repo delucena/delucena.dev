@@ -82,7 +82,9 @@
      * Renderiza a lista de comandos
      */
     function renderCommands(commandsToRender = commands) {
-      commandPalette.innerHTML = '';
+      while (commandPalette.firstChild) {
+        commandPalette.removeChild(commandPalette.firstChild);
+      }
       
       commandsToRender.forEach((command, index) => {
         const item = document.createElement('div');
@@ -206,7 +208,9 @@
         if (filteredCommands.length > 0) {
           renderCommands(filteredCommands);
         } else {
-          commandPalette.innerHTML = '';
+          while (commandPalette.firstChild) {
+            commandPalette.removeChild(commandPalette.firstChild);
+          }
           commandPalette.classList.remove('top-header__command-palette--visible');
           isOpen = false;
         }

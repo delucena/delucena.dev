@@ -28,7 +28,10 @@
     
     // Cria um elemento temporário para processar
     const temp = document.createElement('div');
-    temp.innerHTML = element.innerHTML;
+    // Clona o conteúdo do elemento
+    Array.from(element.childNodes).forEach(node => {
+      temp.appendChild(node.cloneNode(true));
+    });
     
     // Remove todos os spans e mantém apenas o texto
     const spans = temp.querySelectorAll('span.token');
@@ -163,7 +166,25 @@
     button.setAttribute('type', 'button');
     button.setAttribute('aria-label', 'Copiar código');
     button.setAttribute('title', 'Copiar código');
-    button.innerHTML = '<svg class="icon icon--md" width="20" height="20" viewBox="0 0 1920 1920" fill="currentColor" aria-hidden="true"><use href="#icon-copy"></use></svg><span class="sr-only">Copiar código</span>';
+    
+    // Cria o SVG via DOM
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'icon icon--md');
+    svg.setAttribute('width', '20');
+    svg.setAttribute('height', '20');
+    svg.setAttribute('viewBox', '0 0 1920 1920');
+    svg.setAttribute('fill', 'currentColor');
+    svg.setAttribute('aria-hidden', 'true');
+    const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+    use.setAttribute('href', '#icon-copy');
+    svg.appendChild(use);
+    
+    const srOnly = document.createElement('span');
+    srOnly.className = 'sr-only';
+    srOnly.textContent = 'Copiar código';
+    
+    button.appendChild(svg);
+    button.appendChild(srOnly);
     
     // Adiciona o evento de clique
     button.addEventListener('click', handleCopyClick);
