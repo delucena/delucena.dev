@@ -18,6 +18,7 @@
     <meta property="og:title" content="{{meta.og.title}}">
     <meta property="og:description" content="{{meta.og.description}}">
     <meta property="og:image" content="{{meta.og.image}}">
+    <meta property="og:locale" content="{{meta.og.locale}}">
     <meta name="twitter:card" content="{{meta.twitter.card}}">
     <meta name="twitter:title" content="{{meta.twitter.title}}">
     <meta name="twitter:description" content="{{meta.twitter.description}}">
@@ -65,29 +66,29 @@
 </head>
 
 <body>
-<a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+<a href="#main-content" class="skip-link" data-i18n="meta.skipLink">Pular para o conteúdo principal</a>
 <div class="page-root">
 <!-- TEMPLATE: top-header.html -->
 <div class="editor-ui">
 <main id="main-content" role="main">
     <!-- TEMPLATE: navigation.html -->
     
-    <section id="editor" role="region" aria-label="Editor de código">
+    <section id="editor" role="region" aria-label="Editor de código" data-i18n-attr="aria-label" data-i18n="editor.codeEditor">
         <div class="editorContainer">
             <!-- TEMPLATE: editor-header.html -->
             
-            <div contenteditable class="editor" role="textbox" aria-label="Conteúdo do portfólio" aria-multiline="true">
+            <div contenteditable class="editor" role="textbox" aria-label="Conteúdo do portfólio" aria-multiline="true" data-i18n-attr="aria-label" data-i18n="editor.portfolioContent">
                 <!-- Toggle Preview/Code Button - Flutuante -->
-                <div class="floating-toggle" role="toolbar" aria-label="Controles do editor">
-                    <input type="checkbox" id="togglePreviewCode" aria-label="Alternar entre preview e código">
-                    <label for="togglePreviewCode" class="preview-toggle-btn" title="Alternar entre preview e código" role="button" tabindex="0">
+                <div class="floating-toggle" role="toolbar" aria-label="Controles do editor" data-i18n-attr="aria-label" data-i18n="editor.editorControls">
+                    <input type="checkbox" id="togglePreviewCode" aria-label="Alternar entre preview e código" data-i18n-attr="aria-label" data-i18n="editor.togglePreview">
+                    <label for="togglePreviewCode" class="preview-toggle-btn" title="Alternar entre preview e código" role="button" tabindex="0" data-i18n-attr="title" data-i18n="editor.togglePreview">
                         <svg class="icon icon--md" width="20" height="20" viewBox="0 0 490 490" fill="currentColor" aria-hidden="true"><use href="#icon-code"></use></svg>
-                        <span class="sr-only">Alternar entre visualização e código</span>
+                        <span class="sr-only" data-i18n="editor.togglePreviewLabel">Alternar entre visualização e código</span>
                     </label>
                 </div>
                 <!-- Code View Container -->
-                <div class="code-view-container" id="codeViewContainer" style="display: none;" role="region" aria-label="Visualização de código">
-                    <pre class="code-view" role="textbox" aria-label="Código HTML formatado"><code id="codeViewContent" class="language-html"></code></pre>
+                <div class="code-view-container" id="codeViewContainer" style="display: none;" role="region" aria-label="Visualização de código" data-i18n-attr="aria-label" data-i18n="editor.codeView">
+                    <pre class="code-view" role="textbox" aria-label="Código HTML formatado" data-i18n-attr="aria-label" data-i18n="editor.formattedCode"><code id="codeViewContent" class="language-html"></code></pre>
                 </div>
                 <!-- TEMPLATE: sections/index-section.html -->
                 <!-- TEMPLATE: sections/experience-section.html -->
@@ -103,11 +104,12 @@
 <!-- TEMPLATE: footer.html -->
 </div>
     <!-- JavaScript Essencial (carregado com defer, não bloqueia FCP) -->
+    <script src="./js/i18n.js" defer></script>
     <script src="./js/theme.js" defer></script>
     <script src="./js/navigation.js" defer></script>
     <script src="./js/header-command-palette.js" defer></script>
     <script src="./js/editor-tabs.js" defer></script>
-    <!-- Scripts não essenciais (terminal, syntax highlight, etc) serão carregados via bundle após FCP -->
+    <!-- Scripts não essenciais (terminal, syntax highlight, visual-effects, etc) serão carregados via bundle após FCP -->
 </body>
 
 </html>

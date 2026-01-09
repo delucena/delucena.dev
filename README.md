@@ -82,7 +82,9 @@ delucena/
 │       ├── java/               # Código Java
 │       └── resources/          # Recursos e configurações
 ├── scripts/                    # Scripts auxiliares
-│   └── optimize-images.js      # Otimização de imagens
+│   ├── serve.js                # Script de servidor (verifica e libera porta)
+│   ├── optimize-images.js      # Otimização de imagens
+│   └── generate-lcp-images.js  # Geração de imagens LCP
 ├── dist/                       # Arquivos compilados (gerados pelo build)
 ├── build.js                    # Script de build (Node.js)
 ├── build.sh                    # Script de build (Shell)
@@ -131,12 +133,14 @@ delucena/
    npm run serve
    ```
    Acesse `http://localhost:8000` no navegador
+   
+   💡 **Dica:** O comando `npm run serve` automaticamente verifica se a porta 8000 está em uso e libera qualquer processo que esteja ocupando-a, evitando o erro "Address already in use".
 
 **Scripts disponíveis:**
 - `npm run build` - Gera a pasta dist com os arquivos compilados (monta templates, minifica CSS/JS)
 - `npm run clean` - Remove a pasta dist
-- `npm run preview` - Gera o build e abre no navegador (macOS)
-- `npm run serve` - Gera o build e inicia servidor HTTP local na porta 8000
+- `npm run preview` - ⚠️ Gera o build e abre no navegador (macOS), mas não funciona com i18n (usa file://)
+- `npm run serve` - ✅ Gera o build e inicia servidor HTTP local na porta 8000 (recomendado). **Automaticamente verifica e libera a porta se estiver em uso**
 - `npm run dev` - Alias para `serve`
 
 **O que o build faz:**
@@ -149,13 +153,17 @@ delucena/
 
 **Nota:** O build consolida automaticamente todos os CSS (resolve `@import`) em um único arquivo `main.css`. 
 
-⚠️ **Importante sobre imagens:** Se você abrir `dist/index.html` diretamente no navegador (protocolo `file://`), algumas imagens podem não carregar devido a restrições de segurança do navegador. **Recomendado:** Use `npm run serve` para testar com um servidor HTTP local.
+⚠️ **Importante sobre imagens e i18n:** Se você abrir `dist/index.html` diretamente no navegador (protocolo `file://`), algumas funcionalidades podem não funcionar devido a restrições de segurança do navegador (CORS). Isso afeta especialmente o sistema de i18n que usa `fetch()` para carregar traduções. **Recomendado:** Use `npm run serve` para testar com um servidor HTTP local.
 
 ```bash
 npm run build
 npm run clean
-npm run preview
+npm run serve
 ```
+
+Depois acesse `http://localhost:8000` no navegador.
+
+⚠️ **Nota:** O comando `npm run preview` abre o arquivo diretamente do sistema de arquivos (`file://`), o que causa erros com requisições `fetch()` (usado pelo sistema de i18n). **Use sempre `npm run serve`** para garantir que tudo funcione corretamente.
 
 ### Opção 2: Usar o Script Shell (Alternativo)
 
@@ -183,7 +191,10 @@ Após gerar a pasta `dist/`, você pode visualizar o projeto de várias formas:
 
 2. **Usar um servidor local (recomendado):**
    ```bash
-   # Python 3
+   # Usando o script npm (recomendado - libera porta automaticamente)
+   npm run serve
+
+   # Python 3 (manual)
    cd dist && python3 -m http.server 8000
 
    # Node.js (com http-server)
@@ -194,6 +205,8 @@ Após gerar a pasta `dist/`, você pode visualizar o projeto de várias formas:
    ```
 
    Depois acesse: `http://localhost:8000`
+   
+   ⚠️ **Nota:** Se usar os comandos manuais (Python, Node.js, PHP) e a porta 8000 estiver em uso, você precisará encerrar o processo manualmente ou usar outra porta. O comando `npm run serve` faz isso automaticamente.
 
 ## 🎨 Recursos CSS Utilizados
 

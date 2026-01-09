@@ -42,7 +42,7 @@
     }
     
     try {
-      themeLabel.textContent = themeCheckbox.checked ? 'Light' : 'Dark';
+      themeLabel.textContent = themeCheckbox.checked ? 'Tema: Light' : 'Tema: Dark';
     } catch (error) {
       console.error('Erro ao atualizar label do tema:', error);
     }

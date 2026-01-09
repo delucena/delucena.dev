@@ -198,7 +198,6 @@
       description: 'Lista comandos disponíveis ou comandos de um grupo específico',
       group: 'system',
       args: [],
-      acceptsOptionalArgs: true, // Permite argumento opcional para grupos
       execute: (arg) => {
         if (!arg) {
           // help → lista grupos
@@ -211,19 +210,12 @@
             groups[group].push(cmd);
           });
           
-          const groupsTitle = getTerminalTranslation('help.groupsTitle');
-          const useHelpGroup = getTerminalTranslation('help.useHelpGroup');
-          const commandLabel = getTerminalTranslation('help.command');
-          const commandsLabel = getTerminalTranslation('help.commands');
-          
-          const output = [groupsTitle, ''];
+          const output = ['Grupos disponíveis:', ''];
           Object.keys(groups).sort().forEach(group => {
-            const count = groups[group].length;
-            const label = count === 1 ? commandLabel : commandsLabel;
-            output.push(`  ${group.padEnd(15)} - ${count} ${label}`);
+            output.push(`  ${group.padEnd(15)} - ${groups[group].length} comando(s)`);
           });
           output.push('');
-          output.push(useHelpGroup);
+          output.push('Use "help <grupo>" para ver comandos de um grupo específico.');
           return output;
         } else {
           // help <group> → lista comandos do grupo
@@ -233,19 +225,10 @@
           );
           
           if (commandsInGroup.length === 0) {
-            // Coleta todos os grupos disponíveis para sugestão
-            const allGroups = new Set();
-            Object.keys(COMMANDS).forEach(cmd => {
-              allGroups.add(COMMANDS[cmd].group);
-            });
-            const groupsList = Array.from(allGroups).sort().join(', ');
-            const errorMsg = getTerminalTranslation('help.groupNotFound', { group });
-            const availableGroupsLabel = getTerminalTranslation('help.availableGroups');
-            return [errorMsg, `${availableGroupsLabel} ${groupsList}`];
+            return [`Grupo "${group}" não encontrado. Use "help" para ver grupos disponíveis.`];
           }
           
-          const groupCommandsTitle = getTerminalTranslation('help.groupCommandsTitle', { group });
-          const output = [groupCommandsTitle, ''];
+          const output = [`Comandos do grupo "${group}":`, ''];
           commandsInGroup.sort().forEach(cmd => {
             const cmdDef = COMMANDS[cmd];
             const argsStr = cmdDef.args.length > 0 
@@ -862,11 +845,10 @@
     if (!cmdDef) return { valid: false, message: `comando não encontrado: ${commandName}` };
     
     if (cmdDef.args.length === 0) {
-      // Comando não aceita argumentos, exceto se aceitar argumentos opcionais
-      if (arg && !cmdDef.acceptsOptionalArgs) {
+      // Comando não aceita argumentos
+      if (arg) {
         return { valid: false, message: `comando "${commandName}" não aceita argumentos` };
       }
-      // Se aceita argumentos opcionais, deixa o handler validar
       return { valid: true };
     }
     
@@ -899,15 +881,6 @@
         historyIndex = commandHistory.length;
       }
 
-      // Primeiro verifica se o comando completo existe (para comandos com espaços como "ls -lah")
-      if (COMMANDS[trimmed]) {
-        const cmdDef = COMMANDS[trimmed];
-        // Comandos completos não aceitam argumentos adicionais
-        const result = cmdDef.execute();
-        return Array.isArray(result) ? result : [];
-      }
-
-      // Se não encontrou comando completo, faz parse normal
       const { command: cmd, arg } = parseCommand(trimmed);
       
       // Verifica se o comando existe
@@ -947,27 +920,12 @@
     const hasSpace = trimmed.includes(' ');
 
     if (!hasSpace) {
-      // Sem espaço: autocomplete de comandos (incluindo comandos com espaços)
+      // Sem espaço: autocomplete de comandos
       return Object.keys(COMMANDS)
-        .filter(c => {
-          // Verifica se começa com o comando digitado
-          // Ex: "ls" deve sugerir "ls", "ls -lah", "ls -la"
-          const cmdParts = c.split(/\s+/);
-          return cmdParts[0].startsWith(cmd) && c !== trimmed;
-        })
+        .filter(c => c.startsWith(cmd) && c !== cmd)
         .sort();
     } else {
-      // Com espaço: pode ser comando completo ou argumento
-      // Primeiro verifica se há comandos completos que começam com o input
-      const fullCommandMatches = Object.keys(COMMANDS)
-        .filter(c => c.startsWith(trimmed) && c !== trimmed)
-        .sort();
-      
-      if (fullCommandMatches.length > 0) {
-        return fullCommandMatches;
-      }
-      
-      // Se não encontrou comando completo, tenta autocomplete de argumentos
+      // Com espaço: autocomplete de argumentos
       if (!COMMANDS[cmd]) {
         return [];
       }
@@ -1008,7 +966,16 @@
     if (autocompleteOptions.length === 1) {
       // Apenas uma opção: completa diretamente
       const option = autocompleteOptions[0];
-      input.value = option;
+      if (inputValue.includes(' ')) {
+        // Tem espaço: completa apenas o argumento
+        const parts = inputValue.split(/\s+/);
+        const cmd = parts[0];
+        const arg = option.split(' ')[1];
+        input.value = `${cmd} ${arg}`;
+      } else {
+        // Sem espaço: completa o comando
+        input.value = option;
+      }
       autocompleteIndex = -1;
       autocompleteOptions = [];
       lastAutocompleteInput = input.value;
@@ -1016,7 +983,17 @@
       // Múltiplas opções: cicla entre elas
       autocompleteIndex = (autocompleteIndex + 1) % autocompleteOptions.length;
       const option = autocompleteOptions[autocompleteIndex];
-      input.value = option;
+      
+      if (inputValue.includes(' ')) {
+        // Tem espaço: completa apenas o argumento
+        const parts = inputValue.split(/\s+/);
+        const cmd = parts[0];
+        const arg = option.split(' ')[1];
+        input.value = `${cmd} ${arg}`;
+      } else {
+        // Sem espaço: completa o comando
+        input.value = option;
+      }
       lastAutocompleteInput = input.value;
     }
   }

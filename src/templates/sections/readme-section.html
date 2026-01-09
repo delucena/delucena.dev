@@ -33,13 +33,13 @@
             </picture>
         </div>
         <div class="readme-content">
-            <h1>{{profile.readme.greeting}}</h1>
-            <p>{{profile.readme.tagline}}</p>
-            <p>{{profile.readme.description}}</p>
+            <h1 data-i18n="readme.greeting">{{profile.readme.greeting}}</h1>
+            <p data-i18n="readme.tagline">{{profile.readme.tagline}}</p>
+            <p data-i18n="readme.description">{{profile.readme.description}}</p>
             <p>
                 <a target="_blank" href="{{profile.readme.credlyUrl}}">
                     <img src="https://img.shields.io/badge/Oracle-Java%20Certified-red?style=for-the-badge&logo=oracle"
-                         alt="Oracle Java Certified"
+                         alt="Oracle Java Certified" data-i18n-attr="alt" data-i18n="readme.certifiedAlt"
                          width="200"
                          height="28"
                          loading="lazy"
@@ -48,7 +48,7 @@
             </p>
             <p>
                 <img src="https://skillicons.dev/icons?i={{profile.readme.skillsIcons}}&perline=12"
-                     alt="My Skills"
+                     alt="My Skills" data-i18n-attr="alt" data-i18n="readme.skillsAlt"
                      width="480"
                      height="48"
                      loading="lazy"

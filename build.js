@@ -208,6 +208,7 @@ async function minifyHTML(html) {
  */
 function consolidateNonEssentialJS(jsSrcDir, jsDistDir) {
   const nonEssentialFiles = [
+    'visual-effects.js',
     'code-highlighter.js',
     'code-copy.js',
     'preview-toggle.js',
@@ -453,7 +454,7 @@ function renderTemplate(template, data) {
       let replacement = '';
       
       if (Array.isArray(array)) {
-        replacement = array.map((item) => {
+        replacement = array.map((item, index) => {
           // Criar contexto mesclando contexto global com propriedades do item
           const itemData = { ...ctx };
           // Se o item for um objeto, adicionar suas propriedades ao contexto
@@ -464,6 +465,8 @@ function renderTemplate(template, data) {
           }
           // Adicionar 'this' para referenciar o item atual (útil para arrays de strings)
           itemData.this = item;
+          // Adicionar '@index' para referenciar o índice atual (compatível com Handlebars)
+          itemData['@index'] = index;
           // Processar template recursivamente (processa loops aninhados e placeholders)
           return processTemplate(loopTemplate, itemData);
         }).join('');
@@ -516,6 +519,9 @@ function renderTemplate(template, data) {
       let value;
       if (trimmedPath === 'this') {
         value = ctx.this;
+      } else if (trimmedPath === '@index' || trimmedPath.startsWith('@index')) {
+        // Tratar @index como referência ao índice do loop
+        value = ctx['@index'];
       } else {
         value = getNestedValue(ctx, trimmedPath);
       }
@@ -707,7 +713,7 @@ async function buildIndexHtml() {
   }
   
   // Scripts essenciais (carregam com defer, não bloqueiam FCP)
-  const essentialJSFiles = ['theme.js', 'navigation.js', 'header-command-palette.js', 'editor-tabs.js'];
+  const essentialJSFiles = ['i18n.js', 'theme.js', 'navigation.js', 'header-command-palette.js', 'editor-tabs.js'];
   
   // Substituir scripts essenciais por versões com hash
   essentialJSFiles.forEach(jsFile => {
@@ -726,6 +732,7 @@ async function buildIndexHtml() {
   
   // Remover scripts não essenciais do HTML (serão carregados via bundle)
   const nonEssentialJSFiles = [
+    'visual-effects.js',
     'terminal/terminal-core.js',
     'terminal/terminal-terminal.js',
     'terminal/terminal-output.js',

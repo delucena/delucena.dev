@@ -26,6 +26,13 @@
   };
 
   // ============================================
+  // CACHE DE HTML ORIGINAL (ANTES DA TRADUÇÃO)
+  // ============================================
+  // Armazena o HTML original de cada seção antes do i18n aplicar traduções
+  // Isso permite que o code view sempre mostre o HTML original, não traduzido
+  const originalHTMLCache = {};
+
+  // ============================================
   // FUNÇÃO ÚNICA: GET ACTIVE TAB ELEMENT
   // ============================================
   // REGRA ABSOLUTA: A aba ativa no DOM é a ÚNICA fonte da verdade
@@ -196,6 +203,7 @@
 
   /**
    * Renderiza o modo página (preview)
+   * Preview sempre mostra o conteúdo traduzido (respeita idioma selecionado)
    * @param {string} pageId - ID da página
    */
   function renderPageView(pageId) {
@@ -226,6 +234,7 @@
     });
     
     // Força um reflow para garantir que o CSS seja recalculado
+    // O preview sempre mostra o conteúdo traduzido (i18n já aplicou as traduções)
     void editor.offsetHeight;
   }
 
@@ -316,11 +325,73 @@
   }
 
   /**
+   * Armazena o HTML original de uma seção (antes da tradução i18n)
+   * @param {string} pageId - ID da página
+   * @param {HTMLElement} section - Elemento da seção
+   */
+  function cacheOriginalHTML(pageId, section) {
+    if (!section || !pageId) return;
+    
+    // Clona a seção para não modificar o original
+    const clone = section.cloneNode(true);
+    
+    // Remove atributos desnecessários
+    clone.removeAttribute('id');
+    clone.removeAttribute('contenteditable');
+    
+    // Mantém a classe para contexto
+    const className = clone.className;
+    clone.removeAttribute('class');
+    
+    // Adiciona a tag de abertura com classe se existir
+    let html = '';
+    if (className) {
+      html = `<section class="${className}">\n`;
+    } else {
+      html = '<section>\n';
+    }
+    
+    // Processa o conteúdo interno
+    html += formatSectionContent(clone);
+    
+    // Fecha a tag
+    html += '</section>';
+    
+    // Armazena no cache
+    originalHTMLCache[pageId] = html;
+  }
+
+  /**
+   * Armazena o HTML original de todas as seções (antes da tradução i18n)
+   * Deve ser chamado quando o DOM estiver pronto, mas ANTES do i18n aplicar traduções
+   */
+  function cacheAllOriginalHTML() {
+    const editor = document.querySelector('.editor');
+    if (!editor) return;
+    
+    // Itera sobre todas as seções mapeadas
+    Object.keys(fileSectionMap).forEach(pageId => {
+      const sectionSelector = fileSectionMap[pageId];
+      const section = editor.querySelector(sectionSelector);
+      if (section) {
+        cacheOriginalHTML(pageId, section);
+      }
+    });
+  }
+
+  /**
    * Obtém o HTML de uma seção específica
+   * REGRA: Code view sempre usa HTML original (não traduzido)
    * @param {string} pageId - ID da página
    * @returns {string} HTML formatado
    */
   function getSectionHTML(pageId) {
+    // Se estiver em modo code, usa o HTML original (não traduzido)
+    if (state.currentViewMode === 'code' && originalHTMLCache[pageId]) {
+      return originalHTMLCache[pageId];
+    }
+    
+    // Se não houver cache ou estiver em modo preview, usa o HTML atual do DOM
     const editor = document.querySelector('.editor');
     if (!editor) return '';
     
@@ -732,6 +803,44 @@
       subtree: true 
     });
     
+    // ============================================
+    // LISTENER PARA MUDANÇAS DE IDIOMA (i18n)
+    // ============================================
+    // Quando o idioma muda, atualiza o preview mas NÃO o code view
+    // E NÃO troca de aba (idioma é independente da aba)
+    document.addEventListener('i18n:changed', function(event) {
+      // Se estiver em modo preview, re-renderiza para mostrar o novo idioma
+      if (state.currentViewMode === 'page') {
+        const currentPage = getCurrentPage();
+        if (currentPage) {
+          // Força re-renderização do preview com o novo idioma
+          renderPageView(currentPage);
+        }
+      }
+      // Se estiver em modo code, NÃO faz nada (code view sempre mostra HTML original)
+      // O código não é traduzido, então não precisa atualizar
+    });
+    
+    // ============================================
+    // CACHE DO HTML ORIGINAL (FALLBACK)
+    // ============================================
+    // Tenta capturar o HTML original quando o DOM estiver pronto
+    // (caso o evento i18n:before-translate não seja disparado ou já tenha sido disparado)
+    // O listener do evento já foi configurado globalmente antes desta função
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        // Aguarda um pouco para garantir que o DOM está totalmente pronto
+        setTimeout(() => {
+          tryCacheOriginalHTML();
+        }, 10);
+      });
+    } else {
+      // DOM já está pronto, tenta capturar imediatamente
+      setTimeout(() => {
+        tryCacheOriginalHTML();
+      }, 10);
+    }
+    
     // Sincroniza inicialmente
     setTimeout(() => {
       syncEditorWithActiveTab();
@@ -741,6 +850,33 @@
     updateToggleIcon();
   }
 
+  // ============================================
+  // INICIALIZAÇÃO GLOBAL
+  // ============================================
+  // Configura listener do evento i18n:before-translate ANTES de qualquer outra coisa
+  // Isso garante que captura o HTML original mesmo se o i18n já estiver inicializado
+  // ou se o preview-toggle for carregado depois do i18n
+  
+  // Função para capturar HTML original de forma segura (definida globalmente)
+  function tryCacheOriginalHTML() {
+    const editor = document.querySelector('.editor');
+    if (!editor) return;
+    
+    // Verifica se já capturou o HTML original
+    if (Object.keys(originalHTMLCache).length > 0) {
+      return; // Já capturou
+    }
+    
+    // Captura o HTML original de todas as seções
+    cacheAllOriginalHTML();
+  }
+  
+  // Configura listener do evento i18n:before-translate o mais cedo possível
+  // Usa capture: true para garantir que seja executado antes de outros listeners
+  document.addEventListener('i18n:before-translate', function() {
+    tryCacheOriginalHTML();
+  }, { once: false, capture: true });
+  
   // Inicializa quando o DOM estiver pronto
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initPreviewToggle);
