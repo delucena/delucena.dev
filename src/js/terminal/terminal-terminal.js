@@ -411,8 +411,13 @@
    */
   function initTerminal() {
     if (!initElements()) {
-      console.warn('Elementos do terminal não encontrados');
       return;
+    }
+
+    // Remover placeholder se existir
+    const placeholder = terminalOutput.querySelector('.terminal-placeholder');
+    if (placeholder) {
+      placeholder.remove();
     }
 
     // Limpa o terminal

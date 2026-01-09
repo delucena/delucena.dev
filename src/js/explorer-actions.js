@@ -25,6 +25,42 @@
     const explorer = document.querySelector('.explorer');
     if (!explorer) return;
 
+    // Botões de expandir/colapsar tudo no header do projeto
+    const expandAllBtn = document.getElementById('expandAllBtn');
+    const collapseAllBtn = document.getElementById('collapseAllBtn');
+    
+    if (expandAllBtn) {
+      expandAllBtn.addEventListener('click', function(e) {
+        e.stopPropagation(); // Previne que o clique expanda/colapse o projeto raiz
+        expandAllFolders(explorer);
+      });
+    }
+    
+    if (collapseAllBtn) {
+      collapseAllBtn.addEventListener('click', function(e) {
+        e.stopPropagation(); // Previne que o clique expanda/colapse o projeto raiz
+        collapseAllFolders(explorer);
+      });
+    }
+
+    // Botões de criar arquivo/pasta (apenas visual, sem ação)
+    const createFileBtns = explorer.querySelectorAll('.explorer-action-btn[aria-label="Criar arquivo"]');
+    const createFolderBtns = explorer.querySelectorAll('.explorer-action-btn[aria-label="Criar pasta"]');
+    
+    createFileBtns.forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation(); // Previne que o clique expanda/colapse o projeto raiz
+        // Sem ação - apenas visual
+      });
+    });
+    
+    createFolderBtns.forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation(); // Previne que o clique expanda/colapse o projeto raiz
+        // Sem ação - apenas visual
+      });
+    });
+
     // Toggle Expand/Collapse - usa checkbox igual ao toggle de código
     const toggleCheckbox = document.getElementById('toggleExpandCollapse');
     if (toggleCheckbox) {
@@ -76,6 +112,7 @@
     // Seleciona todos os checkboxes de pastas dentro do explorer
     // Exclui os checkboxes de OUTLINE e TIMELINE que estão no explorer-bottom
     // Exclui também o checkbox do toggle expand/collapse
+    // Colapsa também o projeto raiz (folderToggleDelucenaDev)
     const allCheckboxes = explorer.querySelectorAll('input[type="checkbox"]');
     
     allCheckboxes.forEach(checkbox => {

@@ -159,8 +159,13 @@
   function printOutputGradually() {
     const outputContent = document.querySelector(SELECTORS.outputContent);
     if (!outputContent) {
-      console.warn('Elemento outputContent não encontrado');
       return;
+    }
+    
+    // Remover placeholder se existir
+    const placeholder = outputContent.querySelector('.output-placeholder');
+    if (placeholder) {
+      placeholder.remove();
     }
     
     // Limpar conteúdo anterior
@@ -215,7 +220,6 @@
     try {
       const outputRadio = document.querySelector(SELECTORS.outputRadio);
       if (!outputRadio) {
-        console.warn('Elemento outputRadio não encontrado');
         return;
       }
       

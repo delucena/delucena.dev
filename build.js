@@ -2,23 +2,39 @@
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
+
+// Importar bibliotecas de minificação (com fallback se não instaladas)
+let htmlMinifier, terser, CleanCSS, PurgeCSS;
+try {
+  htmlMinifier = require('html-minifier-terser');
+  terser = require('terser');
+  CleanCSS = require('clean-css');
+  PurgeCSS = require('purgecss').PurgeCSS;
+} catch (e) {
+  console.warn('⚠ Bibliotecas de minificação não encontradas. Execute: npm install');
+  console.warn('⚠ Continuando com minificação básica...');
+}
 
 const srcDir = path.join(__dirname, 'src');
 const distDir = path.join(__dirname, 'dist');
 const templatesDir = path.join(srcDir, 'templates');
 const dataDir = path.join(srcDir, 'data');
+
+// Mapa de arquivos com hash para atualizar referências no HTML
+const assetMap = {
+  css: {},
+  js: {},
+  images: {}
+};
+
 if (!fs.existsSync(distDir)) {
   fs.mkdirSync(distDir, { recursive: true });
 }
 
+// Gerar hash SHA-256 mais robusto (16 caracteres hex)
 function generateHash(content) {
-  let hash = 0;
-  for (let i = 0; i < content.length; i++) {
-    const char = content.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash;
-  }
-  return Math.abs(hash).toString(36).substring(0, 8);
+  return crypto.createHash('sha256').update(content).digest('hex').substring(0, 16);
 }
 
 function consolidateCSS(cssContent, cssDir, processedFiles = new Set()) {
@@ -44,7 +60,57 @@ function consolidateCSS(cssContent, cssDir, processedFiles = new Set()) {
   });
 }
 
-function minifyCSS(css) {
+// Tree-shaking de CSS usando PurgeCSS
+async function purgeUnusedCSS(cssContent, htmlFiles, options = {}) {
+  if (!PurgeCSS) {
+    console.warn('⚠ PurgeCSS não disponível, pulando tree-shaking de CSS');
+    return cssContent;
+  }
+  
+  try {
+    const result = await new PurgeCSS().purge({
+      content: htmlFiles,
+      css: [{ raw: cssContent }],
+      defaultExtractor: (content) => {
+        // Extrator padrão melhorado
+        const broadMatches = content.match(/[^<>"'`\s]*[^<>"'`\s:]/g) || [];
+        const innerMatches = content.match(/[^<>"'`\s.()]*[^<>"'`\s.():]/g) || [];
+        return broadMatches.concat(innerMatches);
+      },
+      safelist: {
+        // Manter classes críticas que podem ser adicionadas dinamicamente
+        standard: [/^icon-/, /^sr-only/, /^skip-link/, /^floating-toggle/],
+        deep: [/^editor/, /^terminal/, /^explorer/],
+        greedy: [/^nav/, /^header/, /^footer/]
+      },
+      ...options
+    });
+    
+    return result[0]?.css || cssContent;
+  } catch (err) {
+    console.warn('⚠ Erro no tree-shaking CSS:', err.message);
+    return cssContent;
+  }
+}
+
+// Minificação agressiva de CSS usando CleanCSS
+async function minifyCSS(css, options = {}) {
+  if (CleanCSS) {
+    const cleanCSS = new CleanCSS({
+      level: 2, // Otimização agressiva
+      compatibility: 'ie11', // Compatibilidade mínima
+      format: false, // Sem formatação
+      inline: false, // Não inline @import
+      rebase: false,
+      ...options
+    });
+    const result = cleanCSS.minify(css);
+    if (result.errors && result.errors.length > 0) {
+      console.warn('⚠ Erros na minificação CSS:', result.errors);
+    }
+    return result.styles || css;
+  }
+  // Fallback básico
   return css
     .replace(/\/\*[\s\S]*?\*\//g, '')
     .replace(/\s+/g, ' ')
@@ -56,7 +122,39 @@ function minifyCSS(css) {
     .trim();
 }
 
-function minifyJS(js) {
+// Minificação agressiva de JS usando Terser
+async function minifyJS(js, options = {}) {
+  if (terser) {
+    try {
+      const result = await terser.minify(js, {
+        compress: {
+          drop_console: false, // Manter console para debug
+          drop_debugger: true,
+          ecma: 2020,
+          passes: 2, // Múltiplas passadas para otimização máxima
+          unsafe: false,
+          unsafe_comps: false,
+          unsafe_math: false,
+          unsafe_methods: false,
+          ...options.compress
+        },
+        mangle: {
+          toplevel: false,
+          ...options.mangle
+        },
+        format: {
+          comments: false,
+          ...options.format
+        },
+        ...options
+      });
+      return result.code || js;
+    } catch (err) {
+      console.warn('⚠ Erro na minificação JS:', err.message);
+      return js;
+    }
+  }
+  // Fallback básico
   return js
     .replace(/\/\*[\s\S]*?\*\//g, '')
     .replace(/\/\/.*$/gm, '')
@@ -68,36 +166,190 @@ function minifyJS(js) {
     .trim();
 }
 
-function copyDir(src, dest, minify = false) {
+// Minificação agressiva de HTML
+async function minifyHTML(html) {
+  if (htmlMinifier) {
+    return htmlMinifier.minify(html, {
+      collapseWhitespace: true,
+      removeComments: true,
+      removeRedundantAttributes: true,
+      removeScriptTypeAttributes: true,
+      removeStyleLinkTypeAttributes: true,
+      useShortDoctype: true,
+      minifyCSS: false, // CSS já será minificado separadamente
+      minifyJS: false, // JS já será minificado separadamente
+      removeEmptyAttributes: true,
+      removeOptionalTags: false, // Manter tags opcionais para compatibilidade
+      removeAttributeQuotes: false, // Manter aspas para compatibilidade
+      caseSensitive: false,
+      conservativeCollapse: false,
+      decodeEntities: true,
+      html5: true,
+      keepClosingSlash: false,
+      maxLineLength: false,
+      minifyURLs: true,
+      preserveLineBreaks: false,
+      quoteCharacter: '"',
+      removeTagWhitespace: true,
+      sortAttributes: false,
+      sortClassName: false
+    });
+  }
+  // Fallback básico
+  return html
+    .replace(/\s+/g, ' ')
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .trim();
+}
+
+/**
+ * Consolida scripts não essenciais em um único bundle
+ * Scripts não essenciais: terminal, syntax highlight, explorer features, etc.
+ */
+function consolidateNonEssentialJS(jsSrcDir, jsDistDir) {
+  const nonEssentialFiles = [
+    'code-highlighter.js',
+    'code-copy.js',
+    'preview-toggle.js',
+    'explorer-resize.js',
+    'explorer-highlight.js',
+    'explorer-actions.js',
+    'explorer-controls.js',
+    'terminal-resize.js',
+    'terminal/terminal-core.js',
+    'terminal/terminal-terminal.js',
+    'terminal/terminal-output.js',
+    'output.js'
+  ];
+  
+  let bundleContent = `/**
+ * Bundle de scripts não essenciais
+ * Carregado após o First Contentful Paint para não bloquear renderização
+ * Inclui: terminal, syntax highlight, explorer features, etc.
+ */
+(function() {
+  'use strict';
+  
+  // Adia a execução até que o navegador esteja ocioso
+  // ou após um delay mínimo para garantir que o FCP já ocorreu
+  function loadNonEssentialScripts() {
+`;
+
+  // Lê e adiciona cada arquivo ao bundle (mantém IIFEs intactos)
+  nonEssentialFiles.forEach(jsFile => {
+    const filePath = path.join(jsSrcDir, jsFile);
+    if (fs.existsSync(filePath)) {
+      const content = fs.readFileSync(filePath, 'utf8');
+      bundleContent += `\n    // === ${jsFile} ===\n`;
+      bundleContent += content;
+      bundleContent += '\n';
+    } else {
+      console.warn(`⚠ Arquivo não encontrado para bundle: ${jsFile}`);
+    }
+  });
+  
+  bundleContent += `  }
+  
+  // Usa requestIdleCallback se disponível, senão usa setTimeout
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.requestIdleCallback) {
+        requestIdleCallback(loadNonEssentialScripts, { timeout: 2000 });
+      } else {
+        setTimeout(loadNonEssentialScripts, 1000);
+      }
+    });
+  } else {
+    if (window.requestIdleCallback) {
+      requestIdleCallback(loadNonEssentialScripts, { timeout: 2000 });
+    } else {
+      setTimeout(loadNonEssentialScripts, 1000);
+    }
+  }
+})();
+`;
+
+  // Salva o bundle (não minificado para debug)
+  const bundlePath = path.join(jsDistDir, 'non-essential-bundle.js');
+  fs.writeFileSync(bundlePath, bundleContent, 'utf8');
+  console.log('✓ Bundle criado: non-essential-bundle.js');
+  
+  // Minifica o bundle agressivamente
+  return minifyJS(bundleContent).then(minified => {
+    const hash = generateHash(minified);
+    const hashedName = `non-essential-bundle.${hash}.min.js`;
+    const bundleMinPath = path.join(jsDistDir, hashedName);
+  fs.writeFileSync(bundleMinPath, minified, 'utf8');
+    console.log(`✓ Bundle minificado: ${hashedName}`);
+    
+    // Registrar no mapa de assets
+    assetMap.js['non-essential-bundle.min.js'] = hashedName;
+  
+  return bundleMinPath;
+  });
+}
+
+// Processar arquivos com minificação agressiva e hash
+async function processAssets(src, dest, options = {}) {
+  const { minify = false, addHash = false, purgeCSS = false, htmlFiles = [] } = options;
+  
   if (!fs.existsSync(dest)) {
     fs.mkdirSync(dest, { recursive: true });
   }
   
   const entries = fs.readdirSync(src, { withFileTypes: true });
+  const processedFiles = [];
   
   for (const entry of entries) {
     const srcPath = path.join(src, entry.name);
     const destPath = path.join(dest, entry.name);
     
     if (entry.isDirectory()) {
-      copyDir(srcPath, destPath, minify);
+      await processAssets(srcPath, destPath, options);
     } else {
       if (minify && (entry.name.endsWith('.css') || entry.name.endsWith('.js'))) {
         const content = fs.readFileSync(srcPath, 'utf8');
-        fs.copyFileSync(srcPath, destPath);
-        console.log(`✓ Copiado: ${path.relative(srcDir, srcPath)}`);
         
-        const minified = entry.name.endsWith('.css') ? minifyCSS(content) : minifyJS(content);
-        const minFileName = entry.name.replace(/\.(css|js)$/, '.min.$1');
-        const minDestPath = path.join(dest, minFileName);
+        // Minificar
+        let minified = entry.name.endsWith('.css') 
+          ? await minifyCSS(content)
+          : await minifyJS(content);
+        
+        // Tree-shaking CSS se solicitado
+        if (entry.name.endsWith('.css') && purgeCSS && htmlFiles.length > 0) {
+          minified = await purgeUnusedCSS(minified, htmlFiles);
+        }
+        
+        // Gerar nome com hash se solicitado
+        let finalName = entry.name.replace(/\.(css|js)$/, '.min.$1');
+        if (addHash) {
+          const hash = generateHash(minified);
+          const ext = path.extname(finalName);
+          const name = path.basename(finalName, ext);
+          finalName = `${name}.${hash}${ext}`;
+          
+          // Registrar no mapa de assets
+          const originalName = entry.name.replace(/\.(css|js)$/, '.min.$1');
+          if (entry.name.endsWith('.css')) {
+            assetMap.css[originalName] = finalName;
+          } else {
+            assetMap.js[originalName] = finalName;
+          }
+        }
+        
+        const minDestPath = path.join(dest, finalName);
         fs.writeFileSync(minDestPath, minified, 'utf8');
-        console.log(`✓ Minificado: ${path.relative(srcDir, srcPath)} -> ${minFileName}`);
+        console.log(`✓ Minificado: ${path.relative(srcDir, srcPath)} -> ${finalName}`);
+        
+        processedFiles.push({ original: entry.name, hashed: finalName, path: minDestPath });
       } else {
         fs.copyFileSync(srcPath, destPath);
         console.log(`✓ Copiado: ${path.relative(srcDir, srcPath)}`);
       }
     }
   }
+  
+  return processedFiles;
 }
 
 function readTemplate(templatePath) {
@@ -316,7 +568,7 @@ function getAssetVersion(assetPath) {
   return generateHash(content).substring(0, 8);
 }
 
-function buildIndexHtml() {
+async function buildIndexHtml() {
   // Carregar dados JSON
   const data = loadData();
   
@@ -355,6 +607,7 @@ function buildIndexHtml() {
   let html = baseHtml;
   
   // Processar templates com dados
+  html = html.replace('<!-- TEMPLATE: top-header.html -->', renderTemplate(readTemplate('top-header.html'), data));
   html = html.replace('<!-- TEMPLATE: navigation.html -->', renderTemplate(readTemplate('navigation.html'), data));
   
   // Processar editor-header e garantir que o primeiro item habilitado tenha checked
@@ -424,78 +677,104 @@ function buildIndexHtml() {
   // Otimizações de performance: usar arquivos minificados e adicionar versionamento
   const cssDistDir = path.join(distDir, 'css');
   const jsDistDir = path.join(distDir, 'js');
+  const cssSrcDir = path.join(srcDir, 'css');
   
-  // Substituir CSS por versão minificada com versionamento
-  const mainCssMinPath = path.join(cssDistDir, 'main.min.css');
-  if (fs.existsSync(mainCssMinPath)) {
-    const cssVersion = getAssetVersion(mainCssMinPath);
-    const cssVersionQuery = cssVersion ? `?v=${cssVersion}` : '';
-    const cssMinPath = `./css/main.min.css${cssVersionQuery}`;
+  // Carregar e injetar CSS crítico inline no <head> (minificado)
+  const criticalCssPath = path.join(cssSrcDir, 'critical.css');
+  if (fs.existsSync(criticalCssPath)) {
+    const criticalCssContent = fs.readFileSync(criticalCssPath, 'utf8');
+    const criticalCssMinified = await minifyCSS(criticalCssContent);
+    const criticalCssInline = `<style>${criticalCssMinified}</style>`;
     
-    // Substituir referências ao CSS principal
-    html = html.replace(/href=["']\.\/css\/main\.css["']/g, `href="${cssMinPath}"`);
-    
-    // Adicionar preload do CSS crítico no <head> (antes do link stylesheet)
-    const preloadLink = `    <link rel="preload" href="${cssMinPath}" as="style">\n    `;
-    // Inserir após o último meta tag ou antes do primeiro stylesheet
-    html = html.replace(/(<link rel="preconnect"[^>]*>)/, `$1\n${preloadLink}`);
+    // Inserir CSS crítico inline antes do primeiro stylesheet
+    html = html.replace(/(<link rel=['"]stylesheet['"])/, `${criticalCssInline}\n    $1`);
+    console.log('✓ CSS crítico injetado inline no <head>');
+  } else {
+    console.warn('⚠ Arquivo critical.css não encontrado, pulando injeção inline');
   }
   
-  // Substituir JS por versões minificadas com versionamento
-  const jsFiles = [
-    'theme.js', 'navigation.js', 'terminal/terminal-core.js', 
-    'terminal/terminal-terminal.js', 'terminal/terminal-output.js',
-    'code-highlighter.js', 'code-copy.js', 'preview-toggle.js',
-    'explorer-resize.js', 'terminal-resize.js', 'main.js'
-  ];
+  // Substituir CSS por versão com hash
+  const mainCssOriginal = 'main.min.css';
+  const mainCssHashed = assetMap.css[mainCssOriginal] || mainCssOriginal;
+  if (mainCssHashed !== mainCssOriginal) {
+    const cssPath = `./css/${mainCssHashed}`;
+    html = html.replace(/href=["']\.\/css\/main\.css["']/g, `href="${cssPath}"`);
+    
+    // Adicionar preload do CSS principal
+    const preloadLink = `<link rel="preload" href="${cssPath}" as="style">`;
+    html = html.replace(/(<link rel="preconnect"[^>]*>)/, `$1\n    ${preloadLink}`);
+    console.log(`✓ CSS atualizado para versão com hash: ${mainCssHashed}`);
+  }
   
-  jsFiles.forEach(jsFile => {
-    const jsMinPath = path.join(jsDistDir, jsFile.replace(/\.js$/, '.min.js'));
-    if (fs.existsSync(jsMinPath)) {
-      const jsVersion = getAssetVersion(jsMinPath);
-      const jsVersionQuery = jsVersion ? `?v=${jsVersion}` : '';
+  // Scripts essenciais (carregam com defer, não bloqueiam FCP)
+  const essentialJSFiles = ['theme.js', 'navigation.js', 'header-command-palette.js', 'editor-tabs.js'];
+  
+  // Substituir scripts essenciais por versões com hash
+  essentialJSFiles.forEach(jsFile => {
+    const originalMin = `${jsFile.replace(/\.js$/, '')}.min.js`;
+    const hashedName = assetMap.js[originalMin] || originalMin;
+    if (hashedName !== originalMin) {
       const originalPath = `./js/${jsFile}`;
-      const minPath = `./js/${jsFile.replace(/\.js$/, '.min.js')}`;
-      
-      // Substituir referências ao JS
+      const hashedPath = `./js/${hashedName}`;
       html = html.replace(
         new RegExp(`src=["']${originalPath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["']`, 'g'),
-        `src="${minPath}${jsVersionQuery}"`
+        `src="${hashedPath}"`
       );
+      console.log(`✓ JS atualizado para versão com hash: ${hashedName}`);
     }
   });
   
+  // Remover scripts não essenciais do HTML (serão carregados via bundle)
+  const nonEssentialJSFiles = [
+    'terminal/terminal-core.js',
+    'terminal/terminal-terminal.js',
+    'terminal/terminal-output.js',
+    'code-highlighter.js',
+    'code-copy.js',
+    'preview-toggle.js',
+    'explorer-resize.js',
+    'explorer-highlight.js',
+    'terminal-resize.js',
+    'main.js'
+  ];
+  
+  nonEssentialJSFiles.forEach(jsFile => {
+    const originalPath = `./js/${jsFile}`;
+    html = html.replace(
+      new RegExp(`<script[^>]*src=["']${originalPath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["'][^>]*></script>\\s*`, 'g'),
+      ''
+    );
+  });
+  
+  // Adicionar bundle não essencial ao final do body (com defer)
+  const bundleOriginal = 'non-essential-bundle.min.js';
+  const bundleHashed = assetMap.js[bundleOriginal] || bundleOriginal;
+  const bundlePath = `./js/${bundleHashed}`;
+  const bundleScript = `<script src="${bundlePath}" defer></script>`;
+  html = html.replace(/(<\/body>)/, `    ${bundleScript}\n$1`);
+  console.log(`✓ Bundle não essencial adicionado: ${bundleHashed}`);
+  
+  // Minificar HTML agressivamente
+  html = await minifyHTML(html);
+  
   const distIndexPath = path.join(distDir, 'index.html');
   fs.writeFileSync(distIndexPath, html, 'utf8');
-  console.log('✓ Montado: index.html (a partir de templates com dados injetados)');
-  console.log('✓ Otimizado: arquivos minificados e versionamento aplicado');
+  console.log('✓ Montado: index.html (minificado e otimizado)');
+  console.log('✓ Otimizado: arquivos com hash de cache aplicado');
 }
 
-const indexPath = path.join(srcDir, 'index.html');
-
-if (fs.existsSync(indexPath)) {
-  const indexContent = fs.readFileSync(indexPath, 'utf8');
-  if (indexContent.includes('<!-- TEMPLATE:')) {
-    buildIndexHtml();
-  } else {
-    fs.copyFileSync(indexPath, path.join(distDir, 'index.html'));
-    console.log('✓ Copiado: index.html (fallback)');
-  }
-} else {
-  console.warn('⚠ Nenhum arquivo index encontrado!');
-}
-
-const error404Path = path.join(srcDir, '404.html');
-if (fs.existsSync(error404Path)) {
-  fs.copyFileSync(error404Path, path.join(distDir, '404.html'));
-  console.log('✓ Copiado: 404.html');
-}
-
+// Função principal de build (assíncrona)
+async function build() {
+  console.log('🚀 Iniciando build otimizado...\n');
+  
+  // Processar CSS primeiro (consolidar e minificar)
 const cssSrcDir = path.join(srcDir, 'css');
 const cssDistDir = path.join(distDir, 'css');
 if (fs.existsSync(cssSrcDir)) {
-  copyDir(cssSrcDir, cssDistDir, true);
+    // Copiar CSS primeiro
+    await processAssets(cssSrcDir, cssDistDir, { minify: false, addHash: false });
   
+    // Consolidar main.css
   const mainCssPath = path.join(cssDistDir, 'main.css');
   if (fs.existsSync(mainCssPath)) {
     const mainCssContent = fs.readFileSync(mainCssPath, 'utf8');
@@ -503,9 +782,14 @@ if (fs.existsSync(cssSrcDir)) {
     fs.writeFileSync(mainCssPath, consolidated, 'utf8');
     console.log('✓ Consolidado: main.css (resolvidos @import)');
     
-    const minified = minifyCSS(consolidated);
-    fs.writeFileSync(path.join(cssDistDir, 'main.min.css'), minified, 'utf8');
-    console.log('✓ Minificado: main.css consolidado');
+      // Minificar com hash
+      const minified = await minifyCSS(consolidated);
+      const hash = generateHash(minified);
+      const hashedName = `main.${hash}.min.css`;
+      const minPath = path.join(cssDistDir, hashedName);
+      fs.writeFileSync(minPath, minified, 'utf8');
+      assetMap.css['main.min.css'] = hashedName;
+      console.log(`✓ Minificado: main.css -> ${hashedName}`);
   }
   
   console.log(`✓ Processado diretório: css/`);
@@ -513,46 +797,95 @@ if (fs.existsSync(cssSrcDir)) {
   console.warn(`⚠ Diretório não encontrado: css`);
 }
 
-const jsSrcDir = path.join(srcDir, 'js');
-const jsDistDir = path.join(distDir, 'js');
-if (fs.existsSync(jsSrcDir)) {
-  copyDir(jsSrcDir, jsDistDir, true);
-  console.log(`✓ Processado diretório: js/`);
-} else {
-  console.warn(`⚠ Diretório não encontrado: js`);
-}
-
-const assetsSrcDir = path.join(srcDir, 'assets');
-const assetsDistDir = path.join(distDir, 'assets');
-if (fs.existsSync(assetsSrcDir)) {
-  copyDir(assetsSrcDir, assetsDistDir, false);
-  console.log(`✓ Copiado diretório: assets/`);
-} else {
-  console.warn(`⚠ Diretório não encontrado: assets`);
-}
-
-const optimizeImagesScript = path.join(__dirname, 'scripts', 'optimize-images.js');
-if (fs.existsSync(optimizeImagesScript)) {
-  try {
-    require('child_process').execSync(`node "${optimizeImagesScript}"`, { stdio: 'inherit' });
-  } catch (err) {
-    console.warn('⚠ Erro ao otimizar imagens (continuando build)...');
+  // Processar JS (minificar com hash)
+  const jsSrcDir = path.join(srcDir, 'js');
+  const jsDistDir = path.join(distDir, 'js');
+  if (fs.existsSync(jsSrcDir)) {
+    await processAssets(jsSrcDir, jsDistDir, { 
+      minify: true, 
+      addHash: true,
+      purgeCSS: false 
+    });
+    console.log(`✓ Processado diretório: js/`);
+    
+    // Consolida scripts não essenciais em bundle
+    await consolidateNonEssentialJS(jsSrcDir, jsDistDir);
+  } else {
+    console.warn(`⚠ Diretório não encontrado: js`);
   }
-} else {
-  console.log('ℹ Script de otimização de imagens não encontrado. Imagens copiadas normalmente.');
+  
+  // Processar HTML (depois de ter os assets com hash)
+  const indexPath = path.join(srcDir, 'index.html');
+  if (fs.existsSync(indexPath)) {
+    const indexContent = fs.readFileSync(indexPath, 'utf8');
+    if (indexContent.includes('<!-- TEMPLATE:')) {
+      await buildIndexHtml();
+    } else {
+      // Minificar HTML mesmo sem templates
+      const html = fs.readFileSync(indexPath, 'utf8');
+      const minified = await minifyHTML(html);
+      fs.writeFileSync(path.join(distDir, 'index.html'), minified, 'utf8');
+      console.log('✓ Copiado e minificado: index.html (fallback)');
+    }
+  } else {
+    console.warn('⚠ Nenhum arquivo index encontrado!');
+  }
+  
+  // Processar 404.html
+  const error404Path = path.join(srcDir, '404.html');
+  if (fs.existsSync(error404Path)) {
+    const html404 = fs.readFileSync(error404Path, 'utf8');
+    const minified404 = await minifyHTML(html404);
+    fs.writeFileSync(path.join(distDir, '404.html'), minified404, 'utf8');
+    console.log('✓ Copiado e minificado: 404.html');
+  }
+
+  // Copiar assets (imagens, favicons, etc)
+  const assetsSrcDir = path.join(srcDir, 'assets');
+  const assetsDistDir = path.join(distDir, 'assets');
+  if (fs.existsSync(assetsSrcDir)) {
+    await processAssets(assetsSrcDir, assetsDistDir, { minify: false, addHash: false });
+    console.log(`✓ Copiado diretório: assets/`);
+  } else {
+    console.warn(`⚠ Diretório não encontrado: assets`);
+  }
+
+  // Otimizar imagens (se script disponível)
+  const optimizeImagesScript = path.join(__dirname, 'scripts', 'optimize-images.js');
+  if (fs.existsSync(optimizeImagesScript)) {
+    try {
+      require('child_process').execSync(`node "${optimizeImagesScript}"`, { stdio: 'inherit' });
+    } catch (err) {
+      console.warn('⚠ Erro ao otimizar imagens (continuando build)...');
+    }
+  } else {
+    console.log('ℹ Script de otimização de imagens não encontrado. Imagens copiadas normalmente.');
+  }
+
+  // Copiar arquivos de configuração
+  const configDir = path.join(srcDir, 'config');
+  const configFiles = ['robots.txt', 'sitemap.xml', '_headers'];
+
+  configFiles.forEach(file => {
+    const srcFile = path.join(configDir, file);
+    if (fs.existsSync(srcFile)) {
+      const destFile = path.join(distDir, file);
+      fs.copyFileSync(srcFile, destFile);
+      console.log(`✓ Copiado: ${file}`);
+    }
+  });
+
+  console.log('\n✅ Build concluído! Os arquivos estão em ./dist/');
+  console.log('📂 Abra dist/index.html no navegador para visualizar.');
+  console.log('\n📊 Resumo de otimizações:');
+  console.log(`   - CSS com hash: ${Object.keys(assetMap.css).length} arquivo(s)`);
+  console.log(`   - JS com hash: ${Object.keys(assetMap.js).length} arquivo(s)`);
+  console.log('   - HTML minificado');
+  console.log('   - Compatível com Cloudflare CDN');
 }
 
-const configDir = path.join(srcDir, 'config');
-const configFiles = ['robots.txt', 'sitemap.xml', '_headers'];
-
-configFiles.forEach(file => {
-  const srcFile = path.join(configDir, file);
-  if (fs.existsSync(srcFile)) {
-    const destFile = path.join(distDir, file);
-    fs.copyFileSync(srcFile, destFile);
-    console.log(`✓ Copiado: ${file}`);
-  }
+// Executar build
+build().catch(err => {
+  console.error('❌ Erro no build:', err);
+  process.exit(1);
 });
-
-console.log('\n✅ Build concluído! Os arquivos estão em ./dist/');
-console.log('📂 Abra dist/index.html no navegador para visualizar.');

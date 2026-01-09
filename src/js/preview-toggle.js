@@ -1,10 +1,20 @@
 /**
  * Preview Toggle - Alterna entre visualização e código
  * Gerencia a alternância entre preview (renderizado) e código (HTML formatado)
+ * 
+ * REFATORADO: Estado central + renderização única
  */
 
 (function() {
   'use strict';
+
+  // ============================================
+  // ESTADO CENTRAL
+  // ============================================
+  const state = {
+    currentPage: null,      // ID da página atual (ex: 'index', 'skills', 'contact')
+    currentViewMode: 'page' // 'page' | 'code'
+  };
 
   // Mapeamento de IDs de arquivo para classes de seção
   const fileSectionMap = {
@@ -15,24 +25,361 @@
     'contact': '.contact'
   };
 
+  // ============================================
+  // FUNÇÃO ÚNICA: GET ACTIVE TAB ELEMENT
+  // ============================================
+  // REGRA ABSOLUTA: A aba ativa no DOM é a ÚNICA fonte da verdade
+  // Nenhuma variável global ou cache pode decidir qual código exibir.
+
+  /**
+   * Obtém o elemento da aba ativa (SEMPRE busca do DOM)
+   * Garante que existe APENAS UMA aba ativa por vez
+   * @returns {HTMLElement|null} Elemento da aba ativa ou null
+   */
+  function getActiveTabEl() {
+    const header = document.getElementById('header');
+    if (!header) {
+      return null;
+    }
+    
+    // SEMPRE busca a aba ativa do DOM usando o radio checked
+    const checkedRadio = header.querySelector('input[type="radio"][name="openedFile"]:checked');
+    if (!checkedRadio) {
+      return null;
+    }
+    
+    const activeTab = checkedRadio.closest('.editor-tab');
+    if (!activeTab) {
+      return null;
+    }
+    
+    // Verifica se há múltiplas abas marcadas como ativas (corrige se necessário)
+    const allCheckedRadios = header.querySelectorAll('input[type="radio"][name="openedFile"]:checked');
+    if (allCheckedRadios.length > 1) {
+      // Mantém apenas a primeira como checked
+      for (let i = 1; i < allCheckedRadios.length; i++) {
+        allCheckedRadios[i].checked = false;
+        const tab = allCheckedRadios[i].closest('.editor-tab');
+        if (tab) {
+          tab.classList.remove('is-active');
+        }
+      }
+    }
+    
+    // Verifica se a classe is-active está sincronizada
+    const allActiveTabs = header.querySelectorAll('.editor-tab.is-active');
+    if (allActiveTabs.length > 1) {
+      allActiveTabs.forEach(tab => {
+        if (tab !== activeTab) {
+          tab.classList.remove('is-active');
+        }
+      });
+    }
+    
+    // Garante que a aba ativa tem a classe is-active
+    if (!activeTab.classList.contains('is-active')) {
+      activeTab.classList.add('is-active');
+    }
+    
+    return activeTab;
+  }
+
+  /**
+   * Obtém o file path da aba ativa (SEMPRE busca do DOM)
+   * Esta é a ÚNICA função permitida para determinar qual arquivo exibir
+   * @returns {string|null} ID do arquivo (ex: 'index', 'skills') ou null
+   */
+  function getActiveTabFilePath() {
+    const activeTab = getActiveTabEl();
+    if (!activeTab) {
+      return null;
+    }
+    
+    const fileId = activeTab.getAttribute('data-file-id');
+    if (!fileId) {
+      return null;
+    }
+    
+    return fileId;
+  }
+
+  // ============================================
+  // FUNÇÃO DE SINCRONIZAÇÃO DO EDITOR
+  // ============================================
+
+  /**
+   * Sincroniza o editor (code view/preview) com a aba ativa
+   * Esta função é chamada sempre que a aba ativa muda
+   * SEMPRE usa getActiveTabEl() como fonte da verdade
+   */
+  function syncEditorWithActiveTab() {
+    const activeTab = getActiveTabEl();
+    if (!activeTab) {
+      return;
+    }
+    
+    const fileId = activeTab.getAttribute('data-file-id');
+    
+    if (!fileId) {
+      return;
+    }
+    
+    // Atualiza o estado da página atual
+    state.currentPage = fileId;
+    
+    // Atualiza a visualização baseado no modo atual
+    if (state.currentViewMode === 'code') {
+      renderCodeView();
+    } else {
+      renderPageView(fileId);
+    }
+  }
+
+  // ============================================
+  // FUNÇÕES DE ESTADO
+  // ============================================
+
+  /**
+   * Define a página atual
+   * @param {string} pageId - ID da página (ex: 'index', 'skills')
+   * @deprecated Use syncEditorWithActiveTab() diretamente - esta função mantida para compatibilidade
+   */
+  function setCurrentPage(pageId) {
+    // Sempre sincroniza com a aba ativa do DOM (fonte da verdade)
+    syncEditorWithActiveTab();
+  }
+
+  /**
+   * Define o modo de visualização
+   * @param {string} mode - 'page' | 'code'
+   */
+  function setViewMode(mode) {
+    if (state.currentViewMode === mode) return;
+    if (mode !== 'page' && mode !== 'code') {
+      return;
+    }
+    
+    state.currentViewMode = mode;
+    
+    // SEMPRE sincroniza com a aba ativa quando o modo muda
+    syncEditorWithActiveTab();
+  }
+
+  /**
+   * Obtém a página atualmente selecionada
+   * @returns {string|null} ID da página ou null
+   */
+  function getCurrentPage() {
+    return getActiveTabFilePath();
+  }
+
+  // ============================================
+  // FUNÇÕES DE RENDERIZAÇÃO
+  // ============================================
+
+  /**
+   * Renderiza a visualização (página ou código)
+   * @param {string} pageId - ID da página
+   * @param {string} mode - 'page' | 'code'
+   */
+  function renderView(pageId, mode) {
+    if (mode === 'code') {
+      // SEMPRE renderiza da aba ativa (DOM), não do pageId passado
+      renderCodeView();
+    } else {
+      if (!pageId) {
+        return;
+      }
+      renderPageView(pageId);
+    }
+  }
+
+  /**
+   * Renderiza o modo página (preview)
+   * @param {string} pageId - ID da página
+   */
+  function renderPageView(pageId) {
+    const codeViewContainer = document.getElementById('codeViewContainer');
+    const editor = document.querySelector('.editor');
+    
+    if (!editor) return;
+    
+    // Remove classe de modo código
+    editor.classList.remove('code-mode');
+    
+    // Esconde o container de código
+    if (codeViewContainer) {
+      codeViewContainer.style.display = 'none';
+      codeViewContainer.style.visibility = 'hidden';
+      codeViewContainer.style.opacity = '0';
+    }
+    
+    // Remove todos os estilos inline das seções
+    // para permitir que o CSS controle a exibição
+    const sections = editor.querySelectorAll('section');
+    sections.forEach(section => {
+      section.style.display = '';
+      section.style.visibility = '';
+      section.style.opacity = '';
+      section.style.height = '';
+      section.style.overflow = '';
+    });
+    
+    // Força um reflow para garantir que o CSS seja recalculado
+    void editor.offsetHeight;
+  }
+
+  /**
+   * Renderiza o modo código
+   * REGRA ABSOLUTA: SEMPRE busca a aba ativa do DOM
+   * PROIBIDO: aceitar parâmetros, usar variáveis globais, cache
+   */
+  function renderCodeView() {
+    // SEMPRE busca a aba ativa do DOM (única fonte da verdade)
+    const fileId = getActiveTabFilePath();
+    if (!fileId) {
+      return;
+    }
+    
+    const codeViewContainer = document.getElementById('codeViewContainer');
+    const codeViewContent = document.getElementById('codeViewContent');
+    const editor = document.querySelector('.editor');
+    
+    if (!codeViewContainer || !codeViewContent || !editor) {
+      return;
+    }
+    
+    // Remove estilos inline das seções para permitir que o CSS atualize
+    const sections = editor.querySelectorAll('section');
+    sections.forEach(section => {
+      section.style.display = '';
+      section.style.visibility = '';
+      section.style.opacity = '';
+      section.style.height = '';
+      section.style.overflow = '';
+    });
+    
+    // Força reflow para o CSS atualizar qual seção está visível
+    void editor.offsetHeight;
+    void document.body.offsetHeight;
+    
+    // Aguarda o CSS atualizar e então captura o HTML
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          // Obtém o HTML da seção da aba ativa (SEMPRE do DOM)
+          const html = getSectionHTML(fileId);
+          
+          if (!html) {
+            // Limpa o código se não houver HTML
+            codeViewContent.innerHTML = '';
+            codeViewContent.textContent = '';
+            return;
+          }
+          
+          // Adiciona classe para modo código
+          editor.classList.add('code-mode');
+          
+          // Esconde todas as seções
+          sections.forEach(section => {
+            section.style.display = 'none';
+            section.style.visibility = 'hidden';
+            section.style.opacity = '0';
+            section.style.height = '0';
+            section.style.overflow = 'hidden';
+          });
+          
+          // Mostra o container de código
+          codeViewContainer.style.display = 'block';
+          codeViewContainer.style.visibility = 'visible';
+          codeViewContainer.style.opacity = '1';
+          
+          // Aplica syntax highlighting
+          if (isHighlighterAvailable()) {
+            const highlighted = highlightHTML(html);
+            codeViewContent.innerHTML = highlighted;
+          } else {
+            // Aguarda o CodeHighlighter estar disponível
+            setTimeout(() => {
+              if (isHighlighterAvailable()) {
+                const highlighted = highlightHTML(html);
+                codeViewContent.innerHTML = highlighted;
+              } else {
+                // Fallback: HTML escapado sem highlighting
+                codeViewContent.textContent = html;
+              }
+            }, 100);
+          }
+        }, 100);
+      });
+    });
+  }
+
+  /**
+   * Obtém o HTML de uma seção específica
+   * @param {string} pageId - ID da página
+   * @returns {string} HTML formatado
+   */
+  function getSectionHTML(pageId) {
+    const editor = document.querySelector('.editor');
+    if (!editor) return '';
+    
+    const sectionSelector = fileSectionMap[pageId];
+    if (!sectionSelector) {
+      return '';
+    }
+    
+    const section = editor.querySelector(sectionSelector);
+    if (!section) {
+      return '';
+    }
+    
+    // Clona a seção para não modificar o original
+    const clone = section.cloneNode(true);
+    
+    // Remove atributos desnecessários
+    clone.removeAttribute('id');
+    clone.removeAttribute('contenteditable');
+    
+    // Mantém a classe para contexto
+    const className = clone.className;
+    clone.removeAttribute('class');
+    
+    // Adiciona a tag de abertura com classe se existir
+    let html = '';
+    if (className) {
+      html = `<section class="${className}">\n`;
+    } else {
+      html = '<section>\n';
+    }
+    
+    // Processa o conteúdo interno
+    html += formatSectionContent(clone);
+    
+    // Fecha a tag
+    html += '</section>';
+    
+    return html;
+  }
+
+  // ============================================
+  // FUNÇÕES AUXILIARES (mantidas do código original)
+  // ============================================
+
   /**
    * Formata HTML de forma limpa e legível
-   * @param {string} html - HTML a ser formatado
-   * @returns {string} - HTML formatado
    */
   function formatHTML(html) {
     if (!html) return '';
     
     let formatted = '';
     let indent = 0;
-    const tab = '  '; // 2 espaços
+    const tab = '  ';
     const selfClosingTags = ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 
                              'link', 'meta', 'param', 'source', 'track', 'wbr'];
     
-    // Normaliza o HTML
     html = html.trim();
     
-    // Processa o HTML caractere por caractere para melhor controle
     let i = 0;
     let inTag = false;
     let tagBuffer = '';
@@ -42,7 +389,6 @@
       const char = html[i];
       
       if (char === '<') {
-        // Processa texto acumulado antes da tag
         if (textBuffer.trim()) {
           formatted += tab.repeat(indent) + escapeHtml(textBuffer.trim()) + '\n';
           textBuffer = '';
@@ -52,7 +398,6 @@
         tagBuffer = '<';
         i++;
         
-        // Coleta a tag completa
         while (i < html.length && html[i] !== '>') {
           tagBuffer += html[i];
           i++;
@@ -63,7 +408,6 @@
           i++;
         }
         
-        // Processa a tag
         const tagContent = tagBuffer.trim();
         const isClosingTag = tagContent.startsWith('</');
         const isSelfClosing = tagContent.endsWith('/>') || 
@@ -91,7 +435,6 @@
       }
     }
     
-    // Processa texto restante
     if (textBuffer.trim()) {
       formatted += tab.repeat(indent) + escapeHtml(textBuffer.trim()) + '\n';
     }
@@ -99,11 +442,6 @@
     return formatted.trim();
   }
 
-  /**
-   * Escapa caracteres HTML especiais
-   * @param {string} text - Texto a ser escapado
-   * @returns {string} - Texto escapado
-   */
   function escapeHtml(text) {
     const map = {
       '&': '&amp;',
@@ -115,76 +453,21 @@
     return text.replace(/[&<>"']/g, m => map[m]);
   }
 
-  /**
-   * Verifica se o módulo CodeHighlighter está disponível
-   * @returns {boolean} - true se disponível
-   */
   function isHighlighterAvailable() {
     return typeof window.CodeHighlighter !== 'undefined' && 
            typeof window.CodeHighlighter.highlightHTML === 'function';
   }
 
-  /**
-   * Obtém o HTML da seção atual de forma limpa
-   * @returns {string} - HTML da seção atual formatado
-   */
-  function getCurrentSectionHTML() {
-    const editor = document.querySelector('.editor');
+  function highlightHTML(html) {
+    if (!html) return '';
     
-    if (!editor) return '';
-    
-    // Encontra qual arquivo está selecionado
-    let selectedFile = null;
-    for (const fileId in fileSectionMap) {
-      const radio = document.getElementById(fileId);
-      if (radio && radio.checked) {
-        selectedFile = fileId;
-        break;
-      }
+    if (isHighlighterAvailable()) {
+      return window.CodeHighlighter.highlightHTML(html);
     }
     
-    if (!selectedFile) return '';
-    
-    // Encontra a seção correspondente
-    const sectionSelector = fileSectionMap[selectedFile];
-    const section = editor.querySelector(sectionSelector);
-    
-    if (!section) return '';
-    
-    // Clona a seção para não modificar o original
-    const clone = section.cloneNode(true);
-    
-    // Remove atributos desnecessários
-    clone.removeAttribute('id');
-    clone.removeAttribute('contenteditable');
-    
-    // Mantém a classe para contexto, mas pode ser removida se necessário
-    const className = clone.className;
-    clone.removeAttribute('class');
-    
-    // Adiciona a tag de abertura com classe se existir
-    let html = '';
-    if (className) {
-      html = `<section class="${className}">\n`;
-    } else {
-      html = '<section>\n';
-    }
-    
-    // Processa o conteúdo interno
-    html += formatSectionContent(clone);
-    
-    // Fecha a tag
-    html += '</section>';
-    
-    return html;
+    return escapeHtml(html);
   }
 
-  /**
-   * Formata o conteúdo interno de uma seção
-   * @param {Element} element - Elemento a ser formatado
-   * @param {number} indent - Nível de indentação
-   * @returns {string} - HTML formatado
-   */
   function formatSectionContent(element, indent = 1) {
     const tab = '  ';
     let html = '';
@@ -221,11 +504,6 @@
     return html;
   }
 
-  /**
-   * Obtém string de atributos de um elemento
-   * @param {Element} element - Elemento
-   * @returns {string} - String de atributos
-   */
   function getAttributesString(element) {
     let attrs = '';
     const ignoreAttrs = ['id', 'contenteditable'];
@@ -241,128 +519,6 @@
   }
 
   /**
-   * Aplica syntax highlighting ao HTML usando o módulo CodeHighlighter
-   * @param {string} html - HTML a ser destacado
-   * @returns {string} - HTML com spans coloridos usando classes token.*
-   */
-  function highlightHTML(html) {
-    if (!html) return '';
-    
-    // Usa o módulo CodeHighlighter se disponível
-    if (isHighlighterAvailable()) {
-      return window.CodeHighlighter.highlightHTML(html);
-    }
-    
-    // Fallback: retorna HTML escapado sem highlighting
-    console.warn('CodeHighlighter não disponível, retornando HTML sem highlighting');
-    return escapeHtml(html);
-  }
-
-  /**
-   * Atualiza a visualização do código
-   */
-  function updateCodeView() {
-    const codeViewContainer = document.getElementById('codeViewContainer');
-    const codeViewContent = document.getElementById('codeViewContent');
-    const toggleCheckbox = document.getElementById('togglePreviewCode');
-    const editor = document.querySelector('.editor');
-    
-    if (!codeViewContainer || !codeViewContent || !toggleCheckbox || !editor) return;
-    
-    if (toggleCheckbox.checked) {
-      // Modo código
-      const html = getCurrentSectionHTML();
-      if (html) {
-        // Adiciona classe para modo código
-        editor.classList.add('code-mode');
-        
-        // Esconde todas as seções completamente
-        const sections = editor.querySelectorAll('section');
-        sections.forEach(section => {
-          section.style.display = 'none';
-          section.style.visibility = 'hidden';
-          section.style.opacity = '0';
-          section.style.height = '0';
-          section.style.overflow = 'hidden';
-        });
-        
-        // Mostra o container de código
-        codeViewContainer.style.display = 'block';
-        codeViewContainer.style.visibility = 'visible';
-        codeViewContainer.style.opacity = '1';
-        
-        // Aplica syntax highlighting
-        if (isHighlighterAvailable()) {
-          const highlighted = highlightHTML(html);
-          codeViewContent.innerHTML = highlighted;
-        } else {
-          // Aguarda o CodeHighlighter estar disponível (se ainda não estiver)
-          setTimeout(() => {
-            if (isHighlighterAvailable()) {
-              const highlighted = highlightHTML(html);
-              codeViewContent.innerHTML = highlighted;
-            } else {
-              // Fallback: HTML escapado sem highlighting
-              codeViewContent.textContent = html;
-            }
-          }, 100);
-        }
-      }
-    } else {
-      // Modo preview
-      editor.classList.remove('code-mode');
-      
-      // Esconde o container de código
-      codeViewContainer.style.display = 'none';
-      codeViewContainer.style.visibility = 'hidden';
-      codeViewContainer.style.opacity = '0';
-      
-      // Remove todos os estilos inline das seções
-      // para permitir que o CSS controle a exibição
-      const sections = editor.querySelectorAll('section');
-      sections.forEach(section => {
-        section.style.display = '';
-        section.style.visibility = '';
-        section.style.opacity = '';
-        section.style.height = '';
-        section.style.overflow = '';
-      });
-      
-      // Força um reflow para garantir que o CSS seja recalculado
-      void editor.offsetHeight;
-    }
-  }
-
-  /**
-   * Inicializa o toggle
-   */
-  function initPreviewToggle() {
-    const toggleCheckbox = document.getElementById('togglePreviewCode');
-    const header = document.getElementById('header');
-    
-    if (!toggleCheckbox || !header) return;
-    
-    // Listener para o toggle
-    toggleCheckbox.addEventListener('change', function() {
-      updateCodeView();
-      updateToggleIcon();
-    });
-    
-    // Listener para mudanças de arquivo
-    const fileRadios = header.querySelectorAll('input[type="radio"][name="openedFile"]');
-    fileRadios.forEach(radio => {
-      radio.addEventListener('change', function() {
-        if (toggleCheckbox.checked) {
-          updateCodeView();
-        }
-      });
-    });
-    
-    // Atualiza o ícone inicial
-    updateToggleIcon();
-  }
-
-  /**
    * Atualiza o ícone do botão toggle
    */
   function updateToggleIcon() {
@@ -371,18 +527,218 @@
     
     if (!toggleCheckbox || !toggleLabel) return;
     
-    const icon = toggleLabel.querySelector('i');
-    if (icon) {
+    const svg = toggleLabel.querySelector('svg');
+    const icon = toggleLabel.querySelector('svg use');
+    
+    if (svg && icon) {
       if (toggleCheckbox.checked) {
-        // Modo código - mostra ícone de preview
-        icon.className = 'fa-solid fa-eye';
+        // Modo código - mostra ícone de preview (olho)
+        icon.setAttribute('href', '#icon-eye');
+        svg.setAttribute('viewBox', '0 0 24 24');
         toggleLabel.title = 'Ver preview';
       } else {
         // Modo preview - mostra ícone de código
-        icon.className = 'fa-solid fa-code';
+        icon.setAttribute('href', '#icon-code');
+        svg.setAttribute('viewBox', '0 0 490 490');
         toggleLabel.title = 'Ver código';
       }
     }
+  }
+
+  // ============================================
+  // INICIALIZAÇÃO
+  // ============================================
+
+  /**
+   * Inicializa o sistema de toggle
+   */
+  function initPreviewToggle() {
+    const toggleCheckbox = document.getElementById('togglePreviewCode');
+    const header = document.getElementById('header');
+    
+    if (!toggleCheckbox || !header) return;
+    
+    // Sincroniza o estado inicial
+    const initialPage = getCurrentPage();
+    if (initialPage) {
+      state.currentPage = initialPage;
+    }
+    state.currentViewMode = toggleCheckbox.checked ? 'code' : 'page';
+    
+    // Listener para o toggle
+    toggleCheckbox.addEventListener('change', function() {
+      const newMode = this.checked ? 'code' : 'page';
+      setViewMode(newMode);
+      updateToggleIcon();
+    });
+    
+    // Listener para mudanças de página (evento change) - como redundância
+    const fileRadios = header.querySelectorAll('input[type="radio"][name="openedFile"]');
+    fileRadios.forEach(radio => {
+      radio.addEventListener('change', function() {
+        if (this.checked) {
+          // Aguarda um pouco para garantir que o DOM atualizou
+          setTimeout(() => {
+            syncEditorWithActiveTab();
+          }, 10);
+        }
+      });
+    });
+    
+    // ============================================
+    // MUTATION OBSERVER ROBUSTO
+    // ============================================
+    // Observa mudanças no container de tabs para detectar mudanças na aba ativa
+    // Detecta mudanças em:
+    // - atributo 'checked' dos radio buttons
+    // - classe 'is-active' das tabs
+    // - adição/remoção de tabs
+    
+    let syncTimeout = null;
+    const debouncedSync = function() {
+      if (syncTimeout) {
+        clearTimeout(syncTimeout);
+      }
+      syncTimeout = setTimeout(() => {
+        syncEditorWithActiveTab();
+      }, 10);
+    };
+    
+    // Observer para mudanças nos radio buttons (checked)
+    const radioObserver = new MutationObserver(function(mutations) {
+      let shouldSync = false;
+      
+      mutations.forEach(function(mutation) {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'checked') {
+          const radio = mutation.target;
+          if (radio.type === 'radio' && radio.name === 'openedFile') {
+            if (radio.checked) {
+              shouldSync = true;
+            }
+          }
+        }
+      });
+      
+      if (shouldSync) {
+        debouncedSync();
+      }
+    });
+    
+    // Observer para mudanças nas classes das tabs (is-active)
+    const tabClassObserver = new MutationObserver(function(mutations) {
+      let shouldSync = false;
+      
+      mutations.forEach(function(mutation) {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+          const tab = mutation.target;
+          if (tab.classList.contains('editor-tab')) {
+            // Verifica se a classe is-active foi adicionada ou removida
+            if (tab.classList.contains('is-active')) {
+              shouldSync = true;
+            }
+          }
+        }
+      });
+      
+      if (shouldSync) {
+        debouncedSync();
+      }
+    });
+    
+    // Observa todos os radio buttons existentes e futuros
+    const observeRadios = function() {
+      const radios = header.querySelectorAll('input[type="radio"][name="openedFile"]');
+      radios.forEach(function(radio) {
+        if (!radio.dataset.previewToggleObserved) {
+          radioObserver.observe(radio, { 
+            attributes: true, 
+            attributeFilter: ['checked'] 
+          });
+          radio.dataset.previewToggleObserved = 'true';
+        }
+      });
+    };
+    
+    // Observa todas as tabs existentes e futuras (para classe is-active)
+    const observeTabs = function() {
+      const tabs = header.querySelectorAll('.editor-tab');
+      tabs.forEach(function(tab) {
+        if (!tab.dataset.previewToggleObserved) {
+          tabClassObserver.observe(tab, { 
+            attributes: true, 
+            attributeFilter: ['class'] 
+          });
+          tab.dataset.previewToggleObserved = 'true';
+        }
+      });
+    };
+    
+    // Observa mudanças no DOM para novos radios e tabs (abas recriadas)
+    const domObserver = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        if (mutation.addedNodes.length > 0) {
+          mutation.addedNodes.forEach(function(node) {
+            if (node.nodeType === Node.ELEMENT_NODE) {
+              // Observa novos radios
+              const newRadios = node.querySelectorAll ? node.querySelectorAll('input[type="radio"][name="openedFile"]') : [];
+              newRadios.forEach(function(radio) {
+                if (!radio.dataset.previewToggleObserved) {
+                  radioObserver.observe(radio, { 
+                    attributes: true, 
+                    attributeFilter: ['checked'] 
+                  });
+                  radio.dataset.previewToggleObserved = 'true';
+                  
+                  // Adiciona listener 'change' como redundância
+                  if (!radio.dataset.previewToggleListener) {
+                    radio.dataset.previewToggleListener = 'true';
+                    radio.addEventListener('change', function() {
+                      if (this.checked) {
+                        setTimeout(() => {
+                          syncEditorWithActiveTab();
+                        }, 10);
+                      }
+                    });
+                  }
+                }
+              });
+              
+              // Observa novas tabs
+              const newTabs = node.classList && node.classList.contains('editor-tab') 
+                ? [node] 
+                : (node.querySelectorAll ? node.querySelectorAll('.editor-tab') : []);
+              newTabs.forEach(function(tab) {
+                if (!tab.dataset.previewToggleObserved) {
+                  tabClassObserver.observe(tab, { 
+                    attributes: true, 
+                    attributeFilter: ['class'] 
+                  });
+                  tab.dataset.previewToggleObserved = 'true';
+                }
+              });
+            }
+          });
+        }
+      });
+    });
+    
+    // Inicializa observadores
+    observeRadios();
+    observeTabs();
+    
+    // Observa mudanças no DOM (novos elementos)
+    domObserver.observe(header, { 
+      childList: true, 
+      subtree: true 
+    });
+    
+    // Sincroniza inicialmente
+    setTimeout(() => {
+      syncEditorWithActiveTab();
+    }, 100);
+    
+    // Atualiza o ícone inicial
+    updateToggleIcon();
   }
 
   // Inicializa quando o DOM estiver pronto

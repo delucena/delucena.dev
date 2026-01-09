@@ -320,7 +320,6 @@
    */
   function initTerminal() {
     if (!initElements()) {
-      console.warn('Elementos do terminal não encontrados');
       return;
     }
 

@@ -53,7 +53,6 @@
    */
   function init() {
     if (!initElements()) {
-      console.warn('Elementos do tema não encontrados. Funcionalidade desabilitada.');
       return;
     }
 

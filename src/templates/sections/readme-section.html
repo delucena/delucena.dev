@@ -2,9 +2,34 @@
     <div class="readme-container">
         <div class="readme-photo-wrapper">
             <picture>
-                <source srcset="{{profile.profileImage.webp}}" type="image/webp">
-                <source srcset="{{profile.profileImage.webp}}" type="image/webp">
-                <img src="{{profile.profileImage.png}}" alt="{{profile.profileImage.alt}}" class="readme-photo" loading="lazy" onerror="this.onerror=null; this.src='{{profile.profileImage.png}}';">
+                <!-- AVIF com srcset responsivo -->
+                <source 
+                    type="image/avif" 
+                    srcset="{{profile.profileImage.responsive.480w.avif}} 480w,
+                            {{profile.profileImage.responsive.768w.avif}} 768w,
+                            {{profile.profileImage.responsive.1200w.avif}} 1200w"
+                    sizes="(max-width: 480px) 480px,
+                           (max-width: 768px) 768px,
+                           1200px">
+                <!-- WebP com srcset responsivo -->
+                <source 
+                    type="image/webp" 
+                    srcset="{{profile.profileImage.responsive.480w.webp}} 480w,
+                            {{profile.profileImage.responsive.768w.webp}} 768w,
+                            {{profile.profileImage.responsive.1200w.webp}} 1200w"
+                    sizes="(max-width: 480px) 480px,
+                           (max-width: 768px) 768px,
+                           1200px">
+                <!-- Fallback PNG -->
+                <img 
+                    src="{{profile.profileImage.png}}" 
+                    alt="{{profile.profileImage.alt}}" 
+                    class="readme-photo" 
+                    width="{{profile.profileImage.width}}" 
+                    height="{{profile.profileImage.height}}"
+                    loading="eager"
+                    decoding="async"
+                    onerror="this.onerror=null; this.src='{{profile.profileImage.png}}';">
             </picture>
         </div>
         <div class="readme-content">
@@ -14,12 +39,20 @@
             <p>
                 <a target="_blank" href="{{profile.readme.credlyUrl}}">
                     <img src="https://img.shields.io/badge/Oracle-Java%20Certified-red?style=for-the-badge&logo=oracle"
-                         alt="Oracle Java Certified">
+                         alt="Oracle Java Certified"
+                         width="200"
+                         height="28"
+                         loading="lazy"
+                         decoding="async">
                 </a>
             </p>
             <p>
                 <img src="https://skillicons.dev/icons?i={{profile.readme.skillsIcons}}&perline=12"
-                     alt="My Skills">
+                     alt="My Skills"
+                     width="480"
+                     height="48"
+                     loading="lazy"
+                     decoding="async">
             </p>
         </div>
     </div>

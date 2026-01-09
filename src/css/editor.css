@@ -9,6 +9,13 @@
   min-height: 0;
   overflow: hidden;
   order: 1;
+  height: 100%;
+}
+
+/* Garante que header e breadcrumb fiquem no topo */
+.editorContainer > #header,
+.editorContainer > #editor-breadcrumb {
+  flex-shrink: 0;
 }
 
 .editorContainer .editor {
@@ -19,6 +26,10 @@
   order: 1;
   position: relative;
   overflow: hidden;
+  /* Garante que o container não ocupe mais que o espaço disponível */
+  height: 100%;
+  /* Permite que seções filhas ocupem apenas o espaço disponível */
+  box-sizing: border-box;
 }
 
 #editor .editor {
@@ -32,13 +43,16 @@
 #editor .editor section {
   display: none;
   color: var(--color-text-secondary);
-  padding-top: calc(var(--spacing-md) + 50px); /* Espaço para o botão flutuante */
-  padding: calc(var(--spacing-md) + 50px) 4rem var(--spacing-md) var(--spacing-xl);
+  padding: 1.5rem 4rem var(--spacing-md) var(--spacing-xl);
   font-size: var(--font-size-large);
   overflow-x: hidden;
   overflow-y: auto;
-  flex: 1;
-  min-height: 0;
+  /* Removido flex: 1 e min-height: 0 - causavam conflito com display: block */
+  /* Usa max-height ao invés de height para não ocupar toda viewport */
+  max-height: 100%;
+  box-sizing: border-box;
+  /* Garante que a seção ocupe apenas o espaço disponível do container */
+  position: relative;
 }
 
 #editor:has(div #image:checked) ~ #navigation .explorer div .image {
@@ -68,55 +82,302 @@
   background: #4a4a4a;
 }
 
-/* Header com abas */
-#header {
+/* ============================================
+   EDITOR TABS - Abas estilo VS Code
+   ============================================ */
+
+/* Container das abas */
+#header.editor-tabs {
   background-color: var(--color-bg-secondary);
-  height: var(--height-header);
+  height: 35px;
+  min-height: 35px;
   display: flex;
+  align-items: flex-end;
   overflow-y: hidden;
   overflow-x: auto;
   position: relative;
+  border-bottom: 1px solid var(--color-border-primary);
+  flex-shrink: 0;
+  padding-left: 0;
+  gap: 0;
 }
 
-#header div label {
-  font-size: var(--font-size-base);
+/* Aba individual */
+.editor-tabs .editor-tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 35px;
+  min-height: 35px;
+  flex-shrink: 0;
+  margin-left: 2px;
+}
+
+.editor-tabs .editor-tab:first-child {
+  margin-left: 0;
+}
+
+/* Radio button escondido */
+.editor-tabs .editor-tab__radio {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Label da aba */
+.editor-tabs .editor-tab__label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+  padding: 0 12px;
+  font-size: 13px;
+  font-family: var(--font-family-base);
   color: var(--color-text-secondary);
-  padding-left: 0.8em;
-  padding-right: 0.7em;
-  border-right: 1px solid var(--color-border-primary);
+  background-color: transparent;
+  border: none;
   cursor: pointer;
-  text-wrap: nowrap;
+  white-space: nowrap;
+  user-select: none;
+  transition: background-color 0.1s ease, color 0.1s ease;
+  position: relative;
+  min-width: fit-content;
+}
+
+/* Ícone do arquivo */
+.editor-tabs .editor-tab__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-text-secondary);
+  transition: color 0.1s ease;
+}
+
+.editor-tabs .editor-tab__icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Nome do arquivo */
+.editor-tabs .editor-tab__name {
+  display: inline-block;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Botão de fechar */
+.editor-tabs .editor-tab__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
+  padding: 0;
+  margin-left: 4px;
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.1s ease, background-color 0.1s ease, color 0.1s ease;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.editor-tabs .editor-tab__close:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--color-text-primary);
+}
+
+.editor-tabs .editor-tab__close:active {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.editor-tabs .editor-tab__close svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* Hover na aba - mostra botão de fechar */
+.editor-tabs .editor-tab:hover .editor-tab__close {
+  opacity: 1;
+}
+
+/* Aba ativa */
+.editor-tabs .editor-tab__radio:checked ~ .editor-tab__label {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  border-bottom: 2px solid var(--color-border-accent);
+  margin-bottom: -1px;
+}
+
+.editor-tabs .editor-tab__radio:checked ~ .editor-tab__label .editor-tab__icon {
+  color: var(--color-text-primary);
+}
+
+/* Hover em aba inativa */
+.editor-tabs .editor-tab:not(:has(.editor-tab__radio:checked)) .editor-tab__label:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--color-text-primary);
+}
+
+.editor-tabs .editor-tab:not(:has(.editor-tab__radio:checked)) .editor-tab__label:hover .editor-tab__icon {
+  color: var(--color-text-primary);
+}
+
+/* Aba ativa - sempre mostra botão de fechar */
+.editor-tabs .editor-tab__radio:checked ~ .editor-tab__label .editor-tab__close {
+  opacity: 0.7;
+}
+
+.editor-tabs .editor-tab__radio:checked ~ .editor-tab__label:hover .editor-tab__close {
+  opacity: 1;
+}
+
+/* Tema light - ajustes */
+body:has(#theme:checked) .editor-tabs .editor-tab__label:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+body:has(#theme:checked) .editor-tabs .editor-tab__close:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Scrollbar das abas */
+.editor-tabs::-webkit-scrollbar {
+  height: 2px;
+}
+
+.editor-tabs::-webkit-scrollbar-track {
+  background: rgba(60, 60, 60, 0.5);
+}
+
+.editor-tabs::-webkit-scrollbar-thumb {
+  background: #3c3c3c;
+}
+
+.editor-tabs::-webkit-scrollbar-thumb:hover {
+  background: #4a4a4a;
+}
+
+/* Scrollbar do breadcrumb */
+.editor-breadcrumb::-webkit-scrollbar {
+  height: 2px;
+}
+
+.editor-breadcrumb::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.editor-breadcrumb::-webkit-scrollbar-thumb {
+  background: rgba(60, 60, 60, 0.5);
+}
+
+.editor-breadcrumb::-webkit-scrollbar-thumb:hover {
+  background: #3c3c3c;
+}
+
+/* ============================================
+   EDITOR BREADCRUMB - Caminho do arquivo estilo VS Code
+   ============================================ */
+
+#editor-breadcrumb.editor-breadcrumb {
+  background-color: var(--color-bg-primary);
+  height: 22px;
+  min-height: 22px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  border-bottom: 1px solid var(--color-border-primary);
+  flex-shrink: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.editor-breadcrumb__nav {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.editor-breadcrumb__list {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-size: 12px;
+  font-family: var(--font-family-base);
+  color: var(--color-text-secondary);
+}
+
+.editor-breadcrumb__item {
+  display: flex;
+  align-items: center;
   height: 100%;
 }
 
-#header div label::before {
-  content: "\f069";
-  font-family: FontAwesome;
-  display: inline-block;
-  font-style: normal;
-  font-weight: normal;
-  text-decoration: inherit;
-  padding-right: var(--spacing-md);
-  color: var(--color-border-accent);
+.editor-breadcrumb__link {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 4px;
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  font-family: var(--font-family-base);
+  cursor: pointer;
+  transition: color 0.1s ease;
+  white-space: nowrap;
+  border-radius: 2px;
 }
 
-#header div label::after {
-  content: "\00d7";
-  opacity: 0;
-  font-size: 18px;
-  padding-left: var(--spacing-md);
-  color: white;
-  font-weight: 300;
+.editor-breadcrumb__link:hover {
+  color: var(--color-text-primary);
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
-#header div input[type="radio"]:checked ~ label {
-  background-color: var(--color-bg-primary);
-  border-bottom: 1px solid var(--color-border-accent);
+.editor-breadcrumb__link:active {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-#header div input[type="radio"]:checked ~ label:after {
-  opacity: 0.5;
-  cursor: default;
+.editor-breadcrumb__separator {
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  color: var(--color-text-secondary);
+  opacity: 0.6;
+  user-select: none;
+  font-size: 12px;
+}
+
+.editor-breadcrumb__current {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 4px;
+  color: var(--color-text-primary);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.editor-breadcrumb__item--active {
+  color: var(--color-text-primary);
+}
+
+/* Tema light - ajustes breadcrumb */
+body:has(#theme:checked) .editor-breadcrumb__link:hover {
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 /* Scrollbar do header */
@@ -137,24 +398,51 @@
 }
 
 /* Exibição de seções baseada em radio buttons */
+/* Quando visíveis, as seções devem usar display: block e ocupar apenas o espaço disponível */
 #header:has(div #index:checked) ~ .editor .index {
   display: block !important;
+  flex: none !important; /* Remove flex quando visível */
+  /* Garante que a seção ocupe apenas o espaço disponível do container flex */
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 #header:has(div #experience:checked) ~ .editor .experience {
   display: block !important;
+  flex: none !important;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 #header:has(div #contact:checked) ~ .editor .contact {
   display: block !important;
+  flex: none !important;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 #header:has(div #skills:checked) ~ .editor .skills {
   display: block !important;
+  flex: none !important;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 #header:has(div #readme:checked) ~ .editor .readme {
   display: block !important;
+  flex: none !important;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* Estilos específicos para README */
@@ -244,6 +532,7 @@
   max-width: 100%;
   height: auto;
   max-height: 200px;
+  aspect-ratio: attr(width) / attr(height);
 }
 
 #editor .editor .readme .readme-content p img {
@@ -253,6 +542,25 @@
   height: auto;
   display: inline-block;
   margin: var(--spacing-sm) 0;
+  aspect-ratio: attr(width) / attr(height);
+}
+
+/* Dimensões específicas para badges para prevenir CLS */
+#editor .editor .readme .readme-content p img[src*="img.shields.io"] {
+  width: 200px;
+  height: 28px;
+  aspect-ratio: 200 / 28;
+  min-width: 200px;
+  min-height: 28px;
+}
+
+#editor .editor .readme .readme-content p img[src*="skillicons.dev"] {
+  width: 480px;
+  height: 48px;
+  aspect-ratio: 10 / 1;
+  min-width: 200px;
+  min-height: 20px;
+  max-width: 100%;
 }
 
 #editor .editor .readme br {
@@ -334,8 +642,8 @@
 
 .code-view-container {
   display: none;
-  padding: var(--spacing-xl);
-  padding-top: calc(var(--spacing-xl) + 50px); /* Espaço para o botão flutuante */
+  padding: var(--spacing-md);
+  padding-top: calc(var(--spacing-md) + 40px); /* Espaço mínimo para o botão flutuante */
   background-color: var(--color-bg-primary);
   overflow: auto;
   font-family: var(--font-family-mono);
@@ -345,8 +653,8 @@
   right: 0;
   bottom: 0;
   z-index: 10;
-  height: 100%;
-  width: 100%;
+  /* Removido height: 100% e width: 100% - position absolute com top/left/right/bottom já define o tamanho */
+  box-sizing: border-box;
   /* Melhorias de visualização */
   line-height: 1.8;
   tab-size: 2;
@@ -355,7 +663,7 @@
 
 .code-view {
   margin: 0;
-  padding: var(--spacing-lg);
+  padding: 0;
   background: transparent;
   border: none;
   font-family: var(--font-family-mono);
@@ -393,7 +701,7 @@
 
 .code-copy-button {
   position: absolute;
-  top: calc(var(--spacing-md) + 50px);
+  top: calc(var(--spacing-md) + 40px);
   right: var(--spacing-md);
   z-index: 101;
   display: flex;
@@ -589,14 +897,29 @@ main:has(.terminal .header #terminalToggle:checked) .code-view-container {
   transform: scale(1.1);
 }
 
+/* Tamanho e alinhamento dos SVGs dentro dos ícones de contato */
+#editor .editor .contact .contact-icon svg {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
+  max-width: 40px !important;
+  max-height: 40px !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex-shrink: 0 !important;
+  box-sizing: border-box !important;
+}
+
 #editor .editor .contact .contact-icon.linkedin {
   background-color: rgba(0, 119, 181, 0.2);
   color: #0077b5;
 }
 
 #editor .editor .contact .contact-icon.github {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: var(--color-text-primary);
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
 }
 
 #editor .editor .contact .contact-icon.email {
@@ -632,7 +955,8 @@ main:has(.terminal .header #terminalToggle:checked) .code-view-container {
   text-decoration: none;
   font-size: 0.95rem;
   transition: color var(--transition-fast);
-  word-break: break-all;
+  overflow-wrap: anywhere;
+  word-break: normal;
   pointer-events: none;
 }
 
@@ -650,12 +974,21 @@ main:has(.terminal .header #terminalToggle:checked) .code-view-container {
   color: var(--color-text-primary);
   margin-bottom: 1rem;
   font-size: 2rem;
+  font-weight: 600;
 }
 
 #editor .editor .contact > p {
   color: var(--color-text-secondary);
   margin-bottom: 2rem;
   line-height: 1.6;
+}
+
+/* Título da página de skills - seguindo padrão de Contato */
+#editor .editor .skills h1 {
+  color: var(--color-text-primary);
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  font-weight: 600;
 }
 
 /* Responsividade para telas muito largas e baixas */
@@ -708,8 +1041,8 @@ main:has(.terminal .header #terminalToggle:checked) .code-view-container {
     max-width: 100% !important;
     box-sizing: border-box !important;
     overflow-x: hidden !important;
-    word-wrap: break-word !important;
-    overflow-wrap: break-word !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
   }
   
   #editor .editor section * {
@@ -767,8 +1100,8 @@ main:has(.terminal .header #terminalToggle:checked) .code-view-container {
     max-width: 100% !important;
     box-sizing: border-box !important;
     overflow-x: hidden !important;
-    word-wrap: break-word !important;
-    overflow-wrap: break-word !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
   }
   
   #editor .editor section * {

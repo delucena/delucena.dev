@@ -6,7 +6,8 @@
   "scripts": {
     "build": "node build.js",
     "clean": "rm -rf dist",
-    "preview": "npm run build && open dist/index.html",
+    "rebuild": "npm run clean && npm run build",
+    "preview": "npm run rebuild && open dist/index.html",
     "serve": "npm run build && python3 -m http.server 8000 --directory dist",
     "dev": "npm run build && python3 -m http.server 8000 --directory dist",
     "favicon": "node src/assets/generate-favicon.js"
@@ -43,7 +44,14 @@
     "node": ">=14.0.0",
     "npm": ">=6.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "sharp": "^0.34.5",
+    "html-minifier-terser": "^7.2.0",
+    "terser": "^5.26.0",
+    "clean-css": "^5.3.3",
+    "purgecss": "^6.0.0",
+    "glob": "^10.3.10"
+  },
   "browserslist": [
     "> 1%",
     "last 2 versions",

@@ -20,20 +20,19 @@
    * @param {string} id - ID único da aba
    * @param {Object} config - Configuração da aba
    * @param {string} config.label - Label da aba
-   * @param {string} config.icon - Classe do ícone Font Awesome
+   * @param {string} config.icon - ID do símbolo SVG (ex: 'icon-terminal')
    * @param {Function} [config.init] - Função de inicialização
    */
   TerminalCore.registerTab = function(id, config) {
     try {
       if (!id || !config) {
-        console.warn('TerminalCore.registerTab: id e config são obrigatórios');
         return;
       }
 
       registeredTabs[id] = {
         id: id,
         label: config.label || id.toUpperCase(),
-        icon: config.icon || 'fa-solid fa-terminal',
+        icon: config.icon || 'icon-terminal',
         init: config.init || null
       };
 

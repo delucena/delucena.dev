@@ -54,17 +54,20 @@ delucena/
 │   │   │           └── ports-tab.html
 │   │   │
 │   │   ├── 📁 css/                # CSS modular
-│   │   │   ├── main.css            # Arquivo principal (importa todos)
-│   │   │   ├── variables.css      # Variáveis CSS (tema, cores)
-│   │   │   ├── reset.css          # Reset CSS
-│   │   │   ├── layout.css          # Layout principal
-│   │   │   ├── navigation.css     # Barra de navegação
+│   │   │   ├── main.css            # Arquivo principal (importa todos via @import)
+│   │   │   ├── critical.css       # CSS crítico (above the fold, injetado inline)
+│   │   │   ├── variables.css      # Variáveis CSS (tema dark/light, cores)
+│   │   │   ├── reset.css          # Reset CSS e normalização
+│   │   │   ├── layout.css          # Layout principal (grid, flexbox)
+│   │   │   ├── icons.css          # Estilos de ícones
+│   │   │   ├── editor-ui-wrapper.css # Wrapper do editor
+│   │   │   ├── navigation.css     # Barra de navegação lateral
 │   │   │   ├── explorer.css        # Explorer de arquivos
-│   │   │   ├── extensions.css     # Extensões/Formação
-│   │   │   ├── editor.css          # Editor de código
-│   │   │   ├── syntax-highlight.css # Syntax highlighting
-│   │   │   ├── utilities.css      # Utilitários
+│   │   │   ├── extensions.css     # Extensões/Formação acadêmica
+│   │   │   ├── editor.css          # Editor de código e abas
+│   │   │   ├── syntax-highlight.css # Syntax highlighting (cores VSCode)
 │   │   │   ├── terminal.css       # Terminal (wrapper)
+│   │   │   ├── utilities.css      # Classes utilitárias
 │   │   │   └── terminal/          # CSS do terminal modular
 │   │   │       ├── terminal-base.css
 │   │   │       ├── terminal-problems.css
@@ -75,23 +78,44 @@ delucena/
 │   │   │
 │   │   ├── 📁 js/                 # JavaScript modular
 │   │   │   ├── main.js            # Inicialização de módulos
-│   │   │   ├── theme.js           # Gerenciamento de temas
-│   │   │   ├── navigation.js      # Navegação e explorer
-│   │   │   ├── code-highlighter.js # Syntax highlighting
-│   │   │   ├── code-copy.js       # Cópia de código
-│   │   │   ├── preview-toggle.js  # Alternância preview/código
-│   │   │   ├── output.js          # Simulação de output Maven
+│   │   │   ├── theme.js           # Gerenciamento de temas (essencial)
+│   │   │   ├── navigation.js      # Navegação e explorer (essencial)
+│   │   │   ├── header-command-palette.js # Command palette (essencial)
+│   │   │   ├── editor-tabs.js     # Gerenciamento de abas (essencial)
+│   │   │   ├── code-highlighter.js # Syntax highlighting (não essencial)
+│   │   │   ├── code-copy.js       # Cópia de código (não essencial)
+│   │   │   ├── preview-toggle.js  # Alternância preview/código (não essencial)
+│   │   │   ├── explorer-actions.js # Ações do explorer (não essencial)
+│   │   │   ├── explorer-controls.js # Controles do explorer (não essencial)
+│   │   │   ├── explorer-highlight.js # Destaque do explorer (não essencial)
+│   │   │   ├── explorer-resize.js # Redimensionamento do explorer (não essencial)
 │   │   │   ├── terminal.js        # Terminal (wrapper)
-│   │   │   └── terminal/          # Módulos do terminal
+│   │   │   ├── terminal-resize.js # Redimensionamento do terminal (não essencial)
+│   │   │   ├── output.js          # Simulação de output Maven (não essencial)
+│   │   │   └── terminal/          # Módulos do terminal (não essenciais)
 │   │   │       ├── terminal-core.js
 │   │   │       ├── terminal-terminal.js
 │   │   │       └── terminal-output.js
 │   │   │
+│   │   │   **Nota**: Scripts marcados como "não essenciais" são consolidados
+│   │   │   em um bundle que carrega após o First Contentful Paint (FCP).
+│   │   │
+│   │   ├── 📁 data/               # Dados do portfólio (JSON)
+│   │   │   ├── profile.json       # Perfil pessoal (nome, bio, imagem)
+│   │   │   ├── experience.json    # Experiências profissionais
+│   │   │   ├── skills.json        # Habilidades técnicas por categoria
+│   │   │   ├── contact.json       # Links de contato e redes sociais
+│   │   │   ├── meta.json          # Meta tags para SEO e redes sociais
+│   │   │   ├── pages.json         # Configuração de páginas (habilitar/desabilitar)
+│   │   │   └── README.md          # Documentação dos dados JSON
+│   │   │
 │   │   ├── 📁 assets/            # Recursos estáticos
 │   │   │   ├── favicon.svg        # Favicon
+│   │   │   ├── icons.svg          # Ícones SVG
 │   │   │   └── images/            # Imagens
 │   │   │       ├── profile.png
-│   │   │       └── profile.webp
+│   │   │       ├── profile.webp
+│   │   │       └── profile-*.avif # Versões otimizadas (480w, 768w, 1200w)
 │   │   │
 │   │   └── 📁 config/             # Arquivos de configuração
 │   │       ├── _headers           # Headers Cloudflare Pages
@@ -114,11 +138,18 @@ delucena/
 │                   └── skills.html         # Habilidades
 │
 └── 📦 dist/                       # ARQUIVOS COMPILADOS (gerados pelo build)
-    ├── index.html                 # HTML final (montado)
-    ├── 404.html                   # Página 404
+    ├── index.html                 # HTML final (montado, minificado, otimizado)
+    ├── 404.html                   # Página 404 (minificada)
     ├── css/                       # CSS consolidado e minificado
+    │   ├── main.css              # CSS consolidado (sem @import)
+    │   ├── main.{hash}.min.css   # CSS minificado com hash (cache busting)
+    │   └── critical.css          # CSS crítico (cópia, também injetado inline)
     ├── js/                        # JS minificado
-    ├── assets/                    # Assets copiados
+    │   ├── *.min.js              # Scripts minificados individuais
+    │   ├── *.{hash}.min.js       # Scripts com hash (cache busting)
+    │   ├── non-essential-bundle.js # Bundle não essencial (debug)
+    │   └── non-essential-bundle.{hash}.min.js # Bundle minificado com hash
+    ├── assets/                    # Assets copiados (imagens, favicons)
     ├── robots.txt                 # Configuração SEO
     ├── sitemap.xml                # Mapa do site
     └── _headers                    # Headers Cloudflare
@@ -206,10 +237,13 @@ index.html
 css/
 │
 ├── main.css                    # Arquivo principal (importa todos via @import)
+├── critical.css                # CSS crítico (above the fold, injetado inline)
 │
-├── reset.css                   # Reset CSS e normalização
 ├── variables.css               # Variáveis CSS (tema dark/light, cores)
+├── reset.css                   # Reset CSS e normalização
 ├── layout.css                  # Layout principal (body, main, grid)
+├── icons.css                   # Estilos de ícones
+├── editor-ui-wrapper.css      # Wrapper do editor
 ├── utilities.css               # Classes utilitárias
 │
 ├── navigation.css              # Barra lateral de navegação
@@ -229,41 +263,84 @@ css/
     └── terminal-ports.css      # Aba Ports
 ```
 
+**Nota**: O `critical.css` é injetado inline no `<head>` durante o build para melhorar o First Contentful Paint (FCP).
+
 ### Fluxo de Importação CSS
 
 ```
 main.css
 │
-├── @import url('./reset.css')
 ├── @import url('./variables.css')
+├── @import url('./reset.css')
 ├── @import url('./layout.css')
+├── @import url('./icons.css')
+├── @import url('./editor-ui-wrapper.css')
 ├── @import url('./navigation.css')
 ├── @import url('./explorer.css')
 ├── @import url('./extensions.css')
 ├── @import url('./editor.css')
+├── @import url('./terminal/terminal-base.css')
+├── @import url('./terminal/terminal-problems.css')
+├── @import url('./terminal/terminal-output.css')
+├── @import url('./terminal/terminal-terminal.css')
+├── @import url('./terminal/terminal-debug.css')
+├── @import url('./terminal/terminal-ports.css')
 ├── @import url('./syntax-highlight.css')
-├── @import url('./utilities.css')
-├── @import url('./terminal.css')
-└── @import url('./terminal/terminal-base.css')
-    └── (outros módulos do terminal)
+└── @import url('./utilities.css')
 ```
+
+**Nota**: O `critical.css` não é importado em `main.css`. Ele é injetado inline no `<head>` durante o build.
 
 ### Build Process
 
-O script `build.js` consolida todos os `@import` em um único arquivo `main.css` na pasta `dist/`, permitindo que o HTML funcione mesmo abrindo diretamente no navegador.
+O script `build.js` realiza as seguintes operações:
+
+1. **Consolidação CSS**: Resolve todos os `@import` em `main.css`, gerando um único arquivo consolidado em `dist/css/main.css`
+2. **Minificação**: Minifica o CSS consolidado usando CleanCSS
+3. **Hash de Cache**: Gera versão com hash SHA-256: `main.{hash}.min.css`
+4. **CSS Crítico Inline**: Injeta `critical.css` minificado inline no `<head>` do HTML
+5. **Versionamento**: Atualiza referências no HTML para usar versões com hash
+
+Isso permite que o HTML funcione mesmo abrindo diretamente no navegador (após o build), e melhora a performance com cache busting e CSS crítico inline.
 
 ---
 
-## 🧩 Sistema de Templates
+## 🧩 Sistema de Templates e Dados JSON
 
-O projeto utiliza um sistema de templates modulares onde o `index.html` é montado a partir de componentes HTML reutilizáveis.
+O projeto utiliza um sistema de templates modulares com injeção de dados JSON, onde o `index.html` é montado a partir de componentes HTML reutilizáveis.
 
 ### Como Funciona
 
 1. **HTML Base** (`src/index.html`): Contém a estrutura principal e placeholders como `<!-- TEMPLATE: navigation.html -->`
-2. **Templates** (`src/templates/`): Componentes HTML modulares
-3. **Build Script** (`build.js`): Substitui os placeholders pelos templates correspondentes
-4. **Resultado** (`dist/index.html`): HTML final consolidado
+2. **Templates** (`src/templates/`): Componentes HTML modulares com sintaxe de templates
+3. **Dados JSON** (`src/data/`): Dados do portfólio em formato JSON
+4. **Build Script** (`build.js`): 
+   - Carrega dados JSON
+   - Processa templates com injeção de dados
+   - Substitui placeholders pelos templates processados
+   - Minifica HTML final
+5. **Resultado** (`dist/index.html`): HTML final consolidado, minificado e otimizado
+
+### Sintaxe de Templates
+
+Os templates suportam uma sintaxe simples similar a Handlebars:
+
+- **Variáveis Simples**: `{{profile.name}}`, `{{contact.linkedin.url}}`
+- **Loops**: `{{#each experience}}...{{/each}}`
+- **Condicionais**: `{{#if responsibilities}}...{{/if}}`
+- **Acesso Aninhado**: `{{profile.readme.greeting}}`, `{{meta.og.title}}`
+- **Item Atual em Loop**: `{{this}}` (para arrays de strings)
+
+### Arquivos de Dados
+
+- **`profile.json`**: Nome, biografia, imagem de perfil, informações pessoais
+- **`experience.json`**: Array de experiências profissionais
+- **`skills.json`**: Objeto com categorias de habilidades
+- **`contact.json`**: Links de contato e redes sociais
+- **`meta.json`**: Meta tags para SEO e redes sociais (Open Graph, Twitter Cards)
+- **`pages.json`**: Configuração de páginas (habilitar/desabilitar seções)
+
+Consulte `src/data/README.md` para documentação completa dos arquivos JSON.
 
 ### Estrutura de Templates
 
@@ -358,10 +435,14 @@ Pasta expande mostrando conteúdo
 ## 📊 Estatísticas do Projeto
 
 ### Arquivos
-- **Total de arquivos**: ~50+ arquivos
-- **Linhas de código HTML**: ~1000+ linhas (templates modulares)
-- **Linhas de código CSS**: ~2000+ linhas (CSS modular)
-- **Linhas de código JavaScript**: ~2000+ linhas (JS modular)
+- **Total de arquivos**: ~70+ arquivos
+- **Templates HTML**: ~15 arquivos modulares
+- **Arquivos CSS**: ~20 arquivos modulares
+- **Arquivos JavaScript**: ~20 arquivos modulares
+- **Arquivos de Dados**: 6 arquivos JSON
+- **Linhas de código HTML**: ~1500+ linhas (templates modulares)
+- **Linhas de código CSS**: ~3000+ linhas (CSS modular, incluindo critical.css)
+- **Linhas de código JavaScript**: ~2500+ linhas (JS modular)
 - **Linhas de código Java**: ~12 linhas (Application.java)
 
 ### Tecnologias
@@ -377,23 +458,31 @@ Pasta expande mostrando conteúdo
 - **Build System**: Consolidação automática de CSS/JS
 
 ### Funcionalidades CSS-Only
-- ✅ Navegação entre arquivos
-- ✅ Expansão de pastas
-- ✅ Alternância de temas (dark/light)
+- ✅ Navegação entre arquivos (radio buttons + `:has()`)
+- ✅ Expansão de pastas (checkboxes + `:checked`)
+- ✅ Alternância de temas (dark/light) via variáveis CSS
 - ✅ Menu de configurações
 - ✅ Destaque de arquivo ativo
-- ✅ Responsividade mobile
+- ✅ Responsividade mobile (media queries)
 - ✅ Sistema de abas do terminal
+- ✅ Layout responsivo com Grid e Flexbox
 
 ### Funcionalidades JavaScript
-- ⚙️ Simulação de terminal interativo
-- ⚙️ Simulação de output Maven
-- ⚙️ Syntax highlighting de código
-- ⚙️ Cópia de código para clipboard
-- ⚙️ Alternância preview/código
-- ⚙️ Gerenciamento de temas
-- ⚙️ Scroll automático
-- ⚙️ Sistema modular de terminal
+- ⚙️ **Essenciais** (carregam com `defer`):
+  - Gerenciamento de temas
+  - Navegação e explorer
+  - Command palette
+  - Gerenciamento de abas do editor
+  
+- ⚙️ **Não Essenciais** (bundle após FCP):
+  - Simulação de terminal interativo
+  - Simulação de output Maven
+  - Syntax highlighting de código
+  - Cópia de código para clipboard
+  - Alternância preview/código
+  - Ações e controles do explorer
+  - Redimensionamento de componentes
+  - Scroll automático
 
 ---
 
@@ -424,11 +513,20 @@ Pasta expande mostrando conteúdo
 3. **Arquivos estáticos**: `src/main/resources/static/`
 
 ### Para Build/Deploy
-1. **Build frontend**: `npm run build` (gera `dist/` com arquivos consolidados)
-2. **Limpar build**: `npm run clean` (remove `dist/`)
-3. **Preview local**: `npm run serve` (build + servidor HTTP na porta 8000)
-4. **Arquivos finais**: `dist/` (pronto para deploy)
-5. **Deploy**: Hospedar pasta `dist/` (Cloudflare Pages, Netlify, etc.)
+1. **Instalar dependências**: `npm install` (primeira vez)
+2. **Build frontend**: `npm run build` (gera `dist/` com arquivos consolidados, minificados e com hash)
+3. **Limpar build**: `npm run clean` (remove `dist/`)
+4. **Preview local**: `npm run serve` (build + servidor HTTP na porta 8000)
+5. **Arquivos finais**: `dist/` (pronto para deploy)
+6. **Deploy**: Hospedar pasta `dist/` (Cloudflare Pages, Netlify, Vercel, etc.)
+
+**Otimizações do Build**:
+- ✅ CSS consolidado (sem `@import`)
+- ✅ CSS crítico inline no `<head>`
+- ✅ Minificação agressiva (CSS, JS, HTML)
+- ✅ Versionamento com hash (cache busting)
+- ✅ Bundle de scripts não essenciais
+- ✅ Preload de recursos críticos
 
 ---
 
@@ -437,18 +535,30 @@ Pasta expande mostrando conteúdo
 ### Arquivos Principais
 - `src/index.html` - **HTML base** (montado a partir de templates)
 - `src/css/main.css` - **CSS principal** (importa todos os módulos)
+- `src/css/critical.css` - **CSS crítico** (above the fold, injetado inline)
 - `src/js/main.js` - **JavaScript principal** (inicialização)
 - `src/main/java/.../Application.java` - **Backend Spring Boot**
 
 ### Templates HTML
-- `src/templates/sections/*.html` - **Conteúdo do portfólio**
+- `src/templates/sections/*.html` - **Conteúdo do portfólio** (5 seções)
 - `src/templates/navigation.html` - **Barra lateral**
-- `src/templates/terminal/` - **Terminal e abas**
+- `src/templates/terminal/` - **Terminal e abas** (6 templates)
+- `src/templates/top-header.html` - **Cabeçalho superior**
+- `src/templates/editor-header.html` - **Cabeçalho do editor**
+- `src/templates/footer.html` - **Rodapé**
+
+### Arquivos de Dados
+- `src/data/profile.json` - **Perfil pessoal**
+- `src/data/experience.json` - **Experiências profissionais**
+- `src/data/skills.json` - **Habilidades técnicas**
+- `src/data/contact.json` - **Contatos e redes sociais**
+- `src/data/meta.json` - **Meta tags SEO**
+- `src/data/pages.json` - **Configuração de páginas**
 
 ### Arquivos de Configuração
 - `package.json` - Scripts NPM e metadados
-- `build.js` - Script de build (Node.js)
-- `src/config/` - Configurações SEO e deploy
+- `build.js` - Script de build otimizado (Node.js)
+- `src/config/` - Configurações SEO e deploy (robots.txt, sitemap.xml, _headers)
 
 ### Arquivos Gerados (não versionados)
 - `dist/` - Build de produção (gerado pelo `npm run build`)

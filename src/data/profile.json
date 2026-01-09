@@ -22,7 +22,24 @@
   "profileImage": {
     "png": "./assets/images/profile.png",
     "webp": "./assets/images/profile.webp",
-    "alt": "José Paulo de Lucena"
+    "avif": "./assets/images/profile.avif",
+    "width": 680,
+    "height": 993,
+    "alt": "José Paulo de Lucena",
+    "responsive": {
+      "480w": {
+        "webp": "./assets/images/profile-480w.webp",
+        "avif": "./assets/images/profile-480w.avif"
+      },
+      "768w": {
+        "webp": "./assets/images/profile-768w.webp",
+        "avif": "./assets/images/profile-768w.avif"
+      },
+      "1200w": {
+        "webp": "./assets/images/profile-1200w.webp",
+        "avif": "./assets/images/profile-1200w.avif"
+      }
+    }
   },
   "domain": "delucena.dev",
   "url": "https://delucena.dev",

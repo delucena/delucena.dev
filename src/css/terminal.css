@@ -9,6 +9,8 @@
   display: flex;
   flex-direction: column;
   height: var(--height-terminal);
+  min-height: var(--height-terminal);
+  max-height: none;
   overflow: hidden;
   background-color: var(--color-bg-accent);
   transition: margin var(--transition-normal);
