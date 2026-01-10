@@ -23,11 +23,11 @@
 
 # JSON (dados estáticos) - cache moderado com revalidação
 /assets/i18n/*
-  Cache-Control: public, max-age=3600, must-revalidate
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
   Vary: Accept-Encoding
 
 /data/*
-  Cache-Control: public, max-age=3600, must-revalidate
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
   Vary: Accept-Encoding
 
 # Imagens (assets locais)

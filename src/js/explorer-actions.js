@@ -243,26 +243,13 @@
       
       if (!scrollContainer) return;
 
-      // Verifica se o arquivo está visível
-      const fileRect = fileLabel.getBoundingClientRect();
-      const containerRect = scrollContainer.getBoundingClientRect();
-      
-      // Se o arquivo não está visível, faz scroll
-      if (fileRect.top < containerRect.top || fileRect.bottom > containerRect.bottom) {
-        // Calcula a posição relativa do arquivo dentro do container
-        const fileTop = fileLabel.offsetTop;
-        const containerTop = scrollContainer.scrollTop;
-        const containerHeight = scrollContainer.clientHeight;
-        
-        // Calcula a posição ideal (arquivo no topo com margem)
-        const targetScroll = fileTop - 20; // 20px de margem no topo
-        
-        // Faz scroll suave até o arquivo
-        scrollContainer.scrollTo({
-          top: targetScroll,
-          behavior: 'smooth'
-        });
-      }
+      // Evita leituras manuais de layout (getBoundingClientRect/offset*) para reduzir forced reflow.
+      // scrollIntoView rola o ancestral scrollável mais próximo.
+      fileLabel.scrollIntoView({
+        block: 'nearest',
+        inline: 'nearest',
+        behavior: 'smooth'
+      });
     }, 150);
   }
 

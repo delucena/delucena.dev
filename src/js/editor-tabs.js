@@ -387,35 +387,13 @@
       }
       if (!currentLabel) return;
 
-      const labelRect = currentLabel.getBoundingClientRect();
-      const explorerRect = explorer.getBoundingClientRect();
-
-      // Verifica se o label está visível no viewport do explorer
-      const isVisible = (
-        labelRect.top >= explorerRect.top &&
-        labelRect.bottom <= explorerRect.bottom
-      );
-
-      if (!isVisible) {
-        // Calcula a posição para scroll
-        let labelOffsetTop = 0;
-        let element = currentLabel;
-        while (element && element !== explorer) {
-          labelOffsetTop += element.offsetTop;
-          element = element.offsetParent;
-        }
-
-        const explorerHeight = explorer.clientHeight;
-        const labelHeight = currentLabel.offsetHeight;
-
-        // Centraliza o arquivo na viewport do explorer
-        const targetScroll = labelOffsetTop - (explorerHeight / 2) + (labelHeight / 2);
-        
-        explorer.scrollTo({
-          top: Math.max(0, targetScroll),
-          behavior: 'smooth'
-        });
-      }
+      // Evita leituras manuais de layout (getBoundingClientRect/offset*) para reduzir forced reflow.
+      // scrollIntoView rola o ancestral scrollável mais próximo (o explorer) e mantém o comportamento suave.
+      currentLabel.scrollIntoView({
+        block: 'center',
+        inline: 'nearest',
+        behavior: 'smooth'
+      });
     }, 200); // Aumentado para 200ms para dar mais tempo para as pastas expandirem
   }
 
@@ -578,10 +556,6 @@
 
     // Adiciona a aba ao header
     header.appendChild(tab);
-
-    // Força uma atualização do layout para garantir que o CSS seja aplicado
-    // Isso é necessário para elementos criados dinamicamente
-    void tab.offsetHeight;
 
     return tab;
   }

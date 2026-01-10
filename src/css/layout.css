@@ -124,6 +124,11 @@
   cursor: default;
 }
 
+#footer div > span {
+  font-size: var(--font-size-small);
+  color: var(--color-text-secondary);
+}
+
 #footer div i:hover {
   background-color: var(--color-bg-primary);
 }

@@ -104,7 +104,10 @@
 
     // Se for array, junta com quebras de linha
     if (Array.isArray(value)) {
-      element.textContent = value.join('\n');
+      const nextText = value.join('\n');
+      if (element.textContent !== nextText) {
+        element.textContent = nextText;
+      }
       return;
     }
 
@@ -119,10 +122,15 @@
       // Suporta múltiplos atributos separados por vírgula
       const attrs = attr.split(',').map(a => a.trim());
       attrs.forEach(attrName => {
-        element.setAttribute(attrName, String(value));
+        const nextValue = String(value);
+        if (element.getAttribute(attrName) !== nextValue) {
+          element.setAttribute(attrName, nextValue);
+        }
         // Também atualiza title se for aria-label
         if (attrName === 'aria-label') {
-          element.setAttribute('title', String(value));
+          if (element.getAttribute('title') !== nextValue) {
+            element.setAttribute('title', nextValue);
+          }
         }
       });
     } else {
@@ -131,7 +139,10 @@
         // Elemento tem filhos traduzíveis, não sobrescreve
         return;
       }
-      element.textContent = String(value);
+      const nextText = String(value);
+      if (element.textContent !== nextText) {
+        element.textContent = nextText;
+      }
     }
   }
 
@@ -145,6 +156,20 @@
       return;
     }
 
+    // Se a lista já está idêntica, evita churn de DOM (reduz custo de layout/style)
+    const existingLis = element.querySelectorAll(':scope > li');
+    const isSameLength = existingLis.length === items.length;
+    if (isSameLength) {
+      let allSame = true;
+      for (let i = 0; i < items.length; i++) {
+        if ((existingLis[i]?.textContent || '') !== String(items[i])) {
+          allSame = false;
+          break;
+        }
+      }
+      if (allSame) return;
+    }
+
     // Limpa a lista
     while (element.firstChild) {
       element.removeChild(element.firstChild);
@@ -154,7 +179,7 @@
     items.forEach(item => {
       const li = document.createElement('li');
       li.style.fontSize = 'var(--font-size-base)';
-      li.textContent = item;
+      li.textContent = String(item);
       element.appendChild(li);
     });
   }
