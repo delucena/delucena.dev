@@ -15,11 +15,30 @@
         try {
           var key = 'explorer-width';
           var raw = localStorage.getItem(key);
-          if (!raw) return;
-          var width = parseInt(raw, 10);
-          if (!Number.isFinite(width)) return;
-          if (width < 200 || width > 600) return;
-          document.documentElement.style.setProperty('--width-navigation', width + 'px');
+          if (raw) {
+            var width = parseInt(raw, 10);
+            if (Number.isFinite(width) && width >= 200 && width <= 600) {
+              document.documentElement.style.setProperty('--width-navigation', width + 'px');
+            }
+          }
+
+          // Habilita o CSS não-crítico (deferred.css) de forma robusta.
+          // Importante: este script fica ANTES do <link id="deferred-css"> no HTML,
+          // então precisamos tentar novamente após o DOM estar pronto.
+          var enableDeferredCssWhenReady = function () {
+            var deferredCss = document.getElementById('deferred-css');
+            if (!deferredCss) return false;
+
+            var enableDeferredCss = function () { deferredCss.media = 'all'; };
+            if (deferredCss.sheet) enableDeferredCss();
+            else deferredCss.addEventListener('load', enableDeferredCss, { once: true });
+
+            return true;
+          };
+
+          if (!enableDeferredCssWhenReady()) {
+            document.addEventListener('DOMContentLoaded', enableDeferredCssWhenReady, { once: true });
+          }
         } catch (e) {
           // ignore
         }
@@ -30,7 +49,7 @@
     <link rel="stylesheet" href="./css/main.css">
     <!-- CSS não-crítico: carrega sem bloquear render (reduz 'unused-css-rules' no Desktop) -->
     <link rel="preload" href="./css/deferred.css" as="style">
-    <link rel="stylesheet" href="./css/deferred.css" media="print" onload="this.media='all'">
+    <link id="deferred-css" rel="stylesheet" href="./css/deferred.css" media="print">
     <noscript><link rel="stylesheet" href="./css/deferred.css"></noscript>
     
     <!-- Terceiros (imagens): evitar preconnect/dns-prefetch para recursos não-críticos no Desktop -->

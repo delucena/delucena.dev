@@ -572,15 +572,16 @@ body:has(#theme:checked) .editor-breadcrumb__link:hover {
   margin: 0 auto;
 }
 
-#editor .editor .readme .readme-content p img[src*="skillicons.dev"] {
-  width: 480px;
+#editor .editor .readme .readme-content p .skills-icons {
+  width: 666.75px;
   height: 48px;
-  aspect-ratio: 480 / 48;
+  aspect-ratio: 3556 / 256;
   min-width: 200px;
-  min-height: 20px;
+  min-height: 48px;
   max-width: 100%;
   box-sizing: border-box;
   margin: 0 auto;
+  display: block;
 }
 
 #editor .editor .readme br {

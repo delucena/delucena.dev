@@ -57,4 +57,5 @@
   Vary: Accept-Encoding
 
   # Content Security Policy (otimizado para segurança e funcionalidade)
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; img-src 'self' data: https://skillicons.dev https://img.shields.io https:; font-src 'self' data: https://cdnjs.cloudflare.com; connect-src 'self' https://static.cloudflareinsights.com https:; frame-ancestors 'none';
+  # OBS: os hashes de scripts inline são injetados no build (substitui __SCRIPT_SHA256__).
+  Content-Security-Policy: default-src 'self'; script-src 'self' __SCRIPT_SHA256__ https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; img-src 'self' data: https://img.shields.io https:; font-src 'self' data: https://cdnjs.cloudflare.com; connect-src 'self' https://static.cloudflareinsights.com https:; frame-ancestors 'none';
