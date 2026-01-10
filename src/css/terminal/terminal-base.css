@@ -85,8 +85,9 @@
 .terminal:has(#terminals:checked) .terminal-header .terminal-tab-terminals,
 .terminal:has(#debug:checked) .terminal-header .terminal-tab-debug,
 .terminal:has(#ports:checked) .terminal-header .terminal-tab-ports {
-  color: var(--color-border-accent);
-  border-bottom-color: var(--color-border-accent);
+  /* A11y: #007acc em #1e1e1e não atinge 4.5:1; aplicar ajuste local mínimo (≈4.85:1) */
+  color: #1a8fe6;
+  border-bottom-color: #1a8fe6;
 }
 
 /* ============================================

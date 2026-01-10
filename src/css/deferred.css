@@ -1,0 +1,11 @@
+/* ============================================
+   DEFERRED.CSS - Estilos não-críticos
+   Carregado após o primeiro render para reduzir CSS não utilizado no Lighthouse
+   ============================================ */
+
+@import url('./extensions.css');
+@import url('./terminal/terminal-problems.css');
+@import url('./terminal/terminal-output.css');
+@import url('./terminal/terminal-debug.css');
+@import url('./terminal/terminal-ports.css');
+@import url('./syntax-highlight.css');
