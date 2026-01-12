@@ -141,6 +141,45 @@
   let isSettingActiveTab = false;
 
   /**
+   * Se o usuário estiver com o menu "Extensions" ativo e trocar de página/aba,
+   * força o menu "Explorer" e simula o clique no arquivo correspondente no Explorer.
+   *
+   * Isso reaproveita a lógica já existente de highlight/scroll do Explorer.
+   *
+   * @param {string} fileId - ID do arquivo (readme, index, experience, skills, contact)
+   */
+  function forceExplorerAndClickFile(fileId) {
+    if (!fileId) return;
+
+    const extensionsView = document.getElementById('extensionsView');
+    const explorerView = document.getElementById('explorerView');
+    const menu = document.getElementById('menu');
+
+    // Só interfere se o usuário estava realmente no Extensions
+    if (!extensionsView || !extensionsView.checked) return;
+    if (!explorerView) return;
+
+    explorerView.checked = true;
+
+    // Em desktop, garante que o sidebar está aberto
+    if (menu) {
+      menu.checked = true;
+    }
+
+    // Simula o clique no arquivo no Explorer (desktop ou mobile)
+    const explorerLabel =
+      document.querySelector(`.explorer .desktop-only label[for="${fileId}"]`) ||
+      document.querySelector(`.explorer label[for="${fileId}"]`);
+
+    if (explorerLabel) {
+      // Dá um tick para garantir que o DOM/CSS reflita a troca de view
+      setTimeout(() => {
+        explorerLabel.click();
+      }, 0);
+    }
+  }
+
+  /**
    * Define a aba ativa e atualiza o breadcrumb
    * 
    * @param {HTMLElement|string} tabElOrFileId - Elemento da aba (.editor-tab) ou ID do arquivo
@@ -222,6 +261,9 @@
       // Expande as pastas no explorer e faz scroll até o arquivo
       const fileId = tabEl.getAttribute('data-file-id');
       if (fileId) {
+        // Se estava no menu Extensions, volta pro Explorer e simula click no arquivo
+        forceExplorerAndClickFile(fileId);
+
         expandFoldersForFile(fileId);
         // Aguarda um pouco mais para garantir que as pastas foram expandidas e renderizadas
         setTimeout(function() {

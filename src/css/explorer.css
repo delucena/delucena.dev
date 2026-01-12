@@ -938,31 +938,44 @@ body:not(:has(#menu:checked)) .extensions {
    ============================================ */
 
 .explorer-resize-handle {
-  width: 4px;
-  min-width: 4px;
-  max-width: 4px;
+  /* IMPORTANTE:
+   * Esta barra NÃO pode participar do layout (flex), senão cria um "vão"
+   * entre o Explorer/Extensions e o Editor quando aparece/desaparece.
+   * Ela deve ficar sobreposta na borda direita do #navigation.
+   */
+  width: 8px;
+  min-width: 0;
+  max-width: none;
   background-color: transparent;
   cursor: col-resize;
-  position: relative;
-  z-index: 100;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  /* Fica na borda direita do painel lateral (entre sidebar e editor) */
+  right: -4px; /* metade para fora, metade para dentro: facilita o drag sem criar gap */
+  z-index: 1002;
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   transition: background-color var(--transition-fast);
-  height: calc(100dvh - var(--height-footer));
+  height: auto;
   display: none; /* Escondido por padrão */
+  pointer-events: none; /* Só habilita quando realmente visível */
 }
 
 /* Só mostra a barra quando explorer ou extensions estão visíveis */
 /* Usa classe .sidebar-open no body */
-body.sidebar-open #explorerView:checked ~ .explorer-resize-handle,
-body.sidebar-open #extensionsView:checked ~ .explorer-resize-handle {
+body:has(#menu:checked) #closeView:checked ~ .explorer-resize-handle,
+body:has(#menu:checked) #explorerView:checked ~ .explorer-resize-handle,
+body:has(#menu:checked) #extensionsView:checked ~ .explorer-resize-handle {
   display: block;
+  pointer-events: auto;
 }
 
-body:not(.sidebar-open) .explorer-resize-handle {
+body:not(:has(#menu:checked)) .explorer-resize-handle {
   display: none;
+  pointer-events: none;
 }
 
 /* Hover effect - mostra uma linha visual */
@@ -973,7 +986,7 @@ body:not(.sidebar-open) .explorer-resize-handle {
 /* Durante o resize, destaca mais a barra */
 body.resizing .explorer-resize-handle {
   background-color: var(--color-border-accent);
-  width: 4px;
+  width: 8px;
 }
 
 /* Indicador visual quando está sobre a barra */

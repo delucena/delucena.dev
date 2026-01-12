@@ -54,10 +54,21 @@
 
     // Carrega a largura salva ou usa o padrão
     const savedWidth = localStorage.getItem(STORAGE_KEY);
-    const initialWidth = savedWidth ? parseInt(savedWidth, 10) : DEFAULT_WIDTH;
+    const hasSavedWidth = savedWidth != null && savedWidth !== '';
+    const initialWidth = hasSavedWidth ? parseInt(savedWidth, 10) : DEFAULT_WIDTH;
     
-    // Aplica a largura inicial
-    setExplorerWidth(initialWidth);
+    // Evita writes no boot quando já estamos no valor final (reduz reflow/CLS no load)
+    // - No cenário Lighthouse (perfil limpo), não há savedWidth; CSS já deve estar em DEFAULT_WIDTH.
+    // - Só aplicamos quando existe largura salva ou quando detectamos divergência real.
+    const currentCssWidth = getComputedStyle(document.documentElement)
+      .getPropertyValue('--width-navigation')
+      .trim();
+    const currentNumeric = currentCssWidth ? parseInt(currentCssWidth, 10) : NaN;
+    const shouldApply = hasSavedWidth || isNaN(currentNumeric) || currentNumeric !== initialWidth;
+    
+    if (shouldApply) {
+      setExplorerWidth(initialWidth);
+    }
 
     // Configura os event listeners
     setupResizeListeners(resizeHandle);
@@ -235,14 +246,15 @@
     // Define a largura via CSS custom property
     document.documentElement.style.setProperty('--width-navigation', `${width}px`);
     
-    // Também define diretamente nos elementos para garantir
-    explorer.style.width = `${width}px`;
-    explorer.style.minWidth = `${width}px`;
-    explorer.style.maxWidth = `${width}px`;
+    // Define inline apenas quando necessário (mantém compatibilidade com resize, mas evita churn no load)
+    const px = `${width}px`;
+    if (explorer.style.width !== px) explorer.style.width = px;
+    if (explorer.style.minWidth !== px) explorer.style.minWidth = px;
+    if (explorer.style.maxWidth !== px) explorer.style.maxWidth = px;
     
-    extensions.style.width = `${width}px`;
-    extensions.style.minWidth = `${width}px`;
-    extensions.style.maxWidth = `${width}px`;
+    if (extensions.style.width !== px) extensions.style.width = px;
+    if (extensions.style.minWidth !== px) extensions.style.minWidth = px;
+    if (extensions.style.maxWidth !== px) extensions.style.maxWidth = px;
   }
 
   // Inicializa quando o script é carregado

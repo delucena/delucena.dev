@@ -265,6 +265,46 @@
   }
 
   /**
+   * Se o usuário estiver no menu Extensions e trocar de página (arquivo),
+   * força voltar para o menu Explorer para mostrar/acompanhar o arquivo selecionado.
+   *
+   * Observação: usamos capture para rodar antes de outros listeners de "change"
+   * (ex.: highlight/scroll do explorer), garantindo que o Explorer esteja visível.
+   */
+  function initAutoSwitchExtensionsToExplorerOnPageChange() {
+    const switchToExplorer = () => {
+      if (!elements.explorerView) return;
+
+      // Se já está no explorer, não faz nada
+      if (elements.explorerView.checked) return;
+
+      // Força o radio do explorer
+      elements.explorerView.checked = true;
+
+      // Em desktop, garante abrir o sidebar (hamburger)
+      if (elements.menu) {
+        elements.menu.checked = true;
+      }
+
+      // Dispara change para reutilizar a lógica existente (openMenuIfNeeded/updateSidebarState)
+      elements.explorerView.dispatchEvent(new Event('change', { bubbles: true }));
+      updateSidebarState();
+    };
+
+    document.addEventListener('change', (event) => {
+      const target = event.target;
+      if (!target || target.type !== 'radio' || target.name !== 'openedFile' || !target.checked) {
+        return;
+      }
+
+      // Se estava no menu Extensions e mudou a "página", volta pro Explorer
+      if (elements.extensionsView?.checked) {
+        switchToExplorer();
+      }
+    }, true); // capture
+  }
+
+  /**
    * Obtém todas as páginas habilitadas na ordem correta
    */
   function getEnabledPages() {
@@ -297,11 +337,31 @@
    * Navega para uma página específica
    */
   function navigateToPage(pageId) {
+    // Captura o estado atual antes de mudar a página
+    const wasInExtensions = !!elements.extensionsView?.checked;
+
     const radio = document.getElementById(pageId);
     if (radio) {
       radio.checked = true;
       // Dispara o evento change para que outros listeners sejam notificados
       radio.dispatchEvent(new Event('change', { bubbles: true }));
+
+      // Se estava no Extensions, força o Explorer e simula click no arquivo no Explorer
+      if (wasInExtensions && elements.explorerView) {
+        elements.explorerView.checked = true;
+        if (elements.menu) {
+          elements.menu.checked = true;
+        }
+        elements.explorerView.dispatchEvent(new Event('change', { bubbles: true }));
+        updateSidebarState();
+
+        const explorerLabel =
+          document.querySelector(`.explorer .desktop-only label[for="${pageId}"]`) ||
+          document.querySelector(`.explorer label[for="${pageId}"]`);
+        if (explorerLabel) {
+          setTimeout(() => explorerLabel.click(), 0);
+        }
+      }
     }
   }
 
@@ -401,6 +461,7 @@
     initCloseMenusOnClickOutside();
     initMobileMenuState();
     initMobileMenuClose();
+    initAutoSwitchExtensionsToExplorerOnPageChange();
     initPageNavigation();
   }
 
