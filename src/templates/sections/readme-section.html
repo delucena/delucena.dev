@@ -9,30 +9,25 @@
                     srcset="{{profile.profileImage.responsive.480w.avif}} 480w,
                             {{profile.profileImage.responsive.768w.avif}} 768w,
                             {{profile.profileImage.responsive.1200w.avif}} 1200w"
-                    sizes="(max-width: 480px) 480px,
-                           (max-width: 768px) 768px,
-                           1200px">
+                    sizes="200px">
                 <!-- WebP com srcset responsivo -->
                 <source 
                     type="image/webp" 
                     srcset="{{profile.profileImage.responsive.480w.webp}} 480w,
                             {{profile.profileImage.responsive.768w.webp}} 768w,
                             {{profile.profileImage.responsive.1200w.webp}} 1200w"
-                    sizes="(max-width: 480px) 480px,
-                           (max-width: 768px) 768px,
-                           1200px">
+                    sizes="200px">
                 <!-- Fallback PNG -->
                 <img 
                     src="{{profile.profileImage.png}}" 
                     alt="{{profile.profileImage.alt}}" 
                     class="readme-photo" 
-                    width="{{profile.profileImage.width}}" 
-                    height="{{profile.profileImage.height}}"
-                    style="aspect-ratio: {{profile.profileImage.width}}/{{profile.profileImage.height}}; width: 100%; height: auto;"
+                    width="680" 
+                    height="993"
+                    style="aspect-ratio: 680 / 993; width: 100%; height: auto;"
                     loading="eager"
                     fetchpriority="high"
-                    decoding="async"
-                    onerror="this.onerror=null; this.src='{{profile.profileImage.png}}';">
+                    decoding="async">
             </picture>
         </div>
         <div class="readme-content">

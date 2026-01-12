@@ -17,7 +17,7 @@
   opacity: 0;
   pointer-events: none;
   position: relative;
-  z-index: 1;
+  z-index: 2; /* Mesmo padrão do explorer (evita ficar atrás/“sem clique” ao alternar views) */
   transition: margin var(--transition-normal), opacity var(--transition-normal);
   height: 100%; /* Usa altura do container pai (#navigation) ao invés de viewport fixa */
   min-height: 0; /* Permite que flex funcione corretamente */

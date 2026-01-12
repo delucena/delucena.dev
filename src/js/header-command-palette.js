@@ -129,7 +129,6 @@
       });
 
       commandPalette.classList.add('top-header__command-palette--visible');
-      input.setAttribute('aria-expanded', 'true');
       selectedIndex = 0; // Primeiro item selecionado por padrão
       updateSelection();
       isOpen = true;
@@ -164,7 +163,6 @@
      */
     function closeCommandPalette() {
       commandPalette.classList.remove('top-header__command-palette--visible');
-      input.setAttribute('aria-expanded', 'false');
       isOpen = false;
       selectedIndex = -1;
     }
