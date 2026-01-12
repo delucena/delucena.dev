@@ -37,6 +37,32 @@ function generateHash(content) {
   return crypto.createHash('sha256').update(content).digest('hex').substring(0, 16);
 }
 
+/**
+ * Extrai hashes SHA-256 (base64) de todos os <script> inline do HTML final.
+ * - Inclui JSON-LD (script inline também é afetado por CSP quando removemos 'unsafe-inline')
+ * - Ignora scripts com atributo src
+ */
+function extractInlineScriptSha256Base64(html) {
+  if (!html) return [];
+
+  const hashes = [];
+  const scriptRegex = /<script\b([^>]*)>([\s\S]*?)<\/script>/gi;
+  let match;
+
+  while ((match = scriptRegex.exec(html)) !== null) {
+    const attrs = match[1] || '';
+    if (/\bsrc\s*=/.test(attrs)) continue;
+
+    const content = match[2] ?? '';
+    // Hash deve ser do conteúdo exato entre as tags, sem trim.
+    const base64 = crypto.createHash('sha256').update(content, 'utf8').digest('base64');
+    hashes.push(base64);
+  }
+
+  // remove duplicados preservando ordem
+  return [...new Set(hashes)];
+}
+
 function consolidateCSS(cssContent, cssDir, processedFiles = new Set()) {
   return cssContent.replace(/@import\s+url\(['"]?([^'"]+)['"]?\)\s*;?/g, (match, importPath) => {
     const normalizedPath = importPath.replace(/^\.\//, '');
@@ -923,8 +949,29 @@ if (fs.existsSync(cssSrcDir)) {
     const srcFile = path.join(configDir, file);
     if (fs.existsSync(srcFile)) {
       const destFile = path.join(distDir, file);
-      fs.copyFileSync(srcFile, destFile);
-      console.log(`✓ Copiado: ${file}`);
+      if (file === '_headers') {
+        const template = fs.readFileSync(srcFile, 'utf8');
+        const distIndexPath = path.join(distDir, 'index.html');
+
+        if (!fs.existsSync(distIndexPath)) {
+          throw new Error('dist/index.html não encontrado para calcular hashes de CSP.');
+        }
+
+        const distIndexHtml = fs.readFileSync(distIndexPath, 'utf8');
+        const hashes = extractInlineScriptSha256Base64(distIndexHtml);
+        const hashTokens = hashes.map(h => `'sha256-${h}'`).join(' ');
+
+        if (!template.includes('__SCRIPT_SHA256__')) {
+          throw new Error('Placeholder __SCRIPT_SHA256__ não encontrado em src/config/_headers.');
+        }
+
+        const rendered = template.replace(/__SCRIPT_SHA256__/g, hashTokens);
+        fs.writeFileSync(destFile, rendered, 'utf8');
+        console.log(`✓ Gerado: ${file} (CSP com hashes de scripts inline)`);
+      } else {
+        fs.copyFileSync(srcFile, destFile);
+        console.log(`✓ Copiado: ${file}`);
+      }
     }
   });
 

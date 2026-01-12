@@ -2,89 +2,51 @@
 # https://developers.cloudflare.com/pages/platform/headers/
 # Otimizado para máxima performance e cache no Cloudflare
 
-# HTML files - no cache, always fresh (Cloudflare cachea automaticamente por curto período)
+# HTML (documentos) - revalidar sempre (evita HTML \"preso\" em cache após deploy)
+/
+  Cache-Control: public, max-age=0, must-revalidate
+  Vary: Accept-Encoding
+
 /*.html
   Cache-Control: public, max-age=0, must-revalidate
-  X-Content-Type-Options: nosniff
-  X-Frame-Options: DENY
-  X-XSS-Protection: 1; mode=block
-  Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: geolocation=(), microphone=(), camera=()
-  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
-  Cross-Origin-Opener-Policy: same-origin
-  Cross-Origin-Embedder-Policy: require-corp
   Vary: Accept-Encoding
 
-# CSS files - cache for 1 year (com versionamento via hash no nome do arquivo)
-# Arquivos com hash no nome (ex: main.abc123.min.css) podem ser cacheados agressivamente
-/*.css
-  Cache-Control: public, max-age=31536000, immutable
-  Content-Type: text/css; charset=utf-8
-  Vary: Accept-Encoding
-  X-Content-Type-Options: nosniff
-
-# JavaScript files - cache for 1 year (com versionamento via hash no nome do arquivo)
-# Arquivos com hash no nome (ex: bundle.def456.min.js) podem ser cacheados agressivamente
-/*.js
-  Cache-Control: public, max-age=31536000, immutable
-  Content-Type: application/javascript; charset=utf-8
-  Vary: Accept-Encoding
-  X-Content-Type-Options: nosniff
-
-# Images - cache for 1 year (Cloudflare otimiza automaticamente)
-/*.png
+# CSS (arquivos versionados por hash em /css/)
+/css/*
   Cache-Control: public, max-age=31536000, immutable
   Vary: Accept-Encoding
 
-/*.jpg
+# JavaScript (arquivos versionados por hash em /js/)
+/js/*
   Cache-Control: public, max-age=31536000, immutable
   Vary: Accept-Encoding
 
-/*.jpeg
+# JSON (dados estáticos) - cache moderado com revalidação
+/assets/i18n/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+  Vary: Accept-Encoding
+
+/data/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+  Vary: Accept-Encoding
+
+# Imagens (assets locais)
+/assets/images/*
   Cache-Control: public, max-age=31536000, immutable
   Vary: Accept-Encoding
 
-/*.webp
-  Cache-Control: public, max-age=31536000, immutable
-  Vary: Accept-Encoding
-
-/*.svg
-  Cache-Control: public, max-age=31536000, immutable
-  Content-Type: image/svg+xml; charset=utf-8
-  Vary: Accept-Encoding
-
-/*.gif
-  Cache-Control: public, max-age=31536000, immutable
-  Vary: Accept-Encoding
-
-# Fonts - cache for 1 year (com CORS para CDNs)
-/*.woff
+# Fonts (se existirem)
+/assets/fonts/*
   Cache-Control: public, max-age=31536000, immutable
   Access-Control-Allow-Origin: *
   Vary: Accept-Encoding
 
-/*.woff2
+# Outros assets estáticos (ícones, etc.)
+/assets/*
   Cache-Control: public, max-age=31536000, immutable
-  Access-Control-Allow-Origin: *
   Vary: Accept-Encoding
 
-/*.ttf
-  Cache-Control: public, max-age=31536000, immutable
-  Access-Control-Allow-Origin: *
-  Vary: Accept-Encoding
-
-/*.otf
-  Cache-Control: public, max-age=31536000, immutable
-  Access-Control-Allow-Origin: *
-  Vary: Accept-Encoding
-
-# JSON files (dados estáticos) - cache moderado
-/*.json
-  Cache-Control: public, max-age=3600, must-revalidate
-  Content-Type: application/json; charset=utf-8
-  Vary: Accept-Encoding
-
-# Security headers for all files
+# Security headers (globais) — evitar COEP \"require-corp\" para não quebrar imagens/recursos de terceiros
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
@@ -92,8 +54,8 @@
   Permissions-Policy: geolocation=(), microphone=(), camera=()
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
   Cross-Origin-Opener-Policy: same-origin
-  Cross-Origin-Embedder-Policy: require-corp
+  Vary: Accept-Encoding
 
-# Content Security Policy (otimizado para segurança e funcionalidade)
-/*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; img-src 'self' data: https://skillicons.dev https://img.shields.io https:; font-src 'self' data: https://cdnjs.cloudflare.com; connect-src 'self' https://static.cloudflareinsights.com https:; frame-ancestors 'none';
+  # Content Security Policy (otimizado para segurança e funcionalidade)
+  # OBS: os hashes de scripts inline são injetados no build (substitui __SCRIPT_SHA256__).
+  Content-Security-Policy: default-src 'self'; script-src 'self' __SCRIPT_SHA256__ https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; img-src 'self' data: https://img.shields.io https:; font-src 'self' data: https://cdnjs.cloudflare.com; connect-src 'self' https://static.cloudflareinsights.com https:; frame-ancestors 'none';
