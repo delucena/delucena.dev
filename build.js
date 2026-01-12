@@ -723,14 +723,23 @@ async function buildIndexHtml() {
     console.warn('⚠ Arquivo critical.css não encontrado, pulando injeção inline');
   }
   
-  // Substituir CSS por versão com hash e aplicar carregamento assíncrono
+  // Substituir CSS por versões com hash
   const mainCssOriginal = 'main.min.css';
   const mainCssHashed = assetMap.css[mainCssOriginal] || mainCssOriginal;
   if (mainCssHashed !== mainCssOriginal) {
     const cssPath = `./css/${mainCssHashed}`;
-    // Atualizar preload e noscript com caminho com hash
+    // Atualizar preload/stylesheet/noscript com caminho com hash
     html = html.replace(/href=["']\.\/css\/main\.css["']/g, `href="${cssPath}"`);
     console.log(`✓ CSS atualizado para versão com hash: ${mainCssHashed}`);
+  }
+
+  // CSS não-crítico (deferred)
+  const deferredCssOriginal = 'deferred.min.css';
+  const deferredCssHashed = assetMap.css[deferredCssOriginal] || deferredCssOriginal;
+  if (deferredCssHashed !== deferredCssOriginal) {
+    const deferredPath = `./css/${deferredCssHashed}`;
+    html = html.replace(/href=["']\.\/css\/deferred\.css["']/g, `href="${deferredPath}"`);
+    console.log(`✓ CSS deferred atualizado para versão com hash: ${deferredCssHashed}`);
   }
   
   // Scripts essenciais (carregam com defer, não bloqueiam FCP)
@@ -802,15 +811,14 @@ if (fs.existsSync(cssSrcDir)) {
     // Copiar CSS primeiro
     await processAssets(cssSrcDir, cssDistDir, { minify: false, addHash: false });
   
-    // Consolidar main.css
-  const mainCssPath = path.join(cssDistDir, 'main.css');
-  if (fs.existsSync(mainCssPath)) {
-    const mainCssContent = fs.readFileSync(mainCssPath, 'utf8');
-    const consolidated = consolidateCSS(mainCssContent, cssDistDir);
-    fs.writeFileSync(mainCssPath, consolidated, 'utf8');
-    console.log('✓ Consolidado: main.css (resolvidos @import)');
-    
-      // Minificar com hash
+    // Consolidar e minificar main.css
+    const mainCssPath = path.join(cssDistDir, 'main.css');
+    if (fs.existsSync(mainCssPath)) {
+      const mainCssContent = fs.readFileSync(mainCssPath, 'utf8');
+      const consolidated = consolidateCSS(mainCssContent, cssDistDir);
+      fs.writeFileSync(mainCssPath, consolidated, 'utf8');
+      console.log('✓ Consolidado: main.css (resolvidos @import)');
+      
       const minified = await minifyCSS(consolidated);
       const hash = generateHash(minified);
       const hashedName = `main.${hash}.min.css`;
@@ -818,7 +826,24 @@ if (fs.existsSync(cssSrcDir)) {
       fs.writeFileSync(minPath, minified, 'utf8');
       assetMap.css['main.min.css'] = hashedName;
       console.log(`✓ Minificado: main.css -> ${hashedName}`);
-  }
+    }
+
+    // Consolidar e minificar deferred.css
+    const deferredCssPath = path.join(cssDistDir, 'deferred.css');
+    if (fs.existsSync(deferredCssPath)) {
+      const deferredCssContent = fs.readFileSync(deferredCssPath, 'utf8');
+      const consolidatedDeferred = consolidateCSS(deferredCssContent, cssDistDir);
+      fs.writeFileSync(deferredCssPath, consolidatedDeferred, 'utf8');
+      console.log('✓ Consolidado: deferred.css (resolvidos @import)');
+
+      const minifiedDeferred = await minifyCSS(consolidatedDeferred);
+      const hashDeferred = generateHash(minifiedDeferred);
+      const hashedDeferredName = `deferred.${hashDeferred}.min.css`;
+      const minDeferredPath = path.join(cssDistDir, hashedDeferredName);
+      fs.writeFileSync(minDeferredPath, minifiedDeferred, 'utf8');
+      assetMap.css['deferred.min.css'] = hashedDeferredName;
+      console.log(`✓ Minificado: deferred.css -> ${hashedDeferredName}`);
+    }
   
   console.log(`✓ Processado diretório: css/`);
 } else {
