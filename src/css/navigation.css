@@ -88,7 +88,7 @@
 }
 
 /* Ícones do menu - hamburger e close */
-/* Controla visibilidade baseado na classe .sidebar-open no body */
+/* Controla visibilidade baseado no estado do checkbox #menu (sem depender de JS no primeiro paint) */
 /* Sidebar FECHADA: mostra hamburger, esconde close */
 .menu label[for="menu"] .hamburger-icon {
   display: inline-block;
@@ -99,11 +99,11 @@
 }
 
 /* Sidebar ABERTA: esconde hamburger, mostra close */
-body.sidebar-open .menu label[for="menu"] .hamburger-icon {
+body:has(#menu:checked) .menu label[for="menu"] .hamburger-icon {
   display: none;
 }
 
-body.sidebar-open .menu label[for="menu"] .close-icon {
+body:has(#menu:checked) .menu label[for="menu"] .close-icon {
   display: inline-block;
 }
 

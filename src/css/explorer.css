@@ -675,8 +675,8 @@ main:has(#editor .editorContainer #header div #readme:checked) #navigation .expl
 }
 
 /* Alternância entre explorer e extensions */
-/* Usa classe .sidebar-open no body para controlar visibilidade */
-body.sidebar-open #explorerView:checked ~ .explorer {
+/* Usa o estado do checkbox #menu para controlar visibilidade (evita depender de JS no primeiro paint) */
+body:has(#menu:checked) #explorerView:checked ~ .explorer {
   margin-left: 0;
   opacity: 1;
   pointer-events: auto;
@@ -688,37 +688,37 @@ body.sidebar-open #explorerView:checked ~ .explorer {
  * No mobile, o Explorer continua fechado via regras específicas em navigation.css.
  */
 @media (min-width: 769px) {
-  body.sidebar-open #closeView:checked ~ .explorer {
+  body:has(#menu:checked) #closeView:checked ~ .explorer {
     margin-left: 0;
     opacity: 1;
     pointer-events: auto;
   }
 
-  body.sidebar-open #closeView:checked ~ .extensions {
+  body:has(#menu:checked) #closeView:checked ~ .extensions {
     margin-left: calc(-1 * var(--width-navigation));
     opacity: 0;
     pointer-events: none;
   }
 }
 
-body.sidebar-open #explorerView:checked ~ .extensions {
+body:has(#menu:checked) #explorerView:checked ~ .extensions {
   margin-left: calc(-1 * var(--width-navigation));
   opacity: 0;
 }
 
-body.sidebar-open #extensionsView:checked ~ .explorer {
+body:has(#menu:checked) #extensionsView:checked ~ .explorer {
   margin-left: calc(-1 * var(--width-navigation));
   opacity: 0;
 }
 
-body.sidebar-open #extensionsView:checked ~ .extensions {
+body:has(#menu:checked) #extensionsView:checked ~ .extensions {
   margin-left: 0;
   opacity: 1;
   pointer-events: auto;
 }
 
-body:not(.sidebar-open) .explorer,
-body:not(.sidebar-open) .extensions {
+body:not(:has(#menu:checked)) .explorer,
+body:not(:has(#menu:checked)) .extensions {
   margin-left: calc(-1 * var(--width-navigation));
   opacity: 0;
 }
@@ -781,7 +781,8 @@ body:not(.sidebar-open) .extensions {
     opacity: 1;
   }
 
-  body.sidebar-open .explorer {
+  /* Mantém a lógica original deste breakpoint sem depender de JS no primeiro paint */
+  body:has(#menu:checked) .explorer {
     margin-left: calc(-1 * var(--width-navigation));
     opacity: 0;
   }
