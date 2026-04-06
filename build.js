@@ -769,7 +769,7 @@ async function buildIndexHtml() {
   }
   
   // Scripts essenciais (carregam com defer, não bloqueiam FCP)
-  const essentialJSFiles = ['i18n.js', 'theme.js', 'navigation.js', 'header-command-palette.js', 'editor-tabs.js'];
+  const essentialJSFiles = ['analytics.js', 'i18n.js', 'theme.js', 'navigation.js', 'header-command-palette.js', 'editor-tabs.js'];
   
   // Substituir scripts essenciais por versões com hash
   essentialJSFiles.forEach(jsFile => {

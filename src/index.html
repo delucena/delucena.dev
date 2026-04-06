@@ -9,6 +9,15 @@
     <link rel="canonical" href="{{meta.canonicalUrl}}">
     <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
     <link rel="alternate icon" type="image/svg+xml" href="./assets/favicon.svg">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-85S6V3W8HK"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      // O page_view é enviado manualmente por src/js/analytics.js com UTMs anexadas.
+      gtag('config', 'G-85S6V3W8HK', { send_page_view: false });
+    </script>
     <!-- Evita CLS no Desktop ao aplicar largura salva do Explorer antes do primeiro paint -->
     <script>
       (function () {
@@ -142,6 +151,7 @@
 <!-- TEMPLATE: footer.html -->
 </div>
     <!-- JavaScript Essencial (carregado com defer, não bloqueia FCP) -->
+    <script src="./js/analytics.js" defer></script>
     <script src="./js/i18n.js" defer></script>
     <script src="./js/theme.js" defer></script>
     <script src="./js/navigation.js" defer></script>
