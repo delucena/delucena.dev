@@ -58,4 +58,4 @@
 
   # Content Security Policy (otimizado para segurança e funcionalidade)
   # OBS: os hashes de scripts inline são injetados no build (substitui __SCRIPT_SHA256__).
-  Content-Security-Policy: default-src 'self'; script-src 'self' __SCRIPT_SHA256__ https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; img-src 'self' data: https://img.shields.io https:; font-src 'self' data: https://cdnjs.cloudflare.com; connect-src 'self' https://static.cloudflareinsights.com https:; frame-ancestors 'none';
+  Content-Security-Policy: default-src 'self'; script-src 'self' __SCRIPT_SHA256__ https://static.cloudflareinsights.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; img-src 'self' data: https://img.shields.io https:; font-src 'self' data: https://cdnjs.cloudflare.com; connect-src 'self' https://static.cloudflareinsights.com https:; frame-ancestors 'none';
